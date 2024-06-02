@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./imgs/logo.png" alt="Ditto Logo dark" height="250">
+  <img src="imgs/logo.png" height="250">
 </div>
 
 # Auto-X for Industries
@@ -12,5 +12,5 @@ Auto-X for Industries is a autonomous solution that aims to solve the following 
 - Only part of the business processes can be automated with existing services
 
 <div  align="center">
-  <img src="./imgs/framework.png" width="800"/>
+  <img src="imgs/framework.png" width="800"/>
 </div>
