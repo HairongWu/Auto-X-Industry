@@ -4,16 +4,20 @@ The Auto-X Engine is a deep learning inference engine designed for MCUs/CPUs. It
 
 This engine only supports the model structures described in this repo at this time.
 
-This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/ROS based Robots to Eclipse Ditto via MQTT using Auto-X Engine.
+This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/Android based Robots to Eclipse Ditto via MQTT using Auto-X Engine.
 
-## Models for MCU (such as ESP32 and Arm Cortex-M)
+## Model Pool
+
+> **Note** Because image classification models are rarely used in practical scenarios, we do not privide such kind of models.
+
+### Models for MCU (such as ESP32 and Arm Cortex-M)
 
 - [PicoDet-XS](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/picodet)
 - [PP-Tinypose](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/keypoint/tiny_pose)
 - [PP-MobileSeg-Tiny](https://github.com/PaddlePaddle/PaddleSeg/tree/release/2.9/configs/pp_mobileseg)
 - [PaddleOCR(mobile)](https://github.com/PaddlePaddle/PaddleOCR/blob/main/doc/doc_en/models_list_en.md)
 
-## Models for CPU (such as Arm Cortex-A and X86)
+### Models for CPU (such as Arm Cortex-A and X86)
 
 - [Recognize Anything Model](https://github.com/xinyu1205/recognize-anything)
 - [GroundingDINO](https://github.com/IDEA-Research/GroundingDINO)
@@ -24,7 +28,6 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 - [ChatGLM](https://github.com/ggerganov/ggml)
 - [llama2](https://github.com/karpathy/llama2.c)
 
-> **Note** Because image classification models are rarely used in practical scenarios, we do not privide such kind of models.
 
 ## Demos
 
@@ -39,6 +42,13 @@ This demo simulates the following industrial scenarios:
 2. The camera sends the camera status info. and recognition results to Eclipse Ditto at a fixed interval
 
 ###  Pixhawk 4 and RP Pi 4B
+
+This demo simulates the following industrial scenarios:
+1. Schedule the drone to autonomously collect images of specified objects at some specified places.
+2. Exchange drone status with Eclipse Ditto during the flight
+3. Upload the collected images to Eclipse Ditto when drone goes home
+
+###  Android Robot
 
 
 ## References
