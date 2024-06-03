@@ -11,9 +11,6 @@ Auto-X AI Server provides the built-in industrial autonomous use cases, such as:
 ## References
 
 - [label-studio-ml-backend](https://github.com/HumanSignal/label-studio-ml-backend)
-- [Recognize Anything Model](https://github.com/xinyu1205/recognize-anything)
-- [Grounded-Segment-Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything)
-- [Whisper](https://github.com/openai/whisper)
 - [OneLLM](https://github.com/csuhan/OneLLM)
 - [RAGFlow](https://github.com/infiniflow/ragflow)
 - [Chronos](https://github.com/amazon-science/chronos-forecasting)

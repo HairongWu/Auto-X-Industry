@@ -15,11 +15,13 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 
 ## Models for CPU (such as Arm Cortex-A and X86)
 
-- [PicoDet-L](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/picodet)
-- [hrnet](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/keypoint/hrnet)
-- [PP-LiteSeg](https://github.com/PaddlePaddle/PaddleSeg/tree/release/2.9/configs/pp_liteseg)
+- [Recognize Anything Model](https://github.com/xinyu1205/recognize-anything)
+- [GroundingDINO](https://github.com/IDEA-Research/GroundingDINO)
+- [UniPose](https://github.com/IDEA-Research/UniPose)
 - [PaddleOCR(server)](https://github.com/PaddlePaddle/PaddleOCR/blob/main/doc/doc_en/models_list_en.md)
-- [whisper](https://github.com/ggerganov/whisper.cpp)
+- [SAM](https://github.com/ggerganov/ggml)
+- [whisper](https://github.com/ggerganov/ggml)
+- [ChatGLM](https://github.com/ggerganov/ggml)
 - [llama2](https://github.com/karpathy/llama2.c)
 
 > **Note** Because image classification models are rarely used in practical scenarios, we do not privide such kind of models.
