@@ -6,6 +6,7 @@ Auto-X Studio is based on Label Studio by adding the following features:
 - modify the pre-labeling, fine-tuning and training behaviors
 - import PDFs directly from user interfaces
 - solution oriented built-in label templates
+- support knowledge graph creation tasks
 
 
 

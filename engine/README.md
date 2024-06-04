@@ -23,6 +23,7 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 - [GroundingDINO](https://github.com/IDEA-Research/GroundingDINO)
 - [UniPose](https://github.com/IDEA-Research/UniPose)
 - [PaddleOCR(server)](https://github.com/PaddlePaddle/PaddleOCR/blob/main/doc/doc_en/models_list_en.md)
+- [PP-Structure](https://github.com/PaddlePaddle/PaddleOCR/blob/main/ppstructure/docs/models_list_en.md)
 - [SAM](https://github.com/ggerganov/ggml)
 - [whisper](https://github.com/ggerganov/ggml)
 - [ChatGLM](https://github.com/ggerganov/ggml)
@@ -39,14 +40,14 @@ Get more information about [Timer Camera X](https://docs.m5stack.com/en/unit/tim
 
 This demo simulates the following industrial scenarios:
 1. Fix the camera in front of the target objects in COCO dataset categories
-2. The camera sends the camera status info. and recognition results to Eclipse Ditto at a fixed interval
+2. The camera sends the camera status info. and recognition results to Auto-X Studio at a fixed interval
 
 ###  Pixhawk 4 and RP Pi 4B
 
 This demo simulates the following industrial scenarios:
 1. Schedule the drone to autonomously collect images of specified objects at some specified places.
-2. Exchange drone status with Eclipse Ditto during the flight
-3. Upload the collected images to Eclipse Ditto when drone goes home
+2. Exchange drone status with Auto-X Studio during the flight
+3. Upload the collected images to Auto-X Studio when drone goes home
 
 ###  Android Robot
 
