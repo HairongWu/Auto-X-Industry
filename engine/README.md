@@ -9,6 +9,7 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 ## Model Pool
 
 > **Note** Because image classification models are rarely used in practical scenarios, we do not privide such kind of models.
+> We also provide guidelines and running code to customize and retrain the following models using your own private data.
 
 ### Models for MCU (such as ESP32 and Arm Cortex-M)
 
@@ -28,32 +29,35 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 - [whisper](https://github.com/ggerganov/ggml)
 - [ChatGLM](https://github.com/ggerganov/ggml)
 - [llama2](https://github.com/karpathy/llama2.c)
-
+- [Chronos](https://github.com/amazon-science/chronos-forecasting)
+- [StableTTS](https://github.com/KdaiP/StableTTS)
+- [GeneFace++](https://github.com/yerfor/GeneFacePlusPlus)
 
 ## Demos
 
-### Timer Camera X
+### ESP32-S3-EYE
 
-Timer Camera X is a camera module based on ESP32, integrated with ESP32 chip and 8M-PSRAM. The camera (ov3660) with 3 million pixels , DFOV 66.5 ° and shoot 2048x1536 resolution photo, built-in 140mAh battery and LED status indicator, featuring ultra-low power consumption design. There is a reset button under the LED. Through RTC (BM8563), timing sleep and wake-up can be realized. The standby current is only 2μA. After timing photo taking function(one photo per hour) is turned on, the battery can work continuously for more than one month. The module supports Wi-Fi image transmission and USB port debugging. The bottom HY2.0-4P port output can be connected to other peripherals.
+The ESP32-S3-EYE is a small-sized AI development board produced by Espressif. It is based on the ESP32-S3 SoC and ESP-WHO, Espressif’s AI development framework. It features a 2-Megapixel camera, an LCD display, and a microphone, which are used for image recognition and audio processing. ESP32-S3-EYE offers plenty of storage, with an 8 MB Octal PSRAM and a 8 MB flash. It also supports image transmission via Wi-Fi and debugging through a Micro-USB port. With ESP-WHO, you can develop a variety of AIoT applications, such as smart doorbell, surveillance systems, facial recognition time clock, etc.
 
-Get more information about [Timer Camera X](https://docs.m5stack.com/en/unit/timercam_x).
+Get more information about the hardware at [ESP32-S3-EYE](https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
 
 This demo simulates the following industrial scenarios:
 1. Fix the camera in front of the target objects in COCO dataset categories
-2. The camera sends the camera status info. and recognition results to Auto-X Studio at a fixed interval
+2. The camera sends the camera status info. and the recognition results to Auto-X Studio at a fixed interval
 
-###  Pixhawk 4 and RP Pi 4B
+###  Raspberry Pi 4 Navio2 Autopilot
+
+Get more information about the hardware at [Navio2](https://navio2.hipi.io/)
 
 This demo simulates the following industrial scenarios:
 1. Schedule the drone to autonomously collect images of specified objects at some specified places.
 2. Exchange drone status with Auto-X Studio during the flight
 3. Upload the collected images to Auto-X Studio when drone goes home
 
-###  Android Robot
+###  Diesease Diagnosis with virtual human agent (Android)
 
 
 ## References
 
 - [Eclipse Ditto :: Examples](https://github.com/eclipse-ditto/ditto-examples)
-- [M5_Camera_Examples](https://github.com/m5stack/M5_Camera_Examples)
 - [PX4 Drone Autopilot](https://github.com/PX4/PX4-Autopilot)

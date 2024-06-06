@@ -15,5 +15,4 @@ Auto-X AI Server supports three types of tasks: prediction tasks, training tasks
 - [label-studio-ml-backend](https://github.com/HumanSignal/label-studio-ml-backend)
 - [OneLLM](https://github.com/csuhan/OneLLM)
 - [RAGFlow](https://github.com/infiniflow/ragflow)
-- [Chronos](https://github.com/amazon-science/chronos-forecasting)
 - [XAgent](https://github.com/OpenBMB/XAgent)
