@@ -33,7 +33,7 @@ python _wsgi.py --log-level DEBUG --groundingdino_model xxx --pose_model xxx
 6. Start up label studio and connect with this server for pre-labeling using this [label template](./label_templates/visual.xml)
 
 <div  align="center">
-  <img src="assets/image_demo_results.png" width="800"/>
+  <img src="../assets/image_demo_results.png" width="800"/>
 </div>
 
 ## References
