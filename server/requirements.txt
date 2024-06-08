@@ -1,0 +1,16 @@
+#python-magic
+# Windows
+python-magic-bin
+Flask~=2.3
+colorama~=0.4
+requests~=2.31
+semver~=3.0.2
+pillow~=10.3
+label-studio-sdk==0.0.34
+
+git+https://github.com/HumanSignal/label-studio-tools.git
+
+
+
+
+

@@ -5,13 +5,13 @@ Auto-X Studio is based on Label Studio by adding the following features:
 - device mangement under projects
 - modify the pre-labeling, fine-tuning and training behaviors
 - import PDFs directly from user interfaces
-- solution oriented built-in label templates
+- auto-generated label templates
 - support knowledge graph creation tasks
+- schedule tasks with edge devices or Auto-X Server
 
+## Connect with Auto-X AI Server
 
 
 ## References
 
-- [label-studio](https://github.com/HumanSignal/label-studio)
 - [Eclipse Ditto™ Client SDKs](https://github.com/eclipse-ditto/ditto-clients)
-- [OpenRemote v3](https://github.com/openremote/openremote)
