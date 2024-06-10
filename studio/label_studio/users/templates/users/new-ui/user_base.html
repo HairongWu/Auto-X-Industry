@@ -1,0 +1,36 @@
+{% extends 'simple.html' %}
+{% load i18n %}
+{% load static %}
+{% load filters %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ settings.HOSTNAME }}{% static 'css/login.css' %}"/>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129877673-1" nonce="{{request.csp_nonce}}"></script>
+<script nonce="{{request.csp_nonce}}">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-129877673-1');
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="login_page_new_ui">
+  <div class="right">
+    <img src="{{ settings.HOSTNAME }}{% static 'images/logo.png' %}" height="93"  alt="Auto-X Studio Logo"/>
+    <h2>Welcome to Auto-X Studio</h2>
+    <h3>A full-fledged digital twin and AI solution for industrial scenarios</h3>
+    <div class="toggle">
+        {% if not settings.DISABLE_SIGNUP_WITHOUT_LINK %}
+        <a href="{{ settings.HOSTNAME }}/user/signup" class="{% if 'signup' in request.path %}active{% endif %}">Sign up</a>
+        <a href="{{ settings.HOSTNAME }}/user/login" class="{% if 'login' in request.path %}active{% endif %}">Log in</a>
+        {% endif %}
+    </div>
+    {% block user_content %}
+  </div>
+</div>
+
+  {% endblock %}
+{% endblock %}
