@@ -167,3 +167,207 @@ sdkconfig
 sdkconfig.old
 
 *.db
+
+node_modules
+*.pyc
+*.ipynb
+__pycache__
+.local/
+
+# docs
+__generated__
+\#$
+docs/data/
+etc/
+/src/
+yarn-error.log
+/dist/
+
+# mobile/builds
+db/
+logfile
+venv/
+.venv
+.vscode
+.autoenv
+.env
+.envrc
+# web/static
+
+studio/deploy/license.txt
+studio/deploy/logs/
+studio/deploy/redis-data/
+studio/deploy/dockerfiles/postgres-data
+studio/deploy/dockerfiles/mysql-data
+postgres-data
+mysql-data
+
+studio/label_studio/core/media
+studio/label_studio/core/downloads
+studio/label_studio/core/export
+
+studio/label_studio/core/static_build
+studio/label_studio/core/version_.py
+studio/label_studio/core/core
+
+archive
+
+*.rtl.css
+*.rtl.min.css
+*.idea/*
+.vscode/*
+pyrightconfig.json
+tags.temp
+mydatabase
+label_studio.sqlite3
+*.egg-info
+tmp
+.DS_Store
+*.sqlite3
+studio/label_studio/core/settings/local.py
+studio/deploy/nginx/certs/*
+!studio/deploy/nginx/certs/.placeholder
+mydata/
+studio/deploy/pgsql/certs/*
+!studio/deploy/pgsql/certs/.placeholder
+
+*.swp
+*.swo
+*.swn
+1/*
+*/*/1/*
+docker-compose.override.yml
+
+.config/*
+.python_history
+.viminfo
+.bash_history
+
+.pdm-python
+
+# actions-hub
+.github/actions-hub
+
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+tmp
+/out-tsc
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+.DS_Store
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+.nx/
+migrations.json
+
+# System Files
+.DS_Store
+Thumbs.db
+
+report.*.json
+.env*
+!.env.example
+!.env.build
+!.env.local
+!*.lock
+
+studio/web/libs/**/package.json
+studio/web/libs/**/package-lock.json
+studio/web/libs/**/yarn.lock
+
+# editor ignored files
+
+studio/web/libs/editor/__pycache__/
+
+# Logs
+studio/web/libs/editor/logs
+studio/web/libs/editor/*.log
+studio/web/libs/editor/npm-debug.log*
+studio/web/libs/editor/yarn-debug.log*
+studio/web/libs/editor/yarn-error.log*
+studio/web/libs/editor/report.*.json
+
+# Backend
+studio/web/libs/editor/backend/env3/
+studio/web/libs/editor/backend/__pycache__
+
+# MAC
+studio/web/libs/editor/.DS_Store
+
+# Env
+studio/web/libs/editor/.env.local
+studio/web/libs/editor/.env.development.local
+studio/web/libs/editor/.env.test.local
+studio/web/libs/editor/.env.production.local
+
+# Testing
+studio/web/libs/editor/coverage/
+studio/web/libs/editor/tests/e2e/output/
+
+# codecept screenshots
+studio/web/libs/editor/e2e/output
+
+
+# datamanager ignored files
+
+# Logs
+studio/web/libs/datamanager/logs
+studio/web/libs/datamanager/*.log
+studio/web/libs/datamanager/npm-debug.log*
+studio/web/libs/datamanager/yarn-debug.log*
+studio/web/libs/datamanager/yarn-error.log*
+
+# Backend
+studio/web/libs/datamanager/backend/env3/
+studio/web/libs/datamanager/backend/__pycache__
+
+# MAC
+studio/web/libs/datamanager/.DS_Store
+
+# Env
+studio/web/libs/datamanager/.env
+studio/web/libs/datamanager/.env.local
+studio/web/libs/datamanager/.env.development.local
+studio/web/libs/datamanager/.env.test.local
+studio/web/libs/datamanager/.env.production.local
+
+studio/web/libs/datamanager/report.*.json
+
+# Testing
+studio/web/libs/datamanager/coverage/
+studio/web/libs/datamanager/public/static/
+
+# Examples of local env
+studio/web/libs/datamanager/src/examples
+
+# codecept screenshots
+studio/web/libs/datamanager/e2e/output
+
+studio/web/libs/datamanager/.cache

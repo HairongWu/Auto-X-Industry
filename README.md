@@ -20,3 +20,4 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 - [label-studio](https://github.com/HumanSignal/label-studio)
 - [OpenRemote v3](https://github.com/openremote/openremote)
 - [Eclipse Ditto™](https://github.com/eclipse-ditto/ditto)
+- [mediasoup v3](https://github.com/versatica/mediasoup)
