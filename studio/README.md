@@ -1,18 +1,18 @@
 # Auto-X Studio
 
-Auto-X Studio is based on Label Studio with the following features:
-- basic labeling functions of Label Studio (with modifications)
-- exchange data with Eclipse Ditto™
-- device mangement under projects
-- modify the pre-labeling, fine-tuning and training behaviors
-- import PDFs directly from user interfaces
-- auto-generated label templates
+Auto-X Studio is based on Label Studio and provides full functions to build AI solutions from the start.
+
+It has the following features:
+- exchange data with Eclipse Ditto™ or data server
+- device mangement
+- full workflow to build models: pre-labeling, labeling manually, fine-tuning/training and deploy
+- built-in solution templates
 - support knowledge graph creation tasks
 - schedule tasks with edge devices or Auto-X Server
 
 ## Install for local development
 
-You can run the latest Label Studio version locally without installing the package from pypi. 
+You can run the latest Auto-X Studio locally without installing the package. 
 
 ```bash
 # Install all package dependencies

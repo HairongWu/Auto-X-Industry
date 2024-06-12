@@ -157,7 +157,7 @@ def load_image(image_path: str) -> Tuple[np.array, torch.Tensor]:
     image_transformed, _ = transform(image_source, None)
     return image, image_transformed
 
-class VisualSolution(): 
+class VisualPipeline(): 
     def __init__(self):
         super().__init__()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -288,3 +288,5 @@ class VisualSolution():
 
         return all_keypoints, all_boxes, all_labels, all_logits, all_lengths
     
+    def run_visual_genome(self, image_paths, labels_r):
+        pass

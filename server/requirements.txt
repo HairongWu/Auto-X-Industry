@@ -7,6 +7,13 @@ requests~=2.31
 semver~=3.0.2
 pillow~=10.3
 label-studio-sdk==0.0.34
+shapely
+pyclipper
+lanms-nova
+scikit-image
+imgaug
+
+paddleclas
 
 git+https://github.com/HumanSignal/label-studio-tools.git
 
