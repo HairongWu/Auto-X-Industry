@@ -1,8 +1,9 @@
 <div align="center">
   <img src="assets/logo.png" height="120">
 </div>
-
-# Auto-X for Industries
+<div align="center">
+  <h1>Auto-X for Industries</h1>
+</div>
 
 Auto-X for Industries is an autonomous solution that aims to solve the following challenges:
 

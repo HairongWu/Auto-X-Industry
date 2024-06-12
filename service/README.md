@@ -6,7 +6,7 @@ The full pipelines are provided using Auto-X stack, and you can build your own s
 ## Remote Monitoring Anything (Visual)
 
 <div  align="center">
-  <img src="assets/rma_flow.png" width="800"/>
+  <img src="../assets/rma_flow.png" width="800"/>
 </div>
 
 ## Document Intelligence
