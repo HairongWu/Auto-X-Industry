@@ -370,3 +370,50 @@ studio/web/libs/datamanager/src/examples
 studio/web/libs/datamanager/e2e/output
 
 studio/web/libs/datamanager/.cache
+
+# compiled output
+service/dist
+service/tmp
+service/out-tsc
+# Only exists if Bazel was run
+service/bazel-out
+
+# profiling files
+chrome-profiler-events*.json
+
+# IDEs and editors
+service/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+service/.angular/
+service/.sass-cache
+service/connect.lock
+service/coverage
+service/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+service/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+.vercel
+service/test-results/
+service/playwright-report/
+service/blob-report/
+service/playwright/.cache/

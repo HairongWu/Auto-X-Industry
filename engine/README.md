@@ -2,13 +2,13 @@
 
 The Auto-X Engine is a deep learning inference engine designed for MCUs/CPUs. It is written entirely in C and runs on Auto-X private model format.
 
-This engine only supports the model structures described in this repo at this time.
+This engine only supports the model structures described in this repo at this time. And these models are needed in the built-in solutions.
 
 This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/Android based Robots to Auto-X Studio via MQTT using Auto-X Engine.
 
 ## Model Pool
 
-> **Note** Because image classification models are rarely used in practical scenarios, we do not privide such kind of models.
+> **Note** The following models could be modified from the originial ones.
 > We also provide guidelines and running code to customize and retrain the following models using your own data.
 
 ### Models for MCU (such as ESP32 and Arm Cortex-M)
@@ -17,7 +17,7 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 | :-------- | :--------: | :---------------------: | :----------------: | :----------------: | :---------------: | :-----------------------------: |
 | [PicoDet-XS](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/picodet) |  192*192   |                     |               |                |               |    ESP32-S3-EYE           |
 | [PP-Tinypose](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/keypoint/tiny_pose) |  256*192   |                     |               |                |               |    ESP32-S3-EYE           |
-| [PaddleOCR(mobile)](https://github.com/PaddlePaddle/PaddleOCR/blob/main/doc/doc_en/models_list_en.md) |     |                     |               |                |               |    ESP32-S3-EYE           |
+| [en_number_mobile_v2.0_rec](https://github.com/PaddlePaddle/PaddleOCR/blob/main/doc/doc_en/models_list_en.md) |     |                     |               |                |               |    ESP32-S3-EYE           |
 
 ### Models for CPU (such as Arm Cortex-A and X86)
 
@@ -68,3 +68,5 @@ This demo simulates the following industrial scenarios:
 - [Eclipse Ditto :: Examples](https://github.com/eclipse-ditto/ditto-examples)
 - [PX4 Drone Autopilot](https://github.com/PX4/PX4-Autopilot)
 - [M5_Camera_Examples](https://github.com/m5stack/M5_Camera_Examples/tree/main)
+- [ESP32-S3-EYE](https://github.com/W00ng/ESP32-S3-EYE)
+- [FreeRTOS](https://github.com/FreeRTOS/FreeRTOS)

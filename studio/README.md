@@ -28,3 +28,4 @@ python label_studio/manage.py runserver
 ## References
 
 - [Eclipse Ditto™ Client SDKs](https://github.com/eclipse-ditto/ditto-clients)
+- [ScrapeGraphAI](https://github.com/VinciGit00/Scrapegraph-ai)
