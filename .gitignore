@@ -417,3 +417,6 @@ service/test-results/
 service/playwright-report/
 service/blob-report/
 service/playwright/.cache/
+
+.vs/
+Debug/

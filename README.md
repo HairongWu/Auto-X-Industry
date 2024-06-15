@@ -19,11 +19,23 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 Not stable for now. Please wait for the first release.
 Contributors and Sponsors are welcomed.
 
+## Release Plan
 
+- [X] Initialize codebase
+- [] Image/Video Understanding and Recognition (Upload or Connect to devices)
+- [] Time Series Understanding and Prediction (Upload or Connect to devices)
+- [] Document Understanding and Recognition (Upload or Connect to devices)
+- [] Auto Development
+- [] Auto ERP
+- [] Auto Supply Chain
+- [] Auto Finance
+- [] Auto-X Consultant
 
 
 ## Acknowledgments
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
-- [Eclipse Ditto™](https://github.com/eclipse-ditto/ditto)
-- [mediasoup v3](https://github.com/versatica/mediasoup)
+- [Odoo](https://github.com/odoo/odoo)
+- [frePPLe](https://github.com/frePPLe/frepple)
+- [FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)
+- [flutter-webrtc](https://github.com/flutter-webrtc/flutter-webrtc)

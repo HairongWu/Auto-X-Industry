@@ -30,5 +30,30 @@ python _wsgi.py --log-level DEBUG --groundingdino_model xxx --pose_model xxx
 ## References
 
 - [label-studio-ml-backend](https://github.com/HumanSignal/label-studio-ml-backend)
+
 - [RAGFlow](https://github.com/infiniflow/ragflow)
 - [XAgent](https://github.com/OpenBMB/XAgent)
+
+- [VideoLLaMA 2](https://github.com/DAMO-NLP-SG/VideoLLaMA2)
+- [anomalib](https://github.com/openvinotoolkit/anomalib)
+- [EmoLLM](https://github.com/SmartFlowAI/EmoLLM)
+- [OMG-Seg](https://github.com/lxtGH/OMG-Seg)
+- [SegFormer](https://github.com/NVlabs/SegFormer)
+- [Recognize Anything Model](https://github.com/xinyu1205/recognize-anything)
+- [Grounding DINO](https://github.com/IDEA-Research/GroundingDINO)
+- [UniPose](https://github.com/IDEA-Research/UniPose)
+
+- [MegaParse](https://github.com/QuivrHQ/MegaParse)
+- [PP-Structure](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)
+- [Surya](https://github.com/VikParuchuri/surya)
+
+- [Chronos](https://github.com/amazon-science/chronos-forecasting)
+
+- [V-Express](https://github.com/tencent-ailab/V-Express)
+
+- [Perplexica](https://github.com/ItzCrazyKns/Perplexica)
+
+- [ScrapeGraphAI](https://github.com/VinciGit00/Scrapegraph-ai)
+- [Docs2KG](https://github.com/AI4WA/Docs2KG)
+- [Extract, Define, Canonicalize](https://github.com/clear-nus/edc)
+- [crawl4ai](https://github.com/unclecode/crawl4ai)

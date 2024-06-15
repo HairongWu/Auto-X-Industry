@@ -24,21 +24,30 @@ export class Menu {
           ],
         },
         {
-          icon: 'assets/icons/heroicons/outline/bookmark.svg',
-          label: 'Auto-X Advisor',
-          route: '',
-          children: [
-            { label: 'Lauch Advisor', route: '' },
-            { label: 'Virtual Human Settings', route: '' },
-          ],
-        },     
-        {
           icon: 'assets/icons/heroicons/outline/moon.svg',
           label: 'Auto Development',
           route: '',
           children: [
             { label: 'Modify Legacy Systems', route: '' },
             { label: 'Develop New Systems', route: '' },
+          ],
+        },  
+        {
+          icon: 'assets/icons/heroicons/outline/bookmark.svg',
+          label: 'Auto ERP',
+          route: '',
+          children: [
+            { label: 'Dashboard', route: '' },
+          ],
+        },            
+        {
+          icon: 'assets/icons/heroicons/outline/chart-pie.svg',
+          label: 'Auto Supply Chain',
+          route: '',
+          children: [
+            { label: 'Demand forecasting', route: '' },
+            { label: 'Inventory planning', route: '' },
+            { label: 'Production planning and scheduling', route: '' },
           ],
         },   
         {
@@ -49,22 +58,20 @@ export class Menu {
             { label: 'Quantitative Trading', route: '' },
             { label: 'Data Source Settings', route: '' },
           ],
-        },      
+        },    
         {
-          icon: 'assets/icons/heroicons/outline/chart-pie.svg',
-          label: 'Auto Supply Chain',
+          icon: 'assets/icons/heroicons/outline/sun.svg',
+          label: 'Auto-X Consultant',
           route: '',
           children: [
-            { label: 'Demand forecasting', route: '' },
-            { label: 'Inventory planning', route: '' },
-            { label: 'Production planning and scheduling', route: '' },
-            { label: 'Odoo and ERP integration', route: '' },
+            { label: 'Communicate with Auto-X', route: '' },
+            { label: 'Virtual Huamn Settings', route: '' },
           ],
-        },    
+        },   
       ],
     },
     {
-      group: 'Account',
+      group: 'Account & Settings',
       separator: false,
       items: [
         {
@@ -77,6 +84,14 @@ export class Menu {
             { label: 'Forgot Password', route: '/auth/forgot-password' },
             { label: 'New Password', route: '/auth/new-password' },
             { label: 'Two Steps', route: '/auth/two-steps' },
+          ],
+        },
+        {
+          icon: 'assets/icons/heroicons/outline/lock-closed.svg',
+          label: 'Settings',
+          route: '',
+          children: [
+            { label: 'Auto-X AI Server', route: '' },
           ],
         },
       ],

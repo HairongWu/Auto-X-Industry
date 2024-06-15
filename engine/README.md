@@ -1,6 +1,7 @@
 # Auto-X Engine
 
-The Auto-X Engine is a deep learning inference engine designed for MCUs/CPUs. It is written entirely in C and runs on Auto-X private model format.
+The Auto-X Engine is a deep learning inference engine designed for MCUs/CPUs. It is written entirely in C and runs on Auto-X private model format. Most of the codes are adapted from [ggml](https://github.com/ggerganov/ggml), [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite),
+[OpenCV](https://github.com/opencv/opencv), [darknet](https://github.com/pjreddie/darknet) and [llama2.c](https://github.com/karpathy/llama2.c).
 
 This engine only supports the model structures described in this repo at this time. And these models are needed in the built-in solutions.
 
@@ -13,32 +14,13 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 
 ### Models for MCU (such as ESP32 and Arm Cortex-M)
 
-| Model Name   | Input size | Latency(s) |  Weight  | Config | Demo Firmware | Target Device |
-| :-------- | :--------: | :---------------------: | :----------------: | :----------------: | :---------------: | :-----------------------------: |
-| [PicoDet-XS](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/picodet) |  192*192   |                     |               |                |               |    ESP32-S3-EYE           |
-| [PP-Tinypose](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.7/configs/keypoint/tiny_pose) |  256*192   |                     |               |                |               |    ESP32-S3-EYE           |
-| [en_number_mobile_v2.0_rec](https://github.com/PaddlePaddle/PaddleOCR/blob/main/doc/doc_en/models_list_en.md) |     |                     |               |                |               |    ESP32-S3-EYE           |
 
 ### Models for CPU (such as Arm Cortex-A and X86)
 
-| Model Name   | Input size | Latency(s) |  Weight  | Config | Demo Firmware | Target Device |
-| :-------- | :--------: | :---------------------: | :----------------: | :----------------: | :---------------: | :-----------------------------: |
-| [YOLO-World](https://github.com/AILab-CVC/YOLO-World) |     |                     |               |                |               |    Raspberry Pi 4          |
-| [UniPose](https://github.com/IDEA-Research/UniPose) |     |                     |               |                |               |    Raspberry Pi 4          |
-| [PP-Structure](https://github.com/PaddlePaddle/PaddleOCR/blob/main/ppstructure/docs/models_list_en.md) |    |                     |               |                |               |    Raspberry Pi 4          |
-| [SAM](https://github.com/ggerganov/ggml) |     |                     |               |                |               |    Raspberry Pi 4           |
-| [faster-whisper](https://github.com/SYSTRAN/faster-whisper) |     |                     |               |                |               |    Raspberry Pi 4           |
-| [ChatGLM](https://github.com/ggerganov/ggml) |     |                     |               |                |               |    Raspberry Pi 4           |
-| [llama2](https://github.com/karpathy/llama2.c) |     |                     |               |                |               |    Raspberry Pi 4           |
-| [Chronos](https://github.com/amazon-science/chronos-forecasting) |     |                     |               |                |               |    Raspberry Pi 4           |
-| [StableTTS](https://github.com/KdaiP/StableTTS) |     |                     |               |                |               |    Raspberry Pi 4           |
-| [GeneFace++](https://github.com/yerfor/GeneFacePlusPlus) |     |                     |               |                |               |    Raspberry Pi 4           |
-
-## Model Converter
-
-This tool can convert the pre-trained models generated from Pytorch, PaddlePaddle, ggml, and onnx to Auto-X format.
-At this time, we only support models described in the previous section.
-
+1. Llama2
+   The demo resides in the 'demos' folder with a MSVS project. As to the model downloading and other details, please refer to [here](https://github.com/karpathy/llama2.c).
+   
+2. Whisper
 
 ## Demos
 
@@ -51,6 +33,7 @@ This demo simulates the following industrial scenarios:
 2. run the Object Detection(COCO)/OCR(number, english, and so on)/Gauge Transcription model on device side
 3. The camera sends the device info. and the recognition results to Auto-X Studio via Wi-Fi at a fixed interval
 
+To connect a ESP32 device to Eclipse Ditto, please refer to [here](https://github.com/eclipse-ditto/ditto-examples/tree/master/mqtt-bidirectional).
 
 ###  Raspberry Pi 4 Navio2 Autopilot
 
@@ -64,7 +47,6 @@ This demo simulates the following industrial scenarios:
 
 ## References
 
-- [ggml](https://github.com/ggerganov/ggml)
 - [Eclipse Ditto :: Examples](https://github.com/eclipse-ditto/ditto-examples)
 - [PX4 Drone Autopilot](https://github.com/PX4/PX4-Autopilot)
 - [M5_Camera_Examples](https://github.com/m5stack/M5_Camera_Examples/tree/main)

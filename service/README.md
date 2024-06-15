@@ -14,7 +14,4 @@ npm start
 
 ## References
 
-- [frePPLe](https://github.com/frePPLe/frepple)
-- [FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)
-- [flutter-webrtc](https://github.com/flutter-webrtc/flutter-webrtc)
 - [angular-tailwind](https://github.com/luciano-work/angular-tailwind)
