@@ -22,14 +22,14 @@ Contributors and Sponsors are welcomed.
 ## Release Plan
 
 - [X] Initialize codebase
-- [] Image/Video Understanding and Recognition (Upload or Connect to devices)
-- [] Time Series Understanding and Prediction (Upload or Connect to devices)
-- [] Document Understanding and Recognition (Upload or Connect to devices)
-- [] Auto Development
-- [] Auto ERP
-- [] Auto Supply Chain
-- [] Auto Finance
-- [] Auto-X Consultant
+- [ ] Image/Video Understanding and Recognition (Upload or Connect to devices)
+- [ ] Time Series Understanding and Prediction (Upload or Connect to devices)
+- [ ] Document Understanding and Recognition (Upload or Connect to devices)
+- [ ] Auto Development
+- [ ] Auto ERP
+- [ ] Auto Supply Chain
+- [ ] Auto Finance
+- [ ] Auto-X Consultant
 
 
 ## Acknowledgments
