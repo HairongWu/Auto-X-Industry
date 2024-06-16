@@ -33,6 +33,7 @@ python _wsgi.py --log-level DEBUG --groundingdino_model xxx --pose_model xxx
 
 - [RAGFlow](https://github.com/infiniflow/ragflow)
 - [XAgent](https://github.com/OpenBMB/XAgent)
+- [crewAI](https://github.com/joaomdmoura/crewAI)
 
 - [VideoLLaMA 2](https://github.com/DAMO-NLP-SG/VideoLLaMA2)
 - [anomalib](https://github.com/openvinotoolkit/anomalib)
@@ -57,3 +58,6 @@ python _wsgi.py --log-level DEBUG --groundingdino_model xxx --pose_model xxx
 - [Docs2KG](https://github.com/AI4WA/Docs2KG)
 - [Extract, Define, Canonicalize](https://github.com/clear-nus/edc)
 - [crawl4ai](https://github.com/unclecode/crawl4ai)
+
+- [MetaGPT](https://github.com/geekan/MetaGPT)
+- [aiXcoder](https://github.com/aixcoder-plugin/aiXcoder-7B)

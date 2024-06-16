@@ -22,14 +22,17 @@ Contributors and Sponsors are welcomed.
 ## Release Plan
 
 - [X] Initialize codebase
-- [ ] Image/Video Understanding and Recognition (Upload or Connect to devices)
-- [ ] Time Series Understanding and Prediction (Upload or Connect to devices)
-- [ ] Document Understanding and Recognition (Upload or Connect to devices)
-- [ ] Auto Development
-- [ ] Auto ERP
-- [ ] Auto Supply Chain
-- [ ] Auto Finance
-- [ ] Auto-X Consultant
+- [ ] Release the full-fledged workflows of Image/Video Understanding and Recognition (upload or connect to devices)
+- [ ] Release the full-fledged workflows of Time Series Understanding and Prediction (upload or connect to devices)
+- [ ] Release the full-fledged workflows of Document Understanding and Recognition (upload or connect to devices)
+- [ ] Release the full-fledged workflows of Depth Data Understanding and Prediction (upload or connect to devices)
+
+- [ ] Release Auto Development
+- [ ] Release Auto ERP
+- [ ] Release Auto Medical Care
+- [ ] Release Auto Supply Chain
+- [ ] Release Auto Finance
+- [ ] Release Auto-X Consultant
 
 
 ## Acknowledgments
