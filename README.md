@@ -22,23 +22,26 @@ Contributors and Sponsors are welcomed.
 ## Release Plan
 
 - [X] Initialize codebase
+
 - [ ] Release the full-fledged workflows of Image/Video Understanding and Recognition (upload or connect to devices)
 - [ ] Release the full-fledged workflows of Time Series Understanding and Prediction (upload or connect to devices)
 - [ ] Release the full-fledged workflows of Document Understanding and Recognition (upload or connect to devices)
 - [ ] Release the full-fledged workflows of Depth Data Understanding and Prediction (upload or connect to devices)
 
 - [ ] Release Auto Development
-- [ ] Release Auto ERP
-- [ ] Release Auto Medical Care
-- [ ] Release Auto Supply Chain
-- [ ] Release Auto Finance
+- [ ] Release Auto ERP (based on ERPNext)
+- [ ] Release Auto Health Care (based on Frappe Health)
+- [ ] Release Auto Supply Chain (based on frePPLe)
+- [ ] Release Auto Finance (based on FinGPT)
+
 - [ ] Release Auto-X Consultant
 
 
 ## Acknowledgments
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
-- [Odoo](https://github.com/odoo/odoo)
+- [ERPNext](https://github.com/frappe/erpnext)
 - [frePPLe](https://github.com/frePPLe/frepple)
 - [FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)
+- [Frappe Health](https://github.com/frappe/health)
 - [flutter-webrtc](https://github.com/flutter-webrtc/flutter-webrtc)

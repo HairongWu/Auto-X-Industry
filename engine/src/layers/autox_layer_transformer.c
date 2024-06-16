@@ -19,6 +19,9 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
     float* content_row = w->token_embedding_table + token * dim;
     memcpy(x, content_row, dim*sizeof(*x));
 
+	uint32_t x_dims[1];
+	uint32_t y_dims[2];
+	uint32_t o_dims[1];
     // forward all the layers
     for(unsigned long long l = 0; l < p->n_layers; l++) {
 
@@ -31,9 +34,18 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
         s->v = s->value_cache + loff + pos * kv_dim;
 
         // qkv matmuls for this position
-        autox_matmul(s->q, s->xb, w->wq + l*dim*dim, dim, dim);
-        autox_matmul(s->k, s->xb, w->wk + l*dim*kv_dim, dim, kv_dim);
-        autox_matmul(s->v, s->xb, w->wv + l*dim*kv_dim, dim, kv_dim);
+		x_dims[0] = dim;
+		y_dims[0] = dim;
+		y_dims[1] = dim;	
+		o_dims[0] = dim;
+		autox_matmul(s->xb, w->wq + l * dim*dim, s->q, x_dims, 1,y_dims, 2, o_dims, 1,false, true, 1.0);
+		x_dims[0] = dim;
+		y_dims[0] = kv_dim;
+		y_dims[1] = dim;
+		o_dims[0] = kv_dim;
+		autox_matmul(s->xb, w->wk + l * dim*kv_dim, s->k, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
+		autox_matmul(s->xb, w->wv + l * dim*kv_dim, s->v, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
+
 
         // RoPE relative positional encoding: complex-valued rotate q and k in each head
         for (int i = 0; i < dim; i+=2) {
@@ -54,7 +66,7 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
 
         // multihead attention. iterate over all heads
         int h;
-        #pragma omp parallel for private(h)
+
         for (h = 0; h < p->n_heads; h++) {
             // get the query vector for this head
             float* q = s->q + h * head_size;
@@ -75,7 +87,7 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
             }
 
             // softmax the scores to get attention weights, from 0..pos inclusively
-            autox_softmax(att, pos + 1);
+            autox_softmax(att, 1, pos + 1);
 
             // weighted sum of the values, store back into xb
             float* xb = s->xb + h * head_size;
@@ -93,8 +105,11 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
         }
 
         // final matmul to get the output of the attention
-        autox_matmul(s->xb2, s->xb, w->wo + l*dim*dim, dim, dim);
-
+		x_dims[0] = dim;
+		y_dims[0] = dim;
+		y_dims[1] = dim;
+		o_dims[0] = dim;
+		autox_matmul(s->xb, w->wo + l * dim*dim, s->xb2, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
         // residual connection back into x
         for (int i = 0; i < dim; i++) {
             x[i] += s->xb2[i];
@@ -105,22 +120,22 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
 
         // Now for FFN in PyTorch we have: self.w2(F.silu(self.w1(x)) * self.w3(x))
         // first calculate self.w1(x) and self.w3(x)
-        autox_matmul(s->hb, s->xb, w->w1 + l*dim*hidden_dim, dim, hidden_dim);
-        autox_matmul(s->hb2, s->xb, w->w3 + l*dim*hidden_dim, dim, hidden_dim);
+		x_dims[0] = dim;
+		y_dims[0] = hidden_dim;
+		y_dims[1] = dim;
+		o_dims[0] = hidden_dim;
+		autox_matmul(s->xb, w->w1 + l * dim*hidden_dim, s->hb, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
+		autox_matmul(s->xb, w->w3 + l * dim*hidden_dim, s->hb2, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
 
         // SwiGLU non-linearity
-        for (int i = 0; i < hidden_dim; i++) {
-            float val = s->hb[i];
-            // silu(x)=x*σ(x), where σ(x) is the logistic sigmoid
-            val *= (1.0f / (1.0f + expf(-val)));
-            // elementwise multiply with w3(x)
-            val *= s->hb2[i];
-            s->hb[i] = val;
-        }
+		autox_swiglu(s->hb, s->hb2, hidden_dim);
 
         // final matmul to get the output of the ffn
-        autox_matmul(s->xb, s->hb, w->w2 + l*dim*hidden_dim, hidden_dim, dim);
-
+		x_dims[0] = hidden_dim;
+		y_dims[0] = dim;
+		y_dims[1] = hidden_dim;
+		o_dims[0] = dim;
+		autox_matmul(s->hb, w->w2 + l * dim*hidden_dim, s->xb, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
         // residual connection
         for (int i = 0; i < dim; i++) {
             x[i] += s->xb[i];
@@ -131,6 +146,10 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
     autox_rmsnorm(x, x, w->rms_final_weight, dim);
 
     // classifier into logits
-    autox_matmul(s->logits, x, w->wcls, p->dim, p->vocab_size);
+	x_dims[0] = p->dim;
+	y_dims[0] = p->vocab_size;
+	y_dims[1] = p->dim;
+	o_dims[0] = p->vocab_size;
+	autox_matmul(x, w->wcls, s->logits, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
     return s->logits;
 }

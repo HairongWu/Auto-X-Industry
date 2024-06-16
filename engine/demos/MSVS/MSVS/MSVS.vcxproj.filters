@@ -45,6 +45,9 @@
     <ClCompile Include="llama2_demo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_swiglu.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\architectures\autox_arch.h">

@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_matmul.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_rmsnorm.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_softmax.c" />
+    <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_swiglu.c" />
     <ClCompile Include="..\..\..\src\layers\autox_layer_sampler.c" />
     <ClCompile Include="..\..\..\src\layers\autox_layer_tokenizer.c" />
     <ClCompile Include="..\..\..\src\layers\autox_layer_transformer.c" />

@@ -78,17 +78,17 @@ int sample_topp(float* probabilities, int n, float topp, ProbIndex* probindex, f
     return probindex[last_idx].index; // in case of rounding errors
 }
 
-int autox_sample(Sampler* sampler, float* logits) {
+uint32_t autox_sample(Sampler* sampler, float* logits) {
     // sample the token given the logits and some hyperparameters
-    int next;
+	uint32_t next;
     if (sampler->temperature == 0.0f) {
         // greedy argmax sampling: take the token with the highest probability
-        next = autox_argmax(logits, sampler->vocab_size);
+        autox_argmax(logits, &next, sampler->vocab_size);
     } else {
         // apply the temperature to the logits
         for (int q=0; q<sampler->vocab_size; q++) { logits[q] /= sampler->temperature; }
         // apply softmax to the logits to get the probabilities for next token
-        autox_softmax(logits, sampler->vocab_size);
+        autox_softmax(logits, 1, sampler->vocab_size);
         // flip a (float) coin (this is our source of entropy for sampling)
         float coin = random_f32(&sampler->rng_state);
         // we sample from this distribution to get the next token

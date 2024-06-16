@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
 	// default parameters
 	char checkpoint_path[256] = "../../../../../model_pool/stories42M.bin";
-	char tokenizer_path[256] = "../../../tools/llama2/tokenizer.bin";
+	char tokenizer_path[256] = "../../../model_converter/pytorch/llama2/tokenizer.bin";
 	char prompt[256] = "One day, Lily met a Shoggoth";        // prompt string
 
 	run_llama2(checkpoint_path, tokenizer_path, prompt);

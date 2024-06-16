@@ -94,7 +94,7 @@ static autox_err_t read_checkpoint(char* checkpoint, Config* config, Transformer
 
 	fseek(file, 0, SEEK_SET);
 	*data = (float*)calloc(*file_size / 4, sizeof(float));
-	for (int i = 0; i < *file_size / 4; i++)
+	for (uint32_t i = 0; i < *file_size / 4; i++)
 	{
 		fread(*data + i, sizeof(float), 1, file);
 	}
@@ -166,8 +166,8 @@ autox_err_t run_llama2(char* checkpoint_path, char* tokenizer_path, char* prompt
 	unsigned long long rng_seed = 0; // seed rng with time by default
 
 	// parameter validation/overrides
-	if (temperature < 0.0) temperature = 0.0;
-	if (topp < 0.0 || 1.0 < topp) topp = 0.9;
+	if (temperature < 0.0) temperature = 0.0f;
+	if (topp < 0.0 || 1.0 < topp) topp = 0.9f;
 	if (steps < 0) steps = 0;
 
 	// build the Transformer via the model .bin file

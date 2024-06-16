@@ -23,51 +23,6 @@ export class Menu {
             { label: 'Dashboard', route: '/dashboard/di' },
           ],
         },
-        {
-          icon: 'assets/icons/heroicons/outline/moon.svg',
-          label: 'Auto Development',
-          route: '',
-          children: [
-            { label: 'Modify Legacy Systems', route: '' },
-            { label: 'Develop New Systems', route: '' },
-          ],
-        },  
-        {
-          icon: 'assets/icons/heroicons/outline/bookmark.svg',
-          label: 'Auto ERP',
-          route: '',
-          children: [
-            { label: 'Dashboard', route: '' },
-          ],
-        },            
-        {
-          icon: 'assets/icons/heroicons/outline/chart-pie.svg',
-          label: 'Auto Supply Chain',
-          route: '',
-          children: [
-            { label: 'Demand forecasting', route: '' },
-            { label: 'Inventory planning', route: '' },
-            { label: 'Production planning and scheduling', route: '' },
-          ],
-        },   
-        {
-          icon: 'assets/icons/heroicons/outline/sun.svg',
-          label: 'Auto Finance',
-          route: '',
-          children: [
-            { label: 'Quantitative Trading', route: '' },
-            { label: 'Data Source Settings', route: '' },
-          ],
-        },    
-        {
-          icon: 'assets/icons/heroicons/outline/sun.svg',
-          label: 'Auto-X Consultant',
-          route: '',
-          children: [
-            { label: 'Communicate with Auto-X', route: '' },
-            { label: 'Virtual Huamn Settings', route: '' },
-          ],
-        },   
       ],
     },
     {
