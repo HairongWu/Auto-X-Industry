@@ -28,7 +28,7 @@ Contributors and Sponsors are welcomed.
 - [ ] Release the full-fledged workflows of Document Understanding and Recognition (upload or connect to devices)
 - [ ] Release the full-fledged workflows of Depth Data Understanding and Prediction (upload or connect to devices)
 
-- [ ] Release Auto Development
+- [ ] Release the full-fledged workflows of Auto Development Pipelines
 - [ ] Release Auto ERP (based on ERPNext)
 - [ ] Release Auto Health Care (based on Frappe Health)
 - [ ] Release Auto Supply Chain (based on frePPLe)

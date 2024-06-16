@@ -3,6 +3,7 @@ import { useAPI } from "../../providers/ApiProvider";
 import { useProject } from "../../providers/ProjectProvider";
 import { isEmptyString } from "../../utils/helpers";
 import { ConfigPage } from "../CreateProject/Config/Config";
+import { TemplatesList } from "../CreateProject/Config/TemplatesList";
 
 export const LabelingSettings = () => {
   const { project, fetchProject } = useProject();

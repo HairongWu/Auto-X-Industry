@@ -5,9 +5,7 @@ import { DangerZone } from "./DangerZone";
 import { GeneralSettings } from "./GeneralSettings";
 import { AnnotationSettings } from "./AnnotationSettings";
 import { LabelingSettings } from "./LabelingSettings";
-import { DeviceManagementSettings } from "./DeviceManagementSettings/DeviceManagementSettings";
 import { MachineLearningSettings } from "./MachineLearningSettings/MachineLearningSettings";
-import { PredictionsSettings } from "./PredictionsSettings/PredictionsSettings";
 import { StorageSettings } from "./StorageSettings/StorageSettings";
 import { isInLicense, LF_CLOUD_STORAGE_FOR_MANAGERS } from "../../utils/license-flags";
 
@@ -20,9 +18,7 @@ export const MenuLayout = ({ children, ...routeProps }) => {
         GeneralSettings,
         LabelingSettings,
         AnnotationSettings,
-        DeviceManagementSettings,
         MachineLearningSettings,
-        PredictionsSettings,
         isAllowCloudStorage && StorageSettings,
         WebhookPage,
         DangerZone,
@@ -36,9 +32,7 @@ export const MenuLayout = ({ children, ...routeProps }) => {
 const pages = {
   AnnotationSettings,
   LabelingSettings,
-  DeviceManagementSettings,
   MachineLearningSettings,
-  PredictionsSettings,
   WebhookPage,
   DangerZone,
 };

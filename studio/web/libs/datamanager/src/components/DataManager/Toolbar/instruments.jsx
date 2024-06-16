@@ -121,11 +121,4 @@ export const instruments = {
       </Interface>
     );
   },
-  "export-button": ({ size }) => {
-    return (
-      <Interface name="export">
-        <ExportButton size={size}>Export</ExportButton>
-      </Interface>
-    );
-  },
 };

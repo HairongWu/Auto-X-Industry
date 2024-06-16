@@ -132,6 +132,7 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
         <div className={menubarClass}>
           <Dropdown.Trigger dropdown={menuDropdownRef} closeOnClickOutside={!sidebarPinned}>
             <div className={`${menubarClass.elem("trigger")} main-menu-trigger`}>
+              <img src={absoluteURL("/static/icons/logo-black.svg")} alt="Auto-X Logo" height="22" />
               <b>Auto-X Studio</b>
               <Hamburger opened={sidebarOpened} />
             </div>

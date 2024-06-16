@@ -114,23 +114,6 @@ const Webhook = () => {
   return (
     <Block name="webhook-wrap">
       {content}
-      <Elem name="footer">
-        <Elem name="footer-icon">
-          <IconInfo width="28" height="28" />
-        </Elem>
-        <Elem name="footer-text">
-          <p>
-            Webhooks allow external services to be notified when certain events happen. When the specified events occur,
-            a POST request is sent to each of the URLs you provide.
-          </p>
-          <p>
-            <a href="https://labelstud.io/guide/webhooks.html" target="_blank" rel="noreferrer">
-              Read more in the documentation
-            </a>
-            .
-          </p>
-        </Elem>
-      </Elem>
     </Block>
   );
 };

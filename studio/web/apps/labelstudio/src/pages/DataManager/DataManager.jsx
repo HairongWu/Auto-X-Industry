@@ -13,7 +13,6 @@ import { addAction, addCrumb, deleteAction, deleteCrumb } from "../../services/b
 import { Block, Elem } from "../../utils/bem";
 import { isDefined } from "../../utils/helpers";
 import { ImportModal } from "../CreateProject/Import/ImportModal";
-import { ExportPage } from "../ExportPage/ExportPage";
 import { APIConfig } from "./api-config";
 import { ToastContext } from "../../components/Toast/Toast";
 import { FF_OPTIC_2, isFF } from "../../utils/feature-flags";
@@ -207,7 +206,6 @@ export const DataManagerPage = ({ ...props }) => {
 
 DataManagerPage.path = "/data";
 DataManagerPage.pages = {
-  ExportPage,
   ImportModal,
 };
 DataManagerPage.context = ({ dmRef }) => {
