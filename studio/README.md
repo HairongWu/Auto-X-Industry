@@ -3,12 +3,10 @@
 Auto-X Studio is based on Label Studio and provides full functions to build AI solutions from the start.
 
 It has the following features:
-- exchange data with Eclipse Ditto™ or data server
-- device mangement
 - full workflow to build models: pre-labeling, labeling manually, fine-tuning/training and deploy
 - built-in solution templates
 - support knowledge graph creation tasks
-- schedule tasks with edge devices or Auto-X Server
+- support data scraping tasks
 
 ## Install for local development
 

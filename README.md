@@ -23,15 +23,12 @@ Contributors and Sponsors are welcomed.
 
 - [X] Initialize codebase
 
-- [ ] Release the full-fledged workflows of Image/Video Understanding and Recognition (upload or connect to devices)
-- [ ] Release the full-fledged workflows of Time Series Understanding and Prediction (upload or connect to devices)
-- [ ] Release the full-fledged workflows of Document Understanding and Recognition (upload or connect to devices)
-- [ ] Release the full-fledged workflows of Depth Data Understanding and Prediction (upload or connect to devices)
-
-- [ ] Release the full-fledged workflows of Auto Development Pipelines
+- [ ] Release Auto Energy Management (based on OpenRemote)
+- [ ] Release Auto System Development
 - [ ] Release Auto ERP (based on ERPNext)
 - [ ] Release Auto Health Care (based on Frappe Health)
 - [ ] Release Auto Supply Chain (based on frePPLe)
+- [ ] Release Auto Real Estate Mangement (based on OpenRemote)
 - [ ] Release Auto Finance (based on FinGPT)
 
 - [ ] Release Auto-X Consultant
@@ -40,6 +37,7 @@ Contributors and Sponsors are welcomed.
 ## Acknowledgments
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
+- [openremote](https://github.com/openremote/openremote)
 - [ERPNext](https://github.com/frappe/erpnext)
 - [frePPLe](https://github.com/frePPLe/frepple)
 - [FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)

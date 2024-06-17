@@ -18,7 +18,14 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 ### Models for CPU (such as Arm Cortex-A and X86)
 
 1. Llama2
-   The demo resides in the 'demos' folder with a MSVS project. As to the model downloading and other details, please refer to [here](https://github.com/karpathy/llama2.c).
+   The demo resides in the 'demos' folder with a MSVS project. As to the model downloading and other details, please refer to the following table:
+
+| model | dim | n_layers | n_heads | n_kv_heads | max context length | parameters | val loss | download
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 260K | 64 | 5 | 8 | 4 | 512 | 260K | 1.297 | [stories260K](https://huggingface.co/karpathy/tinyllamas/tree/main/stories260K)
+| OG | 288 | 6 | 6 | 6 | 256 | 15M | 1.072 | [stories15M.bin](https://huggingface.co/karpathy/tinyllamas/resolve/main/stories15M.bin) |
+| 42M| 512 | 8 | 8 | 8 | 1024 | 42M | 0.847 | [stories42M.bin](https://huggingface.co/karpathy/tinyllamas/resolve/main/stories42M.bin) |
+| 110M| 768 | 12 | 12 | 12 | 1024 | 110M | 0.760 | [stories110M.bin](https://huggingface.co/karpathy/tinyllamas/resolve/main/stories110M.bin) |
    
 2. Whisper
 

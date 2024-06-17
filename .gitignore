@@ -420,3 +420,61 @@ service/playwright/.cache/
 
 .vs/
 Debug/
+
+########Service
+# Build and Release Folders
+service/bin-debug/
+service/bin-release/
+service/[Oo]bj/
+service/[Bb]in/
+service/[Bb]uild/
+service/[Oo]ut/
+service/[Tt]mp/
+
+# Other files and folders
+service/.settings/
+service/.gradle/
+service/.vagrant/
+service/.node/
+service/.classpath/
+service/.classpath
+service/.project/
+service/.project
+service/.vscode/
+service/.idea/
+service/.sts4-cache/
+service/.local/
+service/.DS_*/
+service/apminsight-javaagent/
+service/console/iOS/DerivedData
+service/console/iOS/Pods
+service/manager/.factorypath/
+service/Pods/
+
+.pnp.*
+service/.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Specific files and logs
+openremote.log
+dive.log
+yarn-error.log
+local.properties
+
+# File extensions
+*.mbtiles
+*.air
+*.ipa
+*.apk
+*.dab
+*.sh
+*.iml
+*.ipr
+*.iws
+*.tsbuildinfo
+*~
+*.tar.gz

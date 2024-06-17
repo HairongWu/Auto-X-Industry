@@ -1,17 +1,14 @@
 # Auto-X Service
 
-Auto-X Service provides realtime interactive autonomous services via virtual agents based on webRTC and Auto-X AI server.
-The full pipelines are provided using Auto-X stack, and you can build your own services from start.
+Auto-X Service provides realtime interactive autonomous services via Auto-X AI server.
 
-## Install for local development
+## Quickstart
 
-You can run the latest Auto-X Service locally without installing the package. 
-
-```bash
-npm install
-npm start
+1. Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed (v18+) and started. 
+2. run CMD:
 ```
-
-## References
-
-- [angular-tailwind](https://github.com/luciano-work/angular-tailwind)
+./gradlew clean installDist
+docker-compose -p openremote -f profile/dev-ui.yml up --build -d
+```
+3. If all goes well then you should now be able to access the OpenRemote Manager UI at https://localhost. 
+   The default login is username 'admin' with password 'secret'.
