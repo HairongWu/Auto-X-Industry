@@ -423,36 +423,36 @@ Debug/
 
 ########Service
 # Build and Release Folders
-service/bin-debug/
-service/bin-release/
-service/[Oo]bj/
-service/[Bb]in/
-service/[Bb]uild/
-service/[Oo]ut/
-service/[Tt]mp/
+service/iot/bin-debug/
+service/iot/bin-release/
+service/iot/[Oo]bj/
+service/iot/[Bb]in/
+service/iot/[Bb]uild/
+service/iot/[Oo]ut/
+service/iot/[Tt]mp/
 
 # Other files and folders
-service/.settings/
-service/.gradle/
-service/.vagrant/
-service/.node/
-service/.classpath/
-service/.classpath
-service/.project/
-service/.project
-service/.vscode/
-service/.idea/
-service/.sts4-cache/
-service/.local/
-service/.DS_*/
-service/apminsight-javaagent/
-service/console/iOS/DerivedData
-service/console/iOS/Pods
-service/manager/.factorypath/
-service/Pods/
+service/iot/.settings/
+service/iot/.gradle/
+service/iot/.vagrant/
+service/iot/.node/
+service/iot/.classpath/
+service/iot/.classpath
+service/iot/.project/
+service/iot/.project
+service/iot/.vscode/
+service/iot/.idea/
+service/iot/.sts4-cache/
+service/iot/.local/
+service/iot/.DS_*/
+service/iot/apminsight-javaagent/
+service/iot/console/iOS/DerivedData
+service/iot/console/iOS/Pods
+service/iot/manager/.factorypath/
+service/iot/Pods/
 
 .pnp.*
-service/.yarn/*
+service/iot/.yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
@@ -478,3 +478,7 @@ local.properties
 *.tsbuildinfo
 *~
 *.tar.gz
+
+################
+# Build and Release Folders
+service/iot/openremote/*

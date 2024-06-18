@@ -19,25 +19,31 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 Not stable for now. Please wait for the first release.
 Contributors and Sponsors are welcomed.
 
-## Release Plan
+## Release Plans
 
 - [X] Initialize codebase
 
-- [ ] Release Auto Energy Management (based on OpenRemote)
-- [ ] Release Auto System Development
+- [ ] Release Auto IoT solution (based on OpenRemote)
+
+- [ ] Release Auto System Development (based on IntelliJ IDEA Community)
 - [ ] Release Auto ERP (based on ERPNext)
 - [ ] Release Auto Health Care (based on Frappe Health)
 - [ ] Release Auto Supply Chain (based on frePPLe)
-- [ ] Release Auto Real Estate Mangement (based on OpenRemote)
+
 - [ ] Release Auto Finance (based on FinGPT)
 
 - [ ] Release Auto-X Consultant
+
+## Other Plans
+
+- Auto EDA (based on KiCad)
 
 
 ## Acknowledgments
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
 - [openremote](https://github.com/openremote/openremote)
+- [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)
 - [ERPNext](https://github.com/frappe/erpnext)
 - [frePPLe](https://github.com/frePPLe/frepple)
 - [FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)
