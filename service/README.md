@@ -46,13 +46,12 @@ Auto-X Service provides interactive autonomous services for practical industrial
 ### Quick Start
 1. Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed (v18+) and started. 
 2. Install JDK17
-3. Download the OpenRemote repo and put it in the iot folder.
-4. change to the 'iot' folder and run CMD:
+3. change to the 'iot' folder and run CMD:
 ```
 ./gradlew clean installDist
 docker-compose -p openremote -f profile/dev-ui.yml up --build -d
 ```
-5. If all goes well then you should now be able to access the OpenRemote Manager UI at https://localhost. 
+4. If all goes well then you should now be able to access the OpenRemote Manager UI at https://localhost. 
    The default login is username 'admin' with password 'secret'.
 
 ### Tutorials

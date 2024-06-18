@@ -1,0 +1,4 @@
+org.openremote.model.custom.GasConsumerAssetModelProvider
+org.openremote.model.custom.WaterConsumerAssetModelProvider
+org.openremote.model.custom.GaugeAssetModelProvider
+org.openremote.model.custom.DroneAssetModelProvider
