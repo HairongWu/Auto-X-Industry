@@ -115,6 +115,11 @@ if __name__ == "__main__":
     os.environ['groundingdino_model'] = args.groundingdino_model
     os.environ['pose_model'] = args.pose_model
 
+    os.environ['ram_model'] = "../../model_pool/ram_plus_swin_large_14m.pth"
+    os.environ['ram_img_size'] = 384
+
+    os.environ['videollama2_model_dir'] = "../../model_pool/VideoLLaMA2-7B-Base"
+
     os.environ['det_model_dir'] = "../../model_pool/ch_PP-OCRv4_det_server_infer"
     os.environ['cls_model_dir'] = "../../model_pool/ch_ppocr_mobile_v2.0_cls_infer"
     os.environ['rec_model_dir'] = "../../model_pool/ch_PP-OCRv4_rec_server_infer"

@@ -10,25 +10,4 @@ config: |
     </View>
     <Image name="image" value="$image"/>
   </View>
-  <!-- {
-    "data": {
-      "image": "https://htx-pub.s3.amazonaws.com/templates/inventory-tracking/shelf.jpeg",
-      "objects": [{
-        "value": "CocaCola",
-        "html": "<img width='100' src='https://htx-pub.s3.amazonaws.com/templates/inventory-tracking/cocacola.png'/>"
-      }, {
-        "value": "RedBull",
-        "html": "<img width='100' src='https://htx-pub.s3.amazonaws.com/templates/inventory-tracking/redbull.png'/>"
-      }, {
-        "value": "Burn",
-        "html": "<img width='100' src='https://htx-pub.s3.amazonaws.com/templates/inventory-tracking/burn.png'/>"
-      }, {
-        "value": "Breezer",
-        "html": "<img width='100' src='https://htx-pub.s3.amazonaws.com/templates/inventory-tracking/breezer.png'/>"
-      }, {
-        "value": "Monster",
-        "html": "<img width='100' src='https://htx-pub.s3.amazonaws.com/templates/inventory-tracking/monster.png'/>"
-      }]
-    }
-  } -->
-
+ 

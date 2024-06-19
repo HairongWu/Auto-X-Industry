@@ -12,10 +12,13 @@ pyclipper
 lanms-nova
 scikit-image
 imgaug
+pymilvus
 
 paddleclas
 
 git+https://github.com/HumanSignal/label-studio-tools.git
+git+https://github.com/xinyu1205/recognize-anything.git
+git+https://github.com/amazon-science/chronos-forecasting.git
 
 
 

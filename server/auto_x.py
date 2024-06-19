@@ -29,7 +29,8 @@ class AutoSolution(AutoXMLBase):
                         
     def predict(self, tasks: List[Dict], context: Optional[Dict] = None, **kwargs) -> List[Dict]:
         final_predictions = []
-        image_detection_tasks = []
+        image_dec_tasks = []
+        image_kp_tasks = []
         image_ocr_tasks = []
         
         print(self.parsed_label_config)
@@ -39,18 +40,18 @@ class AutoSolution(AutoXMLBase):
                 from_name_k = k
                 to_name_k = v['to_name'][0]
                 labels_k = v['labels']
-            if v['type'] == 'RectangleLabels':
+            elif v['type'] == 'RectangleLabels':
                 from_name_r = k
                 to_name_r = v['to_name'][0]
                 labels_r = v['labels']
-            if v['type'] == 'Rectangle':
+            elif v['type'] == 'Rectangle':
                 from_name_rect = k
                 to_name_rect = v['to_name'][0]
                 labels_rect = v['labels']
-            if v['type'] == 'Labels':
+            elif v['type'] == 'Labels':
                 from_name_l = k
                 to_name_l = v['to_name'][0]
-            if v['type'] == 'TextArea':
+            elif v['type'] == 'TextArea':
                 textarea_from_name = k
                 li = self.label_interface
                 textarea_tag = li.get_control(textarea_from_name)
@@ -61,6 +62,8 @@ class AutoSolution(AutoXMLBase):
                     raw_img_path = task['data']['ocr']
                 if 'dec' in task['data']:
                     raw_img_path = task['data']['dec']
+                if 'kp' in task['data']:
+                    raw_img_path = task['data']['kp']
 
                 img_path = self.get_local_path(
                     raw_img_path,
@@ -73,10 +76,12 @@ class AutoSolution(AutoXMLBase):
                 print(mime)
 
                 if 'image/' in mime:
-                    if 'ocr' in task['data']:
+                    if 'dec' in task['data']:
+                        image_dec_tasks.append(img_path)
+                    elif 'kp' in task['data']:
+                        image_kp_tasks.append(img_path)
+                    elif 'ocr' in task['data']:
                         image_ocr_tasks.append(img_path)
-                    else:
-                        image_detection_tasks.append(img_path)
 
                 elif 'video/' in mime:
                     pass
@@ -87,25 +92,36 @@ class AutoSolution(AutoXMLBase):
             except Exception as e:
                 logger.error(f"Error getting local path: {e}")
                 img_path = raw_img_path
-        if len(image_detection_tasks) > 0:
-            final_predictions.append(self.multiple_detection_tasks(image_detection_tasks, from_name_r, to_name_r, labels_r, from_name_k, to_name_k))
+        if len(image_dec_tasks) > 0:
+            final_predictions.append(self.multiple_dec_tasks(image_dec_tasks, from_name_r, to_name_r, labels_r, from_name_k, to_name_k))
+        if len(image_kp_tasks) > 0:
+            final_predictions.append(self.multiple_kp_tasks(image_kp_tasks, from_name_r, to_name_r, labels_r, from_name_k, to_name_k))
         if len(image_ocr_tasks) > 0:
             final_predictions.append(self.multiple_ocr_tasks(image_ocr_tasks, from_name_rect, to_name_rect, from_name_l, to_name_l, textarea_tag))
         return final_predictions
     
-    def multiple_detection_tasks(self, image_paths, from_name_r, to_name_r, labels_r, from_name_k, to_name_k):
+    def multiple_dec_tasks(self, image_paths, from_name_r, to_name_r, labels_r, from_name_k, to_name_k):
         
         predictions = []
 
-        all_keypoints, all_boxes, all_labels, all_logits, all_lengths = vis_pipeline.run_keypoints(image_paths, labels_r)
-        
-        for points, (H, W) in zip(all_keypoints, all_lengths):            
-            predictions.extend(self.get_keypoint_results(points, (H, W), from_name_k, to_name_k))
+        all_boxes, all_labels, all_logits, all_lengths = vis_pipeline.run_detection(image_paths)
 
         for boxes_xyxy, label, logits, (H, W) in zip(all_boxes, all_labels, all_logits, all_lengths):                 
             predictions.extend(self.get_detection_results(boxes_xyxy, label, logits, (H, W), from_name_r, to_name_r))
 
-        all_boxes, all_labels, all_logits, all_lengths = vis_pipeline.run_detection(image_paths)
+        return {
+            'result': predictions,
+            'score': 0,
+            'model_version': self.get('model_version')
+        }
+    def multiple_kp_tasks(self, image_paths, from_name_r, to_name_r, labels_r, from_name_k, to_name_k):
+        
+        predictions = []
+
+        all_keypoints, all_boxes, all_labels, all_logits, all_lengths = vis_pipeline.run_keypoints(image_paths)
+        
+        for points, (H, W) in zip(all_keypoints, all_lengths):            
+            predictions.extend(self.get_keypoint_results(points, (H, W), from_name_k, to_name_k))
 
         for boxes_xyxy, label, logits, (H, W) in zip(all_boxes, all_labels, all_logits, all_lengths):                 
             predictions.extend(self.get_detection_results(boxes_xyxy, label, logits, (H, W), from_name_r, to_name_r))

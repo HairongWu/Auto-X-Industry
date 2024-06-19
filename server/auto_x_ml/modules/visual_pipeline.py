@@ -10,6 +10,10 @@ from collections import OrderedDict
 import re
 from transformers import AutoTokenizer
 
+from ram.models import ram_plus
+from ram import inference_ram as inference
+from ram import get_transform
+
 from .utils.slconfig import SLConfig
 from .utils import transforms as T
 from .utils.box_ops import box_cxcywh_to_xyxy
@@ -166,6 +170,13 @@ class VisualPipeline():
         self.IOU_THRESHOLD = os.environ.get("IOU_THRESHOLD", 0.8)
         self.TEXT_THRESHOLD = os.environ.get("TEXT_THRESHOLD", 0.25)
 
+        ram_model = ram_plus(pretrained=os.environ.get('ram_model'),
+                                image_size=os.environ.get("ram_img_size", 384),
+                                vit='swin_l')
+        ram_model.eval()
+        self.ram_model = ram_model.to(self.device)
+        self.transform = get_transform(image_size=os.environ.get("ram_img_size", 384))
+
         from groundingdino.models import build_model
         args = SLConfig.fromfile("./auto_x_ml/modules/groundingdino/GroundingDINO_SwinT_OGC.py")
         #args.text_encoder_type = os.environ.get('bert-base-uncased')
@@ -185,8 +196,16 @@ class VisualPipeline():
 
         self.prompts = []
 
+    def get_prompts(self, image_paths):
+        # Fix me: Change to batch inferences
+        for img in image_paths:
+            image = self.transform(Image.open(img)).unsqueeze(0).to(self.device)
+            res = inference(image, self.ram_model)
+            self.prompts = ','.join(res[0])
+
     def run_detection(self, image_paths):
         # Fix me: Change to batch inferences
+        self.get_prompts(image_paths)
         all_boxes = []
         all_labels = []
         all_logits = []
@@ -224,11 +243,10 @@ class VisualPipeline():
 
         return all_boxes, all_labels, all_logits, all_lengths
     
-    def run_keypoints(self, image_paths, labels_r):
+    def run_keypoints(self, image_paths):
         # Fix me: Change to batch inferences
-        self.prompts = []
-        labels_r = set(labels_r)
-        if len(labels_r) > 0:
+        self.get_prompts(image_paths)
+        if len(self.prompts) > 0:
 
             all_keypoints = []
             all_lengths = []
@@ -244,7 +262,7 @@ class VisualPipeline():
                 boxes_xyxy = []
                 prompts = []
                 logits = []
-                for prompt in labels_r:
+                for prompt in self.prompts:
                     if prompt in predefined_keypoints:
                         keypoint_dict = globals()[prompt]
                         keypoint_text_prompt = keypoint_dict.get("keypoints")
@@ -275,9 +293,6 @@ class VisualPipeline():
                         logits.extend(logits_filt[:,0:1])
 
 
-                    else:
-                        self.prompts.append(prompt)
-
                 all_keypoints.append(keypoints)
                 all_lengths.append((H, W))  
 
@@ -288,5 +303,3 @@ class VisualPipeline():
 
         return all_keypoints, all_boxes, all_labels, all_logits, all_lengths
     
-    def run_visual_genome(self, image_paths, labels_r):
-        pass

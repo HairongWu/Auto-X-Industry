@@ -13,6 +13,7 @@ import { Block, cn, Elem } from "../../../utils/bem";
 import { Palette } from "../../../utils/colors";
 import { colorNames } from "./colors";
 import "./Config.styl";
+import { Preview } from "./Preview";
 import { DEFAULT_COLUMN, EMPTY_CONFIG, isEmptyConfig, Template } from "./Template";
 import { TemplatesList } from "./TemplatesList";
 
@@ -522,6 +523,13 @@ const Configurator = ({
           </Form.Actions>
         )}
       </div>
+      <Preview
+        config={configToDisplay}
+        data={data}
+        project={project}
+        loading={loading}
+        error={parserError || error || (configure === "code" && warning)}
+      />
     </div>
   );
 };

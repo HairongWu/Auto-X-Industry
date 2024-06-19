@@ -22,7 +22,3 @@ python label_studio/manage.py collectstatic
 # Start the server in development mode at http://localhost:8080
 python label_studio/manage.py runserver
 ```
-
-## References
-
-- [Eclipse Ditto™ Client SDKs](https://github.com/eclipse-ditto/ditto-clients)
