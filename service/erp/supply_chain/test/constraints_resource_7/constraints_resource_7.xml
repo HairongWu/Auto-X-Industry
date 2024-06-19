@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Test model for bucketized resources</name>
+  <description>
+  In this test the various aspects of bucketized resources.
+    - constant part of the capacity consumption
+    - variable part of the capacity consumption
+    - efficiency
+    - time_per operations
+    - unconstrained plan with alternate resources
+  </description>
+  <current>2019-01-01T00:00:00</current>
+  <calendars>
+    <calendar name="Capacity">
+      <default>0</default>
+      <buckets>
+        <!-- 2 + 4 + 8 + 16 + 32 = 62 = effective monday through friday -->
+        <bucket start="2019-02-01T00:00:00" end="2019-04-30T00:00:00" days="62" value="20" />
+      </buckets>
+    </calendar>
+  </calendars>
+
+  <!--
+  TEST 1: A simple case with efficiency.
+  The operation is a time_per, which complicates things are the bucket
+  where capacity is needed changes as the requirement quantity changes.
+  -->
+  <operations>
+    <operation name="1. make end item" xsi:type="operation_time_per">
+      <size_multiple>1</size_multiple>
+      <item name="1. end item" />
+      <location name="1. factory" />
+      <loads>
+        <load>
+          <resource name="1. Resource" xsi:type="resource_buckets">
+            <location name="1. factory" />
+            <maximum_calendar name="Capacity"/>
+            <efficiency>50</efficiency>
+            <maxearly>P100D</maxearly>
+          </resource>
+          <quantity>1</quantity>
+          <quantity_fixed>1</quantity_fixed>
+        </load>
+      </loads>
+      <duration>P10D</duration>
+      <duration_per>P10D</duration_per>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="1. order 1">
+      <quantity>2</quantity>
+      <due>2019-07-15T00:00:00</due>
+      <priority>1</priority>
+      <item name="1. end item" />
+      <location name="1. factory" />
+    </demand>
+    <demand name="1. order 2">
+      <quantity>2</quantity>
+      <minshipment>2</minshipment>
+      <due>2018-11-11T00:00:00</due>
+      <priority>1</priority>
+      <item name="1. end item" />
+      <location name="1. factory" />
+    </demand>
+  </demands>
+
+  <!--
+  TEST 2: Same as 1, but with extra availability calendar that restricts
+  the position of the operationplan within the bucket.
+  -->
+  <operations>
+    <operation name="2. make end item" xsi:type="operation_time_per">
+      <size_multiple>1</size_multiple>
+      <item name="2. end item" />
+      <location name="2. factory">
+        <available name="2. factory availability">
+          <default>0</default>
+          <buckets>
+            <!-- 4 + 8 + 16 = 28 = effective tuesday through thursday -->
+            <bucket  days="28" value="1" />
+          </buckets>
+        </available>
+      </location>
+      <loads>
+        <load>
+          <resource name="2. Resource" xsi:type="resource_buckets">
+            <location name="2. factory" />
+            <maximum_calendar name="Capacity"/>
+            <efficiency>50</efficiency>
+            <maxearly>P100D</maxearly>
+          </resource>
+          <quantity>1</quantity>
+          <quantity_fixed>1</quantity_fixed>
+        </load>
+      </loads>
+      <duration>P5D</duration>
+      <duration_per>P5D</duration_per>
+    </operation>
+    <operation name="2. cal test" xsi:type="operation_time_per">
+      <location name="2. factory" />
+    </operation>
+  </operations>
+  <demands>
+    <demand name="2. order 1">
+      <quantity>2</quantity>
+      <due>2019-07-15T00:00:00</due>
+      <priority>1</priority>
+      <item name="2. end item" />
+      <location name="2. factory" />
+    </demand>
+    <demand name="2. order 2">
+      <quantity>2</quantity>
+      <minshipment>2</minshipment>
+      <due>2018-11-11T00:00:00</due>
+      <priority>1</priority>
+      <item name="2. end item" />
+      <location name="2. factory" />
+    </demand>
+  </demands>
+  <operationplans>
+    <operationplan>
+      <reference>cal test #1 backward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <end>2019-07-15T00:00:00</end>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #2 backward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <end>2019-07-16T00:00:00</end>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #3 backward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <end>2019-07-17T00:00:00</end>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #4 backward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <end>2019-07-18T00:00:00</end>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #5 backward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <end>2019-07-19T00:00:00</end>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #6 backward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <end>2019-07-20T00:00:00</end>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #7 backward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <end>2019-07-21T00:00:00</end>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #1 forward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <start>2019-07-01T00:00:00</start>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #2 forward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <start>2019-07-02T00:00:00</start>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #3 forward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <start>2019-07-03T00:00:00</start>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #4 forward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <start>2019-07-04T00:00:00</start>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #5 forward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <start>2019-07-05T00:00:00</start>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #6 forward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <start>2019-07-06T00:00:00</start>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>
+    <operationplan>
+      <reference>cal test #7 forward</reference>
+      <operation>
+        <name>2. cal test</name>
+      </operation>
+      <start>2019-07-07T00:00:00</start>
+      <quantity>1</quantity>
+      <status>approved</status>
+    </operationplan>	
+  </operationplans>
+
+  <!--
+  TEST 3: Same as 2, but with now production split over multiple buckets.
+  -->
+  <operations>
+    <operation name="3. make end item" xsi:type="operation_time_per">
+      <size_multiple>1</size_multiple>
+      <item name="3. end item" />
+      <location name="3. factory">
+        <available name="3. factory availability">
+          <default>0</default>
+          <buckets>
+            <!-- 4 + 8 + 16 = 28 = effective tuesday through thursday -->
+            <bucket  days="28" value="1" />
+          </buckets>
+        </available>
+      </location>
+      <loads>
+        <load>
+            <resource name="3. Resource" xsi:type="resource_buckets">
+                <location name="3. factory" />
+            <maximum_calendar name="Capacity"/>
+            <efficiency>50</efficiency>
+            <maxearly>P100D</maxearly>
+          </resource>
+          <quantity>1</quantity>
+          <quantity_fixed>1</quantity_fixed>
+        </load>
+      </loads>
+      <duration>PT12H</duration>
+      <duration_per>PT12H</duration_per>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="3. order 1">
+      <quantity>20</quantity>
+      <minshipment>10</minshipment>
+      <due>2019-07-15T00:00:00</due>
+      <priority>1</priority>
+      <item name="3. end item" />
+      <location name="3. factory" />
+    </demand>
+    <demand name="3. order 2">
+      <quantity>1</quantity>
+      <minshipment>1</minshipment>
+      <due>2019-04-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="3. end item" />
+      <location name="3. factory" />
+    </demand>
+    <demand name="3. order 3">
+      <quantity>10</quantity>
+      <minshipment>5</minshipment>
+      <due>2018-11-11T00:00:00</due>
+      <priority>1</priority>
+      <item name="3. end item" />
+      <location name="3. factory" />
+    </demand>
+  </demands>
+
+  <!--
+  TEST 4: A case with alternate resources.
+  -->
+  <operations>
+    <operation name="4. make end item with A" xsi:type="operation_time_per">
+      <size_multiple>1</size_multiple>
+      <priority>1</priority>
+      <item name="4. end item" />
+      <location name="4. factory" />
+      <loads>
+        <load>
+          <resource name="4. Resource A" xsi:type="resource_buckets">
+            <location name="4. factory" />
+            <maximum_calendar name="Capacity"/>
+            <maxearly>P10D</maxearly>
+          </resource>
+          <quantity>1</quantity>
+          <quantity_fixed>1</quantity_fixed>
+        </load>
+      </loads>
+      <duration_per>PT1H</duration_per>
+    </operation>
+    <operation name="4. make end item with B" xsi:type="operation_time_per">
+      <size_multiple>1</size_multiple>
+      <priority>2</priority>
+      <item name="4. end item" />
+      <location name="4. factory" />
+      <loads>
+        <load>
+          <resource name="4. Resource B" xsi:type="resource_buckets">
+            <location name="4. factory" />
+            <maximum_calendar name="Capacity"/>
+            <efficiency>75</efficiency>
+            <maxearly>P10D</maxearly>
+          </resource>
+          <quantity>1</quantity>
+          <quantity_fixed>1</quantity_fixed>
+        </load>
+      </loads>
+      <duration_per>PT1H</duration_per>
+    </operation>
+    <operation name="4. make end item with C" xsi:type="operation_time_per">
+      <size_multiple>1</size_multiple>
+      <priority>3</priority>
+      <item name="4. end item" />
+      <location name="4. factory" />
+      <loads>
+        <load>
+              <resource name="4. Resource C" xsi:type="resource_buckets">
+                <location name="4. factory" />
+                <maximum_calendar name="Capacity"/>
+                <efficiency>50</efficiency>
+                <maxearly>P10D</maxearly>
+          </resource>
+          <quantity>1</quantity>
+          <quantity_fixed>1</quantity_fixed>
+        </load>
+      </loads>
+      <duration_per>PT1H</duration_per>
+    </operation>    
+  </operations>
+  <demands>
+    <demand name="4. order 1">
+      <quantity>95</quantity>
+      <due>2019-03-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item" />
+      <location name="4. factory" />
+    </demand>
+  </demands>
+  <!--
+  TEST 5: A case with a complicated interaction between material and capcity constraints.
+  The material constraints brings the operation to a new bucket.
+  -->
+  <buffers>
+    <buffer name="5. component @ 5. factory">
+      <item name="5. component" />
+      <location name="5. factory" />
+      <onhand>11</onhand>
+    </buffer>
+  </buffers>
+  <suppliers>
+    <supplier name="5. Supplier">
+      <itemsuppliers>
+        <itemsupplier>
+          <item name="5. end item"/>
+          <leadtime>P9D</leadtime>
+          <priority>2</priority>
+        </itemsupplier>
+      </itemsuppliers>
+    </supplier>
+  </suppliers>
+  <operations>
+    <operation name="5. make end item" xsi:type="operation_time_per">
+      <size_multiple>1</size_multiple>
+      <item name="5. end item" />
+      <priority>1</priority>
+      <location name="5. factory" />
+      <flows>
+        <flow xsi:type="flow_start">
+          <item name="5. component"/>
+          <quantity>-1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="5. Resource" xsi:type="resource_buckets">
+            <location name="5. factory" />
+            <maximum_calendar name="Capacity"/>
+          </resource>
+          <quantity>2</quantity>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+      <duration_per>P1D</duration_per>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="5. order 1">
+      <quantity>10</quantity>
+      <due>2019-04-08T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item" />
+      <location name="5. factory" />
+    </demand>
+    <demand name="5. order 2">
+      <quantity>4</quantity>
+      <due>2019-03-27T00:00:00</due>
+      <priority>2</priority>
+      <item name="5. end item" />
+      <location name="5. factory" />
+    </demand>    
+  </demands>
+  
+  <!--
+    TEST 6: multiple bucketized resources that aren't simultaneously available before some time
+  -->
+  <operations>
+    <operation name="6. make end item" xsi:type="operation_fixed_time">
+      <item name="6. end item" />
+      <location name="6. factory" />
+      <loads>
+        <load>
+          <resource name="6. Resource A" xsi:type="resource_buckets">
+          <location name="6. factory" />
+          <maximum_calendar name="capacity 6A">
+             <default>0</default>
+             <buckets>
+                <!-- 2 + 4 + 8 + 16 + 32 = 62 = effective monday through friday -->
+                <bucket start="2019-02-01T00:00:00" end="2019-02-28T00:00:00" days="62" value="10" />
+                <bucket start="2019-06-01T00:00:00" end="2019-12-30T00:00:00" days="62" value="10" />
+             </buckets>
+          </maximum_calendar>
+          </resource>
+          <quantity>1</quantity>
+        </load>
+        <load>
+          <resource name="6. Resource B" xsi:type="resource_buckets">
+          <location name="6. factory" />
+          <maximum_calendar name="capacity 6B">
+             <default>0</default>
+             <buckets>
+                <!-- 2 + 4 + 8 + 16 + 32 = 62 = effective monday through friday -->
+                <bucket start="2019-01-01T00:00:00" end="2019-08-01T00:00:00" days="62" value="8" />
+                <bucket start="2019-08-01T00:00:00" end="2019-12-30T00:00:00" days="62" value="4" />
+             </buckets>
+          </maximum_calendar>
+          </resource>
+          <quantity>1</quantity>
+        </load>
+        <load>
+          <resource name="6. Resource C" xsi:type="resource_buckets">
+          <location name="6. factory" />
+          <maximum_calendar name="capacity 6C">
+             <default>0</default>
+             <buckets>
+                <!-- 2 + 4 + 8 + 16 + 32 = 62 = effective monday through friday -->
+                <bucket start="2019-05-01T00:00:00" end="2019-10-30T00:00:00" days="62" value="6" />
+             </buckets>
+          </maximum_calendar>
+          </resource>
+          <quantity>1</quantity>
+        </load>
+      </loads>
+      <duration>P0D</duration>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="6. order 1">
+      <quantity>80</quantity>
+      <due>2019-02-15T00:00:00</due>
+      <priority>1</priority>
+      <item name="6. end item" />
+      <location name="6. factory" />
+      <minshipment>1</minshipment>
+    </demand>
+  </demands>
+  
+  
+<?python
+print("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.1.xml")
+print("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+frepple.solver_mrp(plantype=2, constraints=0, loglevel=2).solve()
+frepple.saveplan("output.3.xml")
+?>
+
+</plan>

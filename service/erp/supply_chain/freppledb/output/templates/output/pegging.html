@@ -1,0 +1,282 @@
+{% extends "admin/base_site_grid.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+<style>
+#grid_location__name, #grid_operationplans, .ui-jqgrid .ui-jqgrid-resize, .ui-jqgrid .ui-jqgrid-htable th div {
+  height: 34px;
+}
+
+rect.opplan {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
+  stroke: rgb(0,0,0);
+}
+
+#main-row .tooltip.bottom .tooltip-arrow {
+  border-bottom-color: white;
+}
+
+#main-row .tooltip.top .tooltip-arrow {
+  border-top-color: white;
+}
+
+#main-row .tooltip.in {
+opacity: 1;
+}
+
+#main-row .tooltip-inner {
+  text-align:left;
+  white-space: nowrap;
+  color: #333;
+  background-color: white;
+}
+
+</style>
+<script>
+
+function buildcolor(rowdata) {
+  // The logic here needs to be in sync with the color formatter in the frepple.js file
+  var thenumber = parseInt(rowdata['color']);
+  if (rowdata['inventory_item'] || rowdata['leadtime']) {
+      if (!isNaN(thenumber)) {
+        if (thenumber >= 100 && thenumber < 999999)
+          return '#008000';
+        else if (thenumber === 0)
+          return '#f00';
+        else if (thenumber === 999999)
+          return 'white';
+        else {
+          thenumber = Math.round(thenumber/100*255);
+          return 'rgb(' + 255 + ',' + thenumber + ',' + 0 + ')';
+        }
+      }
+    } else {
+      var thedelay = Math.round(parseInt(rowdata['delay'])/8640)/10;
+      if (parseInt(rowdata['criticality']) === 999)
+        return '#f00';
+      else if (thedelay < 0)
+        return '#008000';
+      else if (thedelay === 0)
+        return '#008000';
+      else if (thedelay > 0) {
+        if (thenumber > 100 || thenumber < 0)
+          return '#f00';
+        else
+          return 'rgb(' + 255 + ',' + Math.round(thenumber/100*255) + ',' + 0 + ')';
+      }
+    }
+  return 'rgb(111,111,255)';
+}
+
+function escapeAttribute(val) {
+	if (typeof val === 'string' || val instanceof String)
+	  return val.replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+	else
+		return val;
+}
+
+function ganttcell(cellvalue, options, rowdata)
+{
+  var layer = [];
+  var result = [];
+  var map = {};
+  map["MO"] = "manufacturingorder";
+  map["PO"] = "purchaseorder";
+  map["DO"] = "distributionorder";
+  map["DLVR"] = "deliveryorder";
+
+  for (data of rowdata["operationplans"])
+  {
+    var row = 0;
+     for (; row < layer.length; ++row)
+     {
+        if (data["startdate"] >= layer[row] && (data["enddate"] != data["startdate"]))
+        {
+           layer[row] = data["enddate"];
+           break;
+        }
+     };
+     if (row >= layer.length) layer.push(data["enddate"]);
+     var rect = '<a href="' + url_prefix + '/data/input/' + map[data["type"]] +'/?reference='+ admin_escape(data["reference"]) + '">'
+       + '<rect class="opplan" x="' + data["x"] + '" y="' + (-row*gantt.rowsize)
+       + '" fill="' + buildcolor(data) + '" width="' + Math.max(data["w"],1)
+       + '" height="' + (gantt.rowsize-3) + '"';
+     if (data["status"] == "proposed")
+    	 rect += ' fill-opacity="0.5"';
+     Object.keys(data).forEach(function(key,index) {
+    	 if (key != "w" && key != "x" && data[key] !== null) {
+    		 rect += ' data-' + key + '="' + escapeAttribute(data[key]) + '"';
+    	 }
+     });
+     rect += '/>';
+     rect += '</a>'
+     result.push(rect);
+  }
+  result.push( '<line x1="' + rowdata["due"] + '" y1="' + gantt.rowsize + '" x2="' + rowdata["due"] + '" y2="-' + (layer.length*gantt.rowsize) + '" vector-effect="non-scaling-stroke" stroke="red" stroke-width="1" />');
+  result.push( '<line x1="' + rowdata["current"] + '" y1="' + gantt.rowsize + '" x2="' + rowdata["current"] + '" y2="-' + (layer.length*gantt.rowsize) + '" vector-effect="non-scaling-stroke" stroke="black" stroke-width="1" />');
+  var scale = $("#jqgh_grid_operationplans").width() / 10000;
+  return '<svg width="100%" height="' + (gantt.rowsize*layer.length+3) + 'px">'
+    + '<g class="transformer" transform="scale(' + scale + ',1) translate(0,' + ((layer.length-1)*gantt.rowsize+3) +')" title="' + layer.length +'">'
+    + result.join('\n')
+    + '</g></svg>';
+}
+
+function buildtooltip(){
+  var extra = '';
+  var thedelay = Math.round(parseFloat(parseInt($(this).attr("data-delay")))/8640)/10;
+  if (thedelay < 0.1)
+  	thedelay = "" + (-thedelay) + " days early";
+  else if (thedelay > 0.1)
+  	thedelay = "" + thedelay + " days late";
+  else
+  	thedelay = "on time";
+  if ($(this).attr("data-description"))
+    extra += gettext('description')+": " + $(this).attr("data-description") + '<br>';
+  if ($(this).attr("data-batch"))
+    extra += gettext('batch')+": " + $(this).attr("data-batch") + '<br>';
+  if ($(this).attr("data-type") === 'MO') {
+    return gettext('manufacturing order') + '<br>' +
+      $(this).attr("data-operation") + '<br>' +
+      gettext('reference')+": " + $(this).attr("data-reference") + '<br>' +
+      extra +
+      gettext('start')+": " + $(this).attr("data-startdate") + '<br>' +
+      gettext('end')+": " + $(this).attr("data-enddate") + '<br>' +
+      gettext('quantity')+": " + grid.formatNumber(parseFloat($(this).attr("data-quantity"))) + "<br>" +
+      gettext('required quantity')+": " + grid.formatNumber($(this).attr("data-required_quantity")) + "<br>" +
+      gettext('criticality')+": " + $(this).attr("data-criticality") + "<br>" +
+      gettext('delay')+": " +  thedelay + "<br>" +
+      gettext('status')+": " + gettext($(this).attr("data-status")) + "<br>";
+  }
+  else if ($(this).attr("data-type") === 'PO') {
+    return gettext('purchase order') + '<br>' +
+      $(this).attr("data-item") + ' @ ' + $(this).attr("data-location") + '<br>' +
+      gettext('reference')+": " + $(this).attr("data-reference") + '<br>' +
+      extra +
+      gettext('supplier')+": " + $(this).attr("data-supplier") + '<br>' +
+      gettext('start')+": " + $(this).attr("data-startdate") + '<br>' +
+      gettext('end')+": " + $(this).attr("data-enddate") + '<br>' +
+      gettext('quantity')+": " + grid.formatNumber(parseFloat($(this).attr("data-quantity"))) + "<br>" +
+      gettext('required quantity')+": " + grid.formatNumber(parseFloat($(this).attr("data-required_quantity"))) + "<br>" +
+      gettext('criticality')+": " + $(this).attr("data-criticality") + "<br>" +
+      gettext('delay')+": " +  thedelay + "<br>" +
+      gettext('status')+": " + gettext($(this).attr("data-status")) + "<br>";
+  }
+  else if ($(this).attr("data-type") === 'DO') {
+    return gettext('distribution order') + '<br>' +
+      $(this).attr("data-item") + ' @ ' + $(this).attr("data-location") + '<br>' +
+      gettext('origin')+": " + $(this).attr("data-origin") + '<br>' +
+      gettext('reference')+": " + $(this).attr("data-reference") + '<br>' +
+      extra +
+      gettext('start')+": " + $(this).attr("data-startdate") + '<br>' +
+      gettext('end')+": " + $(this).attr("data-enddate") + '<br>' +
+      gettext('quantity')+": " + grid.formatNumber(parseFloat($(this).attr("data-quantity"))) + "<br>" +
+      gettext('required quantity')+": " + grid.formatNumber(parseFloat($(this).attr("data-required_quantity"))) + "<br>" +
+      gettext('criticality')+": " + $(this).attr("data-criticality") + "<br>" +
+      gettext('delay')+": " +  thedelay + "<br>" +
+      gettext('status')+": " + gettext($(this).attr("data-status")) + "<br>";
+  }
+  else if ($(this).attr("data-type") === 'STCK') {
+    return gettext('inventory') + '<br>' +
+      $(this).attr("data-item") + ' @ ' + $(this).attr("data-location") + '<br>' +
+      gettext('quantity')+": " + grid.formatNumber(parseFloat($(this).attr("data-quantity"))) + "<br>";
+  }
+  else if ($(this).attr("data-type") === 'DLVR') {
+    return gettext('customer delivery') + '<br>' +
+      extra +
+      $(this).attr("data-item") + ' @ ' + $(this).attr("data-location") + '<br>' +
+      gettext('demand')+": " + $(this).attr("data-demand") + '<br>' +
+      gettext('start')+": " + $(this).attr("data-startdate") + '<br>' +
+      gettext('end')+": " + $(this).attr("data-enddate") + '<br>' +
+      gettext('quantity')+": " + grid.formatNumber(parseFloat($(this).attr("data-quantity"))) + "<br>" +
+      gettext('criticality')+": " + $(this).attr("data-criticality") + "<br>" +
+      gettext('delay')+": " +  thedelay + "<br>" +
+      gettext('status')+": " + gettext($(this).attr("data-status")) + "<br>";
+  }
+}
+
+
+var horizonstart = new Date({{request.report_startdate|date:"Y"}},{{request.report_startdate|date:"n"}}-1,{{request.report_startdate|date:"j"}});
+var horizonend = new Date({{request.report_enddate|date:"Y"}},{{request.report_enddate|date:"n"}}-1,{{request.report_enddate|date:"j"}});
+var viewstart = new Date(horizonstart.getTime());
+var viewend = new Date(horizonend.getTime());
+
+
+$(function() {
+  gantt.header();
+  $("#jqgh_grid_operationplans").css("overflow-x", "scroll").scroll(gantt.scroll);
+});
+
+function reslistfmt(cellvalue, options, row)
+{
+  if (cellvalue === undefined || cellvalue ==='') return '';
+  result = '';
+  for (var i in cellvalue)
+    result += cellvalue[i]
+      + "<a href=\"" + url_prefix + "/detail/input/resource/" + admin_escape(cellvalue[i])
+      + "/\" onclick='event.stopPropagation()'>"
+      + "<span class='ps-2 fa fa-caret-right'></span>"
+      + "</a><br>";
+  return result;
+}
+
+</script>
+{% endblock %}
+{% block extra_grid %}treeGrid: true,
+treeGridModel: 'adjacency',
+ExpandColumn: 'depth',
+treeIcons: {
+  plus:'fa-caret-right',
+  minus:'fa-caret-down',
+  leaf:'fa-genderless'
+  },
+tree_root_level: 0,
+treeReader: {
+  level_field: 'depth',
+  parent_id_field: 'parent',
+  leaf_field: 'leaf',
+  expanded_field: 'expanded'
+  },
+ExpandColClick: true,
+shrinkToFit: true,
+resizeStop: gantt.redraw,
+loadComplete: function(data) {
+  $('#curerror').html("");
+  if(data.rows.length == 0) {
+    var msg = $('<h2 style="padding:30px">').text(gettext("This demand has not been planned"));
+    $("#content-main").replaceWith(msg);
+  }
+  $("#grid").jqGrid("gridResize", { shrinkToFit: false });
+  $('svg rect').each(function() {
+    bootstrap.Tooltip.getOrCreateInstance($(this)[0], {
+      title: buildtooltip,
+      animation: false,
+      html: true,
+      container: 'body',
+      template: `
+         <div class="tooltip opacity-100" role="tooltip">
+           <div class="tooltip-arrow"></div>
+           <div class="tooltip-inner bg-white text-start text-body fs-6 p-3"></div>
+         </div>`
+    });
+  });
+},
+{% endblock %}
+
+{% block actions %}
+{% include "common/snippet_favorites.html" %}
+<button class="btn btn-sm btn-primary" onclick="gantt.zoom(0.5)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'zoom in'|capfirst|force_escape %}" ><span class="fa fa-search-plus"></span></button>
+<button class="btn btn-sm btn-primary" onclick="gantt.zoom(2.0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'zoom out'|capfirst|force_escape %}" ><span class="fa fa-search-minus"></span></button>
+<button class="btn btn-sm btn-primary" onclick="grid.showExport(true,{{ scenario_permissions }})" >
+  <span data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans 'export as CSV or Excel file'|capfirst|force_escape %}" class="fa fa-arrow-down"></span>
+</button>
+<button class="btn btn-sm btn-primary" onclick="grid.showCustomize(false);" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'customize'|capfirst|force_escape %}"><span class="fa fa-wrench"></span></button>
+{% endblock %}
+
+{% block tools %}{% include "common/snippet_follow.html" %}{% endblock %}
+
+{% block tabs %}{% tabs model %}{% endblock %}

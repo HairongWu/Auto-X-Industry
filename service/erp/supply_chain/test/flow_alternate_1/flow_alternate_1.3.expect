@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<name>Test model for alternate flows</name>
+	<description>
+  This test verifies the behavior of alternate flows.
+  An assembly operation is modeled which has alternate components:
+    * Component A or component B can be used in the assembly.
+      Component A is the preferred one, and Component B is only used
+      when constraints are found on A.
+    * Component C can be replaced by component D till a certain date, or by
+      component E valid from a date.
+      The validity periods of the components D and E can overlap.
+    * Component F is used till a certain date, after which the component G is
+      used. The validity periods of the components can overlap.
+  </description>
+	<current>2009-01-01T00:00:00</current>
+	<locations>
+		<location>
+			<name>factory</name>
+		</location>
+	</locations>
+	<suppliers>
+		<supplier>
+			<name>Component supplier</name>
+		</supplier>
+	</suppliers>
+	<items>
+		<item>
+			<name>component A</name>
+			<itemsuppliers>
+				<itemsupplier>
+					<supplier>
+						<name>Component supplier</name>
+					</supplier>
+					<leadtime>P7D</leadtime>
+				</itemsupplier>
+			</itemsuppliers>
+		</item>
+		<item>
+			<name>component B</name>
+			<itemsuppliers>
+				<itemsupplier>
+					<supplier>
+						<name>Component supplier</name>
+					</supplier>
+					<leadtime>P5D</leadtime>
+				</itemsupplier>
+			</itemsuppliers>
+		</item>
+		<item>
+			<name>component C</name>
+			<itemsuppliers>
+				<itemsupplier>
+					<supplier>
+						<name>Component supplier</name>
+					</supplier>
+					<leadtime>P7D</leadtime>
+				</itemsupplier>
+			</itemsuppliers>
+		</item>
+		<item>
+			<name>component D</name>
+			<itemsuppliers>
+				<itemsupplier>
+					<supplier>
+						<name>Component supplier</name>
+					</supplier>
+					<leadtime>P7D</leadtime>
+				</itemsupplier>
+			</itemsuppliers>
+		</item>
+		<item>
+			<name>component E</name>
+			<itemsuppliers>
+				<itemsupplier>
+					<supplier>
+						<name>Component supplier</name>
+					</supplier>
+					<leadtime>P7D</leadtime>
+				</itemsupplier>
+			</itemsuppliers>
+		</item>
+		<item>
+			<name>component F</name>
+			<itemsuppliers>
+				<itemsupplier>
+					<supplier>
+						<name>Component supplier</name>
+					</supplier>
+					<leadtime>P7D</leadtime>
+				</itemsupplier>
+			</itemsuppliers>
+		</item>
+		<item>
+			<name>component G</name>
+			<itemsuppliers>
+				<itemsupplier>
+					<supplier>
+						<name>Component supplier</name>
+					</supplier>
+					<leadtime>P5D</leadtime>
+				</itemsupplier>
+			</itemsuppliers>
+		</item>
+		<item>
+			<name>product</name>
+		</item>
+	</items>
+	<buffers>
+		<buffer>
+			<name>component A @ factory</name>
+			<item>
+				<name>component A</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<onhand>1</onhand>
+		</buffer>
+		<buffer>
+			<name>component B @ factory</name>
+			<item>
+				<name>component B</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<onhand>4</onhand>
+		</buffer>
+		<buffer>
+			<name>component C @ factory</name>
+			<item>
+				<name>component C</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<onhand>5</onhand>
+		</buffer>
+		<buffer>
+			<name>component D @ factory</name>
+			<item>
+				<name>component D</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+		</buffer>
+		<buffer>
+			<name>component E @ factory</name>
+			<item>
+				<name>component E</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+		</buffer>
+		<buffer>
+			<name>component F @ factory</name>
+			<item>
+				<name>component F</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<onhand>5</onhand>
+		</buffer>
+		<buffer>
+			<name>component G @ factory</name>
+			<item>
+				<name>component G</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<onhand>5</onhand>
+		</buffer>
+		<buffer>
+			<name>product @ factory</name>
+			<producing xsi:type="operation_time_per">
+				<name>assembly</name>
+			</producing>
+			<item>
+				<name>product</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+		</buffer>
+	</buffers>
+	<operations>
+		<operation xsi:type="operation_time_per">
+			<name>assembly</name>
+			<item>
+				<name>product</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<flows>
+				<flow xsi:type="flow_end">
+					<item>
+						<name>product</name>
+					</item>
+					<quantity>1</quantity>
+				</flow>
+				<flow>
+					<item>
+						<name>component A</name>
+					</item>
+					<quantity>-1</quantity>
+					<name>group1</name>
+				</flow>
+				<flow>
+					<item>
+						<name>component B</name>
+					</item>
+					<quantity>-2</quantity>
+					<priority>2</priority>
+					<name>group1</name>
+				</flow>
+				<flow>
+					<item>
+						<name>component C</name>
+					</item>
+					<quantity>-1</quantity>
+					<name>group2</name>
+				</flow>
+				<flow>
+					<item>
+						<name>component D</name>
+					</item>
+					<quantity>-1</quantity>
+					<priority>2</priority>
+					<name>group2</name>
+				</flow>
+				<flow>
+					<item>
+						<name>component E</name>
+					</item>
+					<quantity>-1</quantity>
+					<priority>3</priority>
+					<name>group2</name>
+				</flow>
+				<flow>
+					<item>
+						<name>component F</name>
+					</item>
+					<quantity>-1</quantity>
+					<name>group3</name>
+				</flow>
+				<flow>
+					<item>
+						<name>component G</name>
+					</item>
+					<quantity>-1</quantity>
+					<priority>2</priority>
+					<name>group3</name>
+				</flow>
+			</flows>
+			<duration>P1D</duration>
+			<duration_per>P1D</duration_per>
+		</operation>
+	</operations>
+	<demands>
+		<demand>
+			<name>order 1</name>
+			<quantity>10</quantity>
+			<item>
+				<name>product</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<due>2009-01-04T00:00:00</due>
+			<priority>11</priority>
+		</demand>
+	</demands>
+	<operationplans>
+		<operationplan>
+			<reference>1</reference>
+			<operation xsi:type="operation_itemsupplier">
+				<name>Purchase component A @ factory from Component supplier</name>
+			</operation>
+			<start>2008-12-22T00:00:00</start>
+			<end>2008-12-29T00:00:00</end>
+			<quantity>4</quantity>
+			<feasible>false</feasible>
+			<ordertype>PO</ordertype>
+			<item>
+				<name>component A</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<supplier>
+				<name>Component supplier</name>
+			</supplier>
+		</operationplan>
+		<operationplan>
+			<reference>2</reference>
+			<operation xsi:type="operation_itemsupplier">
+				<name>Purchase component A @ factory from Component supplier</name>
+			</operation>
+			<start>2008-12-25T00:00:00</start>
+			<end>2009-01-01T00:00:00</end>
+			<quantity>2</quantity>
+			<feasible>false</feasible>
+			<ordertype>PO</ordertype>
+			<item>
+				<name>component A</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<supplier>
+				<name>Component supplier</name>
+			</supplier>
+		</operationplan>
+		<operationplan>
+			<reference>3</reference>
+			<operation xsi:type="operation_itemsupplier">
+				<name>Purchase component A @ factory from Component supplier</name>
+			</operation>
+			<start>2008-12-26T00:00:00</start>
+			<end>2009-01-02T00:00:00</end>
+			<quantity>1</quantity>
+			<feasible>false</feasible>
+			<ordertype>PO</ordertype>
+			<item>
+				<name>component A</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<supplier>
+				<name>Component supplier</name>
+			</supplier>
+		</operationplan>
+		<operationplan>
+			<reference>4</reference>
+			<operation xsi:type="operation_itemsupplier">
+				<name>Purchase component C @ factory from Component supplier</name>
+			</operation>
+			<start>2008-12-25T00:00:00</start>
+			<end>2009-01-01T00:00:00</end>
+			<quantity>4</quantity>
+			<feasible>false</feasible>
+			<ordertype>PO</ordertype>
+			<item>
+				<name>component C</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<supplier>
+				<name>Component supplier</name>
+			</supplier>
+		</operationplan>
+		<operationplan>
+			<reference>5</reference>
+			<operation xsi:type="operation_itemsupplier">
+				<name>Purchase component C @ factory from Component supplier</name>
+			</operation>
+			<start>2008-12-26T00:00:00</start>
+			<end>2009-01-02T00:00:00</end>
+			<quantity>1</quantity>
+			<feasible>false</feasible>
+			<ordertype>PO</ordertype>
+			<item>
+				<name>component C</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+			<supplier>
+				<name>Component supplier</name>
+			</supplier>
+		</operationplan>
+		<operationplan>
+			<reference>6</reference>
+			<operation xsi:type="operation_delivery">
+				<name>Ship product @ factory</name>
+				<buffer>
+					<name>product @ factory</name>
+					<item>
+						<name>product</name>
+					</item>
+					<location>
+						<name>factory</name>
+					</location>
+				</buffer>
+			</operation>
+			<demand>
+				<name>order 1</name>
+			</demand>
+			<start>2009-01-04T00:00:00</start>
+			<end>2009-01-04T00:00:00</end>
+			<quantity>10</quantity>
+			<ordertype>DLVR</ordertype>
+			<item>
+				<name>product</name>
+			</item>
+			<location>
+				<name>factory</name>
+			</location>
+		</operationplan>
+		<operationplan>
+			<reference>7</reference>
+			<operation xsi:type="operation_time_per">
+				<name>assembly</name>
+			</operation>
+			<start>2008-12-29T00:00:00</start>
+			<end>2009-01-04T00:00:00</end>
+			<quantity>5</quantity>
+			<feasible>false</feasible>
+		</operationplan>
+		<operationplan>
+			<reference>8</reference>
+			<operation xsi:type="operation_time_per">
+				<name>assembly</name>
+			</operation>
+			<start>2009-01-01T00:00:00</start>
+			<end>2009-01-04T00:00:00</end>
+			<quantity>2</quantity>
+		</operationplan>
+		<operationplan>
+			<reference>9</reference>
+			<operation xsi:type="operation_time_per">
+				<name>assembly</name>
+			</operation>
+			<start>2009-01-01T00:00:00</start>
+			<end>2009-01-04T00:00:00</end>
+			<quantity>2</quantity>
+		</operationplan>
+		<operationplan>
+			<reference>10</reference>
+			<operation xsi:type="operation_time_per">
+				<name>assembly</name>
+			</operation>
+			<start>2009-01-02T00:00:00</start>
+			<end>2009-01-04T00:00:00</end>
+			<quantity>1</quantity>
+		</operationplan>
+	</operationplans>
+</plan>

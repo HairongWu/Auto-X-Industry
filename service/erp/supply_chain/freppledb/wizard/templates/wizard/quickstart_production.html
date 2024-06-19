@@ -1,0 +1,565 @@
+{% extends "admin/base_site_nav.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+{% if not post %}
+<script>
+function getFormData(el) {
+	return el.serializeArray().reduce(function(obj, item) {
+    obj[item.name] = item.value;
+    return obj;
+    }, {});
+}
+
+$(function() {
+	// Submit sales order to go from step 1 to step 2
+  $("#submitsalesorder").on("submit", function() {
+  	$("#inputstep2, #inputstep1").toggleClass("d-none");
+  	if ($("#supply .supply").length == 0)
+  		checkItemLocation(
+  			$("#wizarditem").val(),
+  			$("#wizardlocation").val(),
+  			function(data) {
+  				if (data.length)
+  					$("#supply_path_known, #supply_path_unknown").toggleClass("d-none");
+  				else
+  				  addItemLocation($("#wizarditem").val(), $("#wizardlocation").val());
+  				}
+  			);
+  	return false;
+  });
+
+	// Returning from step 2 to step 1
+  $("#backtosalesorder").on("click", function() {
+    $("#inputstep2, #inputstep1").toggleClass("d-none");
+    return false;
+  });
+
+	// Creating supply path to go from step 2 to step 3
+  $(".createsupplypath").on("click", function() {
+    var ok = $('#submitsalesorder')[0].checkValidity();
+    if (ok) {
+      var data = getFormData($('#submitsalesorder'));
+      data["supply"] = [];
+      $("#supply .supply").each(function(i, group) {
+      	var ok2 = false;
+	      $(group).find("form").each(function(i, el) {
+	      	if (ok && $(el).closest(".collapse").hasClass("show")) {
+	      	  ok = el.checkValidity();
+	      	  ok2 = true;
+	      	  if (ok) data["supply"].push(getFormData($(el)));
+	      	}
+	    	});
+	      if (!ok2) ok = false;
+      });
+    };
+	  if (ok) {
+      $('<i class="fa fa-spinner fa-spin"></i>').prependTo(this);
+      $(this).prop("disabled", true);
+      $.ajax({
+        url: window.location.href,
+        data: JSON.stringify(data),
+        type: "POST",
+        contentType: "application/json",
+        success: function () {window.location.href = window.location.href;},
+        error: function (result, stat, errorThrown) {
+        	$(".fa-spinner").remove();
+        	$(".createsupplypath").removeAttr("disabled");
+          $('#popup').html('<div class="modal-dialog">' +
+              '<div class="modal-content">' +
+              '<div class="modal-header">' +
+                '<h5 class="modal-title">' + gettext("Error") + '</h5>' +
+                '<button type="button" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true" class="fa fa-times"></span></button>'+
+              '</div>' +
+              '<div class="modal-body">' +
+                '<p>' + result.responseText + "<br>" + errorThrown + '</p>' +
+              '</div>' +
+              '<div class="modal-footer">' +
+              '</div>' +
+            '</div>' +
+            '</div>');
+          showModal('popup');
+          }
+      });
+	  }
+  });
+});
+
+function checkItemLocation(item, location, callback) {
+	$.ajax({
+		url: url_prefix + "/wizard/supplypath/?item=" + encodeURIComponent(item)
+				+ "&location=" + encodeURIComponent(location),
+		type: "GET",
+		contentType: "application/json",
+		success: callback
+	});
+};
+
+function addItemLocation(item, location) {
+  var index = $("#supply .supply").length;
+  var newelement = $(`<div class='supply'>
+  		<h2>
+  		Question ${index + 1}:
+      How do you replenish item "<span class="item"></span>" in location "<span class="location"></span>"?
+  		</h2>
+			<div class="accordion" id="accordion${index}" data-index="${index}">
+			  <div class="accordion-item">
+			    <h2 class="accordion-header" id="header${index}-buy">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}-buy">
+			        Choice 1: I buy this item
+            </button>
+          </h2>
+			    <div id="collapse${index}-buy" class="accordion-collapse collapse" aria-labelledby="header${index}-buy" data-bs-parent="accordion${index}">
+			      <div class="accordion-body">
+			        <p>Define the supplier and lead time for purchasing this item.</p>
+			        <form class="form-horizontal">
+			          <div class="row mb-3">
+			            <input type="hidden" name="type" value="PO">
+			            <input type="hidden" name="item" class="itemvalue">
+			            <input type="hidden" name="location" class="locationvalue">
+			            <label class="col-sm-3 col-form-label text-end" for="wizardsupplier${index}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="Supplier you purchase the item from.">
+			            {% trans "supplier"|capfirst %}
+                  <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-9">
+			              <input type="text" class="form-control" id="wizardsupplier${index}" name="supplier"
+			                maxlength="300" required placeholder="{% trans "supplier name"|capfirst %}">
+			            </div>
+			          </div>
+			          <div class="row mb-3">
+			            <label class="col-sm-3 col-form-label text-end" for="wizardleadtime${index}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="Purchasing lead time<br>between placing the order and receiving the ordered items.">
+			            {% trans "lead time"|capfirst %}
+                  <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-9">
+			              <input type="number" class="form-control" id="wizardleadtime${index}" name="leadtime"
+			                required min="0" placeholder="{% trans "lead time (in days)"|capfirst %}">
+			            </div>
+			          </div>
+			        </form>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="accordion-item">
+          <h2 class="accordion-header" id="header${index}-produce">
+            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse${index}-produce">
+                Choice 2: I produce this item
+            </button>
+          </h2>
+			    <div id="collapse${index}-produce" class="collapse" aria-labelledby="header${index}-produce" data-bs-parent="#accordion${index}">
+			      <div class="accordion-body">
+			        <p>Define the time, resource and materials to produce this item.</p>
+			        <form>
+			          <input type="hidden" name="type" value="MO">
+                <input type="hidden" name="item" class="itemvalue">
+                <input type="hidden" name="location" class="locationvalue">
+			          <div class="row mb-3">
+			            <label class="col-sm-3 col-form-label text-end" for="wizardoperation${index}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="A unique name for the operation that produces this item.">
+			            {% trans "operation name"|capfirst %}
+                  <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-9">
+			              <input type="text" class="form-control itemlocationvalue" id="wizardoperation${index}"
+			                name="operation" required placeholder="operation name">
+			            </div>
+			          </div>
+			          <div class="row mb-3">
+			            <label class="col-sm-3 col-form-label text-end" for="wizardduration${index}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="The total operation time is the sum of:<br>- A fixed time for setup and overhead time<br>- A time per produced piece">
+			            {% trans "fixed time"|capfirst %}
+                  <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-9">
+			              <input type="text" class="form-control" id="wizardduration${index}" name="duration"
+			                required placeholder="operation fixed time, formatted as dd hh:mm:ss">
+			            </div>
+			          </div>
+			          <div class="row mb-3">
+			            <label class="col-sm-3 col-form-label text-end" for="wizarddurationper${index}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="The total operation time is the sum of:<br>- A fixed time for setup and overhead time<br>- A time per produced piece">
+			            {% trans "time per piece"|capfirst %}
+                  <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-9">
+			              <input type="text" class="form-control" id="wizarddurationper${index}" name="durationper"
+			                required placeholder="operation time per piece, formatted as dd hh:mm:ss">
+			            </div>
+			          </div>
+			          <div class="row mb-3">
+			            <label class="col-sm-3 col-form-label text-end" for="wizardresource${index}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="The machine or operator needed to perform the operation.">
+			            {% trans "resource"|capfirst %}
+                  <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-9">
+			              <input type="text" class="form-control" id="wizardresource${index}" name="resource"
+			                placeholder="{% trans "resource name"|capfirst %}">
+			            </div>
+			          </div>
+			          <div class="row mb-3">
+			            <label class="col-sm-3 col-form-label text-end" for="wizardconsumeditem${index}0"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="The subassemblies or raw materials<br>consumed by this operation per produced item.">
+			              {% trans "consumed items"|capfirst %}
+                    <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-6">
+			              <input type="text" class="form-control" id="wizardconsumeditem${index}0" name="consumeditem-0"
+			                placeholder="{% trans "component or subassembly item name"|capfirst %}" onchange="changeConsumedItem(event)">
+			            </div>
+			            <div class="col-sm-3">
+			              <input type="number" class="form-control" name="consumedquantity-0"
+			                min="0" placeholder="{% trans "consumed quantity"|capfirst %}">
+			            </div>
+			          </div>
+			          <div class="ms-auto col-sm-1 text-center" data-index="0">
+			             <button class="btn btn-sm btn-primary" type="button" onclick="addConsumeditem(event)">
+			               <i class="fa fa-plus" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add more consumed items"></i>
+			             </button>
+			          </div>
+			        </form>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="accordion-item">
+			    <h2 class="accordion-header" id="header${index}-ship">
+            <button class="accordion-button" data-bs-target="#collapse${index}-ship" data-bs-toggle="collapse">
+			        Choice 3: I ship this item from another location
+            </button>
+			      </h2>
+			    <div id="collapse${index}-ship" class="collapse" aria-labelledby="header${index}-ship" data-bs-parent="#accordion${index}">
+			      <div class="accordion-body">
+			        <p>Define the origin location that can ship material to this location.</p>
+			        <form>
+			          <input type="hidden" name="type" value="DO">
+                <input type="hidden" name="item" class="itemvalue">
+                <input type="hidden" name="location" class="locationvalue">
+			          <div class="row mb-3">
+			            <label class="col-sm-3 col-form-label text-end" for="wizardorigin${index}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                    data-bs-title="The warehouse or distribution center<br>from which we can source this item.">
+			              {% trans "source location"|capfirst %}
+                    <i class="fa fa-question-circle"></i>
+			            </label>
+			            <div class="col-sm-9">
+			              <input type="text" class="form-control" id="wizardorigin${index}" name="origin"
+			                required placeholder="{% trans "source location name"|capfirst %}" onchange="changeDOorigin(event)">
+			            </div>
+			          </div>
+                <div class="row mb-3">
+                <label class="col-sm-3 col-form-label text-end" for="wizardtransporttime${index}"
+                  data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                  data-bs-title="The shipping lead time to transport items<br>from the origin to the destination location.">
+                  {% trans "transport time"|capfirst %}
+                  <i class="fa fa-question-circle"></i>
+                </label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="wizardtransporttime${index}" name="leadtime"
+                    required min="0" placeholder="{% trans "transport time (in days)"|capfirst %}">
+                </div>
+              </div>
+			        </form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			</div>
+      <br>`);
+  // Need safe escaping of the input strings
+  newelement.find(".item").text(item);
+  newelement.find(".itemvalue").val(item);
+  newelement.find(".location").text(location);
+  newelement.find(".locationvalue").val(location);
+  newelement.find(".itemlocationvalue").val("make " + item + " @ " + location);
+  $("#supply").append(newelement);
+  newelement.find('[data-bs-toggle="tooltip"]').tooltip();
+  return index;
+}
+
+function addConsumeditem(ev) {
+	var anchor = $(ev.target).closest(".col-sm-1");
+	var itemindex = parseInt(anchor.attr("data-index")) + 1;
+	anchor.attr("data-index", itemindex);
+	$(`<div class="row mb-3">
+	  <div class="offset-3 col-sm-6">
+	    <input type="text" class="form-control" name="consumeditem-${itemindex}"
+	      placeholder="{% trans "component or subassembly item name"|capfirst %}" onchange="changeConsumedItem(event)">
+	  </div>
+	  <div class="col-sm-3">
+	    <input type="number" class="form-control" name="consumedquantity-${itemindex}"
+	      min="0" placeholder="{% trans "consumed quantity"|capfirst %}">
+	  </div>
+	  </div>`).insertBefore(anchor);
+	return false;
+}
+
+function changeConsumedItem(ev) {
+  var location = $(ev.target).closest("form").find("[name='location']").first().val();
+  var item = $(ev.target).val();
+  if (item && location)
+  	checkItemLocation(
+        item,
+        location,
+        function(data) {
+          if (!data.length)
+          	addItemLocation(item, location);
+          }
+        );
+}
+
+function changeDOorigin(ev) {
+	var location = $(ev.target).val();
+	var item = $(ev.target).closest("form").find("[name='item']").first().val();
+	if (item && location)
+		addItemLocation(item, location);
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-3" style="max-width: 900px" role="tablist">
+    <div class="card">
+      <div class="card-body">
+        <div class="float-end">
+          <img src="/static/wizard/img/plan_editor_thumbnail.png" style="width: 150px" alt="Plan editor">
+        </div>
+        <p>The production planning module plans sales orders and forecast. It generates manufacturing
+        orders, distribution orders and purchase orders for all steps in the bill of material.
+        </p>
+        <p>You can review the resource loading, identify bottlenecks causing late deliveries and
+        manually adjust the plan. You can monitor the progress of the manufacturing orders, distribution orders
+        and purchase orders, or export them to your ERP for execution.</p>
+        <p>Let's start simple by inputting a single sales order and its bill of material.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% if not post %}
+<div class="row mb-3" id="inputstep1">
+	<div class="col-12" style="max-width:900px" role="tablist" aria-multiselectable="true">
+		<div class="card">
+      <div class="card-header wizard-1-of-3" role="tab">
+        <table style="width:100%">
+          <tr>
+            <td style="width:33%">Step 1: Create a sales order</td>
+            <td style="width:33%">Step 2: Define supply path</td>
+            <td style="width:33%">Step 3: Results</td>
+          </tr>
+        </table>
+      </div>
+      <div class="card-body">
+				  <h2 style="margin-top: 0; margin-bottom:10px">
+				  Create a sales order
+				  </h2>
+          <form id="submitsalesorder">
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label text-end" for="wizardsalesorder"
+                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                data-bs-title="Unique name for the sales order.">
+                {% trans "name"|capfirst %}
+                <i class="fa fa-question-circle"></i>
+              </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="wizardsalesorder" name="name"
+                  maxlength="300" required placeholder="{% trans "unique sales order name"|capfirst %}">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label text-end" for="wizarditem"
+                data-bs-toggle="data-bs-html="true" data-delay="500"" data-bs-placement="right" data-bs-html="true"
+                data-bs-title="Item sold to the customer.">
+                {% trans "item"|capfirst %}
+                <i class="fa fa-question-circle"></i>
+              </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="wizarditem" name="item"
+                  maxlength="300" required placeholder="{% trans "item name"|capfirst %}">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label text-end" for="wizardlocation"
+                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                data-bs-title="Location from which the sales order is shipped.">
+                {% trans "location"|capfirst %}
+                <i class="fa fa-question-circle"></i>
+              </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="wizardlocation" name="location"
+                  maxlength="300" required placeholder="{% trans "location name"|capfirst %}">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label text-end" for="wizardcustomer"
+                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                data-bs-title="Customer placing the order.">
+                {% trans "customer"|capfirst %}
+                <i class="fa fa-question-circle"></i>
+              </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="wizardcustomer" name="customer"
+                  maxlength="300" required placeholder="{% trans "customer name"|capfirst %}">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label text-end" for="wizardquantity"
+                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                data-bs-title="Quantity to be shipped.">
+                {% trans "quantity"|capfirst %}
+                <i class="fa fa-question-circle"></i>
+              </label>
+              <div class="col-sm-9">
+                <input type="number" class="form-control" id="wizardquantity" name="quantity"
+                  required placeholder="{% trans "quantity"|capfirst %}" value="1">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label text-end" for="wizarddue"
+                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-delay="500"
+                data-bs-title="Delivery date requested by the customer.">
+                {% trans "due date"|capfirst %}
+                <i class="fa fa-question-circle"></i>
+              </label>
+              <div class="col-sm-9">
+                <input type="date" class="form-control" id="wizarddue" name="due"
+                  required placeholder="{% trans "due date"|capfirst %}" value="{% now "Y-m-d" %}">
+              </div>
+            </div>
+						<div class="row justify-content-center">
+              <div class="col-auto">
+                <input id="createsalesorder" type="submit" class="btn btn-primary mx-auto"
+                value="{% trans "Create sales order"|capfirst %}">
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row d-none" id="inputstep2">
+	<div class="col-12" style="max-width:900px" role="tablist" aria-multiselectable="true">
+		<div class="card">
+      <div class="card-header wizard-2-of-3" role="tab">
+        <table style="width:100%">
+          <tr>
+            <td style="width:33%"><a href="#" class="text-decoration-underline" id="backtosalesorder">Step 1: Create a sales order</a></td>
+            <td style="width:33%">Step 2: Define supply path</td>
+            <td style="width:33%">Step 3: Results</td>
+          </tr>
+        </table>
+      </div>
+      <div class="card-body">
+				  <div id="supply_path_unknown">
+				  <h2>
+          The supply path defines all activities to deliver this sales order.
+          </h2>
+          <p>It can contain multiple levels in the bill of material and bill of distribution.</p>
+          <div class="row mt-3 justify-content-evenly" id="supply"></div>
+          <div class="row mt-3 justify-content-evenly">
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary w-auto createsupplypath">
+              Create supply path
+              </button>
+            </div>
+          </div>
+          <div id="supply_path_known" class="d-none">
+          <h2>
+          The supply path for this sales order is already defined.
+          </h2>
+          <p>You can skip this step and move on to the results.</p>
+          <div class="mx-auto">
+            <button type="submit" class="btn btn-primary mx-auto createsupplypath">
+            Go to results
+            </button>
+          </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% else %}
+<div class="row mb-3">
+  <div class="col-12" style="max-width:900px" role="tablist" aria-multiselectable="true">
+    <div class="card" id="wizard-2">
+      <div class="card-header wizard-3-of-3" role="tab">
+        <h5 class="card-title">
+        <table style="width:100%">
+        <tr>
+        <td style="width:33%">
+          <a class="text-decoration-underline" href="{{request.prefix}}/wizard/quickstart/production/">Step 1: Create a sales order</a>
+        </td>
+        <td style="width:33%">Step 2: Define supply path</td>
+        <td style="width:33%">Step 3: Results</td>
+        </tr>
+        </table>
+        </h5>
+      </div>
+      <div class="card-body">
+          <div>
+          <p>Here is the production plan for your sales order {{post.salesorder}}:</p>
+          </div>
+          <div class="row justify-content-evenly">
+          <div class="col-auto mb-3" style="max-width:130px"
+            data-bs-toggle="tooltip" data-bs-placement="bottom"
+            data-bs-title="Review all activities planned for this sales order">
+            <p><a target="_blank" rel="noopener" href="{{request.prefix}}/demandpegging/{{post.salesorder|admin_quote}}/?noautofilter">
+              <img src="/static/wizard/img/delivery_plan_thumbnail.png" style="width: 100%" alt="Sales order delivery plan"><br>
+              <b>Sales order delivery plan</b>
+            </a></p>
+          </div>
+          <div class="col-auto mb-3" style="max-width:130px"
+            data-bs-toggle="tooltip" data-bs-placement="bottom"
+            data-bs-title="A visual representation of the supply path">
+            <p><a target="_blank" rel="noopener" href="{{request.prefix}}/supplypath/demand/{{post.salesorder|admin_quote}}/?noautofilter">
+              <img src="/static/wizard/img/supply_path_thumbnail.png" style="width: 100%" alt="Sales order supply path"><br>
+              <b>Sales order supply path</b>
+            </a></p>
+          </div>
+          <div class="col-auto mb-3" style="max-width:130px"
+            data-bs-toggle="tooltip" data-bs-placement="bottom"
+            data-bs-title="Shows the inventory profile of all materials">
+            <a target="_blank" rel="noopener" href="{{request.prefix}}/buffer/?noautofilter">
+              <img src="/static/wizard/img/inventory_report_thumbnail.png" style="width: 100%" alt="Inventory report"><br>
+              <b>Inventory report</b>
+            </a>
+          </div>
+          <div class="col-auto mb-3" style="max-width:130px"
+            data-bs-toggle="tooltip" data-bs-placement="bottom"
+            data-bs-title="Shows the loading of all resources">
+            <p><a target="_blank" rel="noopener" href="{{request.prefix}}/resource/?noautofilter">
+              <img src="/static/wizard/img/resource_report_thumbnail.png" style="width: 100%" alt="Resource report"><br>
+              <b>Resource report</b>
+            </a></p>
+          </div>
+          </div>
+          <div>
+          <p>Check out what we did with your input data:</p>
+            <ul>
+              {% for msg in post.messages %}
+              <li style="list-style-type: square"><p>{{ msg | safe }}</p></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="clearfix">
+          <p>Next actions:</p>
+            <ul>
+            <li class="disc"><p><a class="text-decoration-underline" href="{{request.prefix}}/wizard/quickstart/production/">Repeat these steps</a> for another sales order.</p></li>
+            <li class="disc"><p><a rel="noopener" class="text-decoration-underline" href="{{request.prefix}}/wizard/load/production/" target="_blank">
+          Learn how to load Excel spreadsheets</a> to repeat this calculation for many sales orders.</p></li>
+            </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

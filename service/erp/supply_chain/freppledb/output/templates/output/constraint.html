@@ -1,0 +1,25 @@
+{% extends "admin/base_site_grid.html" %}
+
+{% block extrahead %}{{block.super}}
+<script>
+
+// TODO demand column needs separate formatter for demand and forecasts
+
+function probfmt(cellvalue, options, row)
+{
+  if (row['entity'] == 'material')
+    var role = 'input/buffer';
+  else if (row['entity'] == 'capacity')
+    var role = 'input/resource';
+  else if (row['entity'] == 'demand')
+    var role = 'input/demand';
+  else
+    var role = 'input/operation';
+  return $.jgrid.htmlEncode(cellvalue) + "<a href=\"" + url_prefix + "/detail/" + role
+     + "/" + admin_escape(cellvalue)
+     + "/\"><span class='ps-2 context fa fa-caret-right'></span></a>";
+}
+
+</script>
+{% endblock %}
+

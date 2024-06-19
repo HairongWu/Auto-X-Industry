@@ -1,0 +1,17 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block inline_field_sets %}
+{{ block.super }}
+{% if object_id %}
+<fieldset class="module mb-3 container-fluid" id="fieldset-3" style="background:transparent">
+<h1 class="text-capitalize">{% trans "related" %}</h1>
+<div class="row">
+  <div class="col-form-label col-3">
+     <a href="{{ request.prefix }}/data/input/distributionorder/?destination={{ adminform.form.instance.location | urlencode }}&origin={{ adminform.form.instance.origin | urlencode }}&item={{ adminform.form.instance.item | urlencode }}&noautofilter">
+     {% trans "distribution orders"|capfirst %}&nbsp;<i class="fa fa-caret-right"></i></a>
+  </div>
+</div>
+</fieldset>
+{% endif %}
+{% endblock %}

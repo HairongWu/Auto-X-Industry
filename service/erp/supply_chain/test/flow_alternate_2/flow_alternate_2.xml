@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Test model for alternate flows</name>
+  <description>
+  This test verifies the behavior of the user exit that controls alternate flows.
+  The user exit gives the user control over the allowed combinations of alternate flows.
+
+  In this example, a product uses 3 components, each having some alternates.
+     - component A1, with alternates A2 and A3
+     - component B1, with alternates B2, B3 and B4
+     - component C1, with alternates C2, C3 and C4
+
+  This gives a total of 3*4*4 = 48 possible combinations of the components.
+  Using the user exit we restrict the allowed combinations to the following:
+     - A1, B2, C1
+     - A1, B2, C2
+     - A2, B1, C2
+     - A2, B1, C3
+     - A3, B3, C4
+     - A3, B4, C4
+  These restrictions can represent technical constraints in the bill of material
+  (as provided by the engineers), different versions in the bill of material,
+  configuration rules imposed by the customer, etc...
+  </description>
+  <current>2009-01-01T00:00:00</current>
+  <items>
+    <item name="A1">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="A2">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P5D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="A3">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="B1">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="B2">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="B3">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="B4">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P5D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="C1">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="C2">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="C3">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P7D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+    <item name="C4">
+      <itemsuppliers>
+        <itemsupplier>
+          <supplier name="Component supplier"/>
+          <leadtime>P10D</leadtime>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+  </items>
+  <buffers>
+    <buffer name="A1 @ factory">
+      <item name="A1"/>
+      <location name="factory"/>
+      <onhand>0</onhand>
+    </buffer>
+    <buffer name="A2 @ factory">
+      <item name="A2"/>
+      <location name="factory"/>
+      <onhand>0</onhand>
+	</buffer>
+    <buffer name="A3 @ factory">
+      <item name="A3"/>
+      <location name="factory"/>
+      <onhand>10</onhand>
+	</buffer>
+    <buffer name="B1 @ factory">
+      <item name="B1"/>
+      <location name="factory"/>
+      <onhand>0</onhand>
+	</buffer>
+    <buffer name="B2 @ factory">
+      <item name="B2"/>
+      <location name="factory"/>
+      <onhand>0</onhand>
+	</buffer>
+    <buffer name="B3 @ factory">
+      <item name="B3"/>
+      <location name="factory"/>
+      <onhand>5</onhand>
+	</buffer>
+    <buffer name="B4 @ factory">
+      <item name="B4"/>
+      <location name="factory"/>
+      <onhand>5</onhand>
+	</buffer>
+    <buffer name="C1 @ factory">
+      <item name="C1"/>
+      <location name="factory"/>
+      <onhand>0</onhand>
+	</buffer>
+    <buffer name="C2 @ factory">
+      <item name="C2"/>
+      <location name="factory"/>
+      <onhand>10</onhand>
+	</buffer>
+    <buffer name="C3 @ factory">
+      <item name="C3"/>
+      <location name="factory"/>
+      <onhand>5</onhand>
+	</buffer>
+    <buffer name="C4 @ factory">
+      <item name="C4"/>
+      <location name="factory"/>
+      <onhand>5</onhand>
+	</buffer>
+  </buffers>
+  <operations>
+    <operation name="assembly" xsi:type="operation_fixed_time" duration="P1D">
+      <item name="product"/>
+      <location name="factory"/>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="product"/>
+          <quantity>1</quantity>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="A1"/>
+          <quantity>-1</quantity>
+          <priority>1</priority>
+          <name>groupA</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="A2"/>
+          <quantity>-1</quantity>
+          <priority>2</priority>
+          <name>groupA</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="A3"/>
+          <quantity>-1</quantity>
+          <priority>3</priority>
+          <name>groupA</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="B1"/>
+          <quantity>-1</quantity>
+          <priority>1</priority>
+          <name>groupB</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="B2"/>
+          <quantity>-1</quantity>
+          <priority>2</priority>
+          <name>groupB</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="B3"/>
+          <quantity>-1</quantity>
+          <priority>3</priority>
+          <name>groupB</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="B4"/>
+          <quantity>-1</quantity>
+          <priority>4</priority>
+          <name>groupB</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="C1"/>
+          <quantity>-1</quantity>
+          <priority>1</priority>
+          <name>groupC</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="C2"/>
+          <quantity>-1</quantity>
+          <priority>2</priority>
+          <name>groupC</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="C3"/>
+          <quantity>-1</quantity>
+          <priority>3</priority>
+          <name>groupC</name>
+        </flow>
+        <flow xsi:type="flow_start">
+          <item name="C4"/>
+          <quantity>-1</quantity>
+          <priority>4</priority>
+          <name>groupC</name>
+        </flow>
+      </flows>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="order 1">
+      <quantity>10</quantity>
+      <due>2009-01-04T00:00:00</due>
+      <priority>11</priority>
+      <item name="product"/>
+      <maxlateness>P0D</maxlateness>
+      <location name="factory"/>
+    </demand>
+    <!--
+    <demand name="order 2">
+      <quantity>10</quantity>
+      <due>2009-02-02T00:00:00</due>
+      <priority>12</priority>
+      <item name="product"/>
+    </demand>
+    <demand name="order 3">
+      <quantity>10</quantity>
+      <due>2009-02-20T00:00:00</due>
+      <priority>13</priority>
+      <item name="product"/>
+    </demand>
+    -->
+  </demands>
+
+<?python
+allowed = [
+  ['A1', 'B2', 'C1'],
+  ['A1', 'B2', 'C2'],
+  ['A2', 'B1', 'C2'],
+  ['A2', 'B1', 'C3'],
+  ['A3', 'B3', 'C4'],
+  ['A3', 'B4', 'C4'],
+  ]
+
+# This function is called by the solver to verify whether a certain alternate
+# flow is acceptable or not.
+def checkAlternate(flowplan,mode):
+  # The value of global variables is shared across calls to this function.
+  global allowed
+  # Debugging print statements
+  print("Validating combination", end="")
+  for fp in flowplan.operationplan.flowplans:
+    if fp.quantity > 0: continue
+    print(fp.buffer.item.name, end="")
+    if fp == flowplan: break
+  print(":", end="")
+  # Loop through all allowed combinations, and check whether they match the
+  # currently selected part combination
+  for combination in allowed:
+    ok = True
+    # Check whether all currently selected parts are part of this combination
+    for fp in flowplan.operationplan.flowplans:
+      if fp.quantity > 0: continue
+      if fp.buffer.item.name not in combination:
+        # Current parts don't match this combination
+        ok = False
+        break
+      if fp == flowplan: break
+    if ok:
+      # All current parts match
+      print("yes")
+      return True
+  print("no")
+  return False
+
+print("CREATING CONSTRAINED PLAN")
+sol = frepple.solver_mrp(constraints=15, loglevel=2, userexit_flow=checkAlternate)
+sol.solve()
+frepple.saveplan("output.1.xml")
+print("CREATING UNCONSTRAINED PLAN")
+sol.plantype = 2
+sol.solve()
+frepple.saveplan("output.2.xml")
+?>
+
+</plan>

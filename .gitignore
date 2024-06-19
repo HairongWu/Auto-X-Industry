@@ -471,8 +471,6 @@ local.properties
 *.ipa
 *.apk
 *.dab
-*.sh
-*.iml
 *.ipr
 *.iws
 *.tsbuildinfo
@@ -482,3 +480,4 @@ local.properties
 ################
 # Build and Release Folders
 service/iot/openremote/*
+

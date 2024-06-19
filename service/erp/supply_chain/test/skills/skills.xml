@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Test model for resource skills</name>
+  <description>
+  In this test our resources represent a group of operators, with various skills
+  and organized in various levels of qualification.
+  </description>
+  <current>2013-01-01T00:00:00</current>
+  <skills>
+    <skill name="Qualification A">
+	  <resourceskills>
+	     <resourceskill><resource name="Neil"/></resourceskill>
+	  </resourceskills>
+	</skill>
+  </skills>
+  <resources>
+    <resource name="Operators"><location name="factory" /></resource>
+    <resource name="Neil" cost="1">
+      <location name="factory" />
+	    <owner name="Operators"/>
+	    <resourceskills>
+	      <resourceskill priority="1"><skill name="Qualification B" /></resourceskill>
+	      <resourceskill><skill name="Qualification C" /></resourceskill>
+	    </resourceskills>
+	  </resource>
+    <resource name="Bob" cost="1">
+      <location name="factory" />
+      <owner name="Operators"/>
+      <resourceskills>
+        <resourceskill><skill name="Qualification B" /></resourceskill>
+        <resourceskill><skill name="Qualification C" /></resourceskill>
+      </resourceskills>
+    </resource>
+    <resource name="John" cost="1">
+      <location name="factory" />
+      <owner name="Operators"/>
+      <resourceskills>
+        <resourceskill><skill name="Qualification C" /></resourceskill>
+      </resourceskills>
+    </resource>
+    <resource name="Paul" cost="1">
+    <location name="factory" />
+      <owner name="Operators"/>
+      <resourceskills>
+        <resourceskill><skill name="Qualification A" /></resourceskill>
+        <resourceskill><skill name="Qualification B" /></resourceskill>
+        <resourceskill><skill name="Qualification C" /></resourceskill>
+      </resourceskills>
+    </resource>
+  </resources>
+  <operations>
+    <operation name="1. make end item" duration_per="PT1H6.6S" xsi:type="operation_time_per">
+      <location name="factory" />
+      <item name="1. end item" />
+      <loads>
+        <load>
+          <resource name="Operators" />
+		      <skill name="Qualification B" />
+		      <search>MINCOSTPENALTY</search>
+        </load>
+      </loads>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="1. end item" />
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+    </operation>
+  </operations>
+  <demands>
+    <!-- Demand model 1: search for capacity backwards in time -->
+    <demand name="1. order">
+      <quantity>20</quantity>
+      <due>2013-03-06T00:00:00</due>
+      <priority>1</priority>
+      <item name="1. end item" />
+      <location name="factory" />
+    </demand>
+    <demand name="2. order">
+      <quantity>100</quantity>
+      <due>2013-03-06T00:00:00</due>
+      <priority>1</priority>
+      <item name="1. end item" />
+      <location name="factory" />
+    </demand>
+    <demand name="3. order">
+      <quantity>40</quantity>
+      <due>2013-03-06T00:00:00</due>
+      <priority>1</priority>
+      <item name="1. end item" />
+      <location name="factory" />
+    </demand>
+  </demands>
+
+<?python
+print("SAVING MODEL IN XML FORMAT")
+frepple.saveXMLfile("output.1.xml")
+
+print("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+
+print("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.3.xml")
+
+print("TESTING PYTHON API")
+s = frepple.skill(name="turbo")
+r = frepple.resource(name='Bob')
+frepple.resourceskill(resource=r, skill=s)
+with open("output.4.xml","wt") as output:
+  for i in frepple.skills():
+    print("Skill", i.name, ":", file=output)
+    for j in i.resourceskills:
+      print("     ", j.resource.name, file=output)
+  for i in frepple.resources():
+    print("Resource", i.name, ":", file=output)
+    for j in i.resourceskills:
+      print("     ", j.skill.name, file=output)
+?>
+
+</plan>

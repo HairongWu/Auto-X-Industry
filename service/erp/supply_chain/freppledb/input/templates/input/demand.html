@@ -1,0 +1,71 @@
+{% extends "admin/base_site_grid.html" %}
+
+{% block extrahead %}{{block.super}}
+<script>
+
+function delayfmt(cellvalue, options, rowdata) {
+  var days = 0;
+  var seconds = 0;
+  var sign;
+  var d = [];
+  var t = [];
+
+  if (cellvalue === undefined || cellvalue === '' || cellvalue === null) return '';
+  if (typeof cellvalue === "number") {
+    seconds = cellvalue;
+    sign = Math.sign(seconds);
+  } else {
+    sign = (cellvalue.indexOf('-') > -1)?-1:1;
+    d = cellvalue.replace(/ +/g, " ").split(" ");
+    if (d.length == 1)
+    {
+      t = cellvalue.split(":");
+      days = 0;
+    }
+    else
+    {
+      t = d[1].split(":");
+      days = (d[0]!='' ? parseFloat(d[0]) : 0);
+    }
+    switch (t.length)
+    {
+      case 0: // Days only
+        seconds = Math.abs(days) * 86400;
+        break;
+      case 1: // Days, seconds
+        seconds = Math.abs(days) * 86400 + (t[0]!='' ? Math.abs(parseFloat(t[0])) : 0);
+        break;
+      case 2: // Days, minutes and seconds
+        seconds = Math.abs(days) * 86400 + (t[0]!='' ? Math.abs(parseFloat(t[0])) : 0) * 60 + (t[1]!='' ? parseFloat(t[1]) : 0);
+        break;
+      default:
+        // Days, hours, minutes, seconds
+        seconds = Math.abs(days) * 86400 + (t[0]!='' ? Math.abs(parseFloat(t[0])) : 0) * 3600 + (t[1]!='' ? parseFloat(t[1]) : 0) * 60 + (t[2]!='' ? parseFloat(t[2]) : 0);
+    }
+  }
+  seconds = Math.abs(seconds); //remove the sign
+  days = sign < 0 ? Math.floor(seconds / 86400) : Math.ceil(seconds / 86400);
+
+  var thecolor0 = '';
+  var thecolor1 = '';
+  var thenumber = sign * days;
+  if (thenumber <= 0)
+    thecolor0 = '<div class="invStatus" style="background-color: #008000">';
+  else if (thenumber > 7)
+    thecolor0 = '<div class="invStatus" style="background-color: #f00">';
+  else
+    thecolor0 = '<div class="invStatus" style="background-color: rgb('+255+','+Math.round((1-thenumber/7)*255)+','+0+')">';
+  thecolor1 = '</div>';
+  return thecolor0 + (sign*days).toString() + " " + gettext("days") + thecolor1;
+}
+
+function plannedquantitycellattr(cellvalue, options, rowdata) {
+  var tmp = parseFloat(rowdata.plannedquantity);
+  if ((isNaN(tmp) || parseFloat(rowdata.quantity) - tmp > 0) && rowdata.status != 'closed' && rowdata.status != 'canceled')
+    return '<div class="invStatus" style="background-color: #f00">' + grid.formatNumber(cellvalue) + "</div>";
+  else
+    return grid.formatNumber(cellvalue);
+}
+
+</script>
+{% endblock %}

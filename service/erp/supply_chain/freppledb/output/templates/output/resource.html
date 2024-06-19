@@ -1,0 +1,346 @@
+{% extends "admin/base_site_gridpivot.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+<style>
+.highutil
+{
+  color: red;
+  font-weight: bold;
+}
+</style>
+{% endblock %}
+
+{% block tools %}
+{% if args.0 %}
+  {% include "common/snippet_follow.html" %}
+{% endif %}
+{{block.super}}
+{% endblock %}
+
+{% block tabs %}
+{% if args.0 %}
+  {% tabs model %}
+{% endif %}
+{{block.super}}
+{% endblock %}
+
+{% block before_table %}{% if args.0 %}
+<div id="graph" style="clear: both; height: 400px; padding: 10px"></div>
+{% endif %}{% endblock %}
+
+{% block crosses %}
+{% if args.0 %}$(function(){
+  // Resize top graph
+  var h = $(window).height();
+  $("#graph").width($(window).width()-60).height(h>800 || h<550 ? 360 : h-450);
+});{% endif %}
+
+{% if args.0 or mode == "graph" %}
+function drawGraphs(jsondata)
+{
+  $('#curerror').html("");
+  {% if args.0 %}var margin = {top: 0, right: 100, bottom: 30, left: 50};
+  {% else %}var margin = {top: 0, right: 0, bottom: 0, left: 50};
+  {% endif %}var width = Math.max($({% if args.0 %}"#graph"{% else %}"#grid_graph"{% endif %}).width() - margin.left - margin.right, 0);
+  var height = {% if args.0 %}$("#graph").height(){% else %}80{% endif %} - margin.top - margin.bottom;
+
+  // Lookup table of displayed columns
+  var fields = {};
+  for (var i in cross_idx)
+    fields[cross_idx[i]] = 0;
+
+  // Define X-axis
+  var domain_x = [];
+  var bucketnamelength = 0;
+  for (var i in timebuckets)
+  {
+    domain_x.push(timebuckets[i]['name']);
+    bucketnamelength = Math.max(timebuckets[i]['name'].length, bucketnamelength);
+  }
+  var x = d3.scale.ordinal()
+    .domain(domain_x)
+    .rangeRoundBands([0, width], 0);
+  var x_width = x.rangeBand();
+  {% if mode == "graph" and not args.0 %}graph.header(margin.left, x);{% endif %}
+
+  // Define Y-axis
+  var y = d3.scale.linear().rangeRound([height, 0]);
+
+  // Draw all graphs
+  $("#grid"){% if not args.0 %}.find(".graph"){% endif %}.each(function(index)
+  {
+    // Create a new SVG element
+    $({% if args.0 %}$("#graph").get(0){% else %}this{% endif %}).html("");
+    var svg = d3.select({% if args.0 %}$("#graph").get(0){% else %}this{% endif %})
+      .append("svg")
+      .attr("class","graphcell")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Build the data for d3
+    var max_y = 0;
+    var data = [];
+    var linedata = [];
+    for (var bckt in timebuckets)
+    {
+      var tmp = jsondata['rows'][index][timebuckets[bckt]['name']];
+      data.push({
+        'resource': jsondata['rows'][index]['resource'],
+        'type': jsondata['rows'][index]['type'],
+        'bucket': bckt,
+        'available': tmp[0],
+        'unavailable': tmp[1],
+        'setup': tmp[2],
+        'load': tmp[3],
+        'perc': tmp[4]
+        });
+      if (1 in fields)
+      {
+        if (tmp[0] + tmp[1] > max_y) max_y = tmp[0] + tmp[1];
+        if (tmp[1] + tmp[2] + tmp[3] > max_y) max_y = tmp[1] + tmp[2] + tmp[3];
+      }
+      else
+      {
+        if (tmp[0] > max_y) max_y = tmp[0];
+        if (tmp[2] + tmp[3] > max_y) max_y = tmp[2] + tmp[3];
+      }
+    }
+
+    // Update the scale of the Y-axis by looking for the max value
+    y.domain([0,max_y]);
+
+    // Draw load bar and invisible hover rectangle
+    svg.selectAll("g")
+      .data(data)
+      .enter()
+      .append("g")
+      .attr("transform", function(d) { return "translate(" + x(timebuckets[d['bucket']]['name']) + ",0)"; })
+      .each(function(d) {
+        var bucket = d3.select(this);
+        var newtop = 0;
+        var top = 0;
+        var load = d['load'];
+        var free = d['available'] - d['setup'] - load;
+        var overload = 0;
+        if (free < 0)
+        {
+          overload = -free;
+          free = 0;
+          load = d['available'] - d['setup'];
+        }
+        if (d['unavailable'] > 0 && 1 in fields)
+        {
+          newtop = top + d['unavailable'];
+          bucket.append("rect")
+            .attr("width", x_width)
+            .attr("y", y(newtop))
+            .attr("height", y(top) - y(newtop))
+            .style("fill","#F6BD0F");
+          top = newtop;
+        }
+        if (d['setup'] > 0 && 2 in fields)
+        {
+          newtop = top + d['setup'];
+          bucket.append("rect")
+            .attr("width", x_width)
+            .attr("y", y(newtop))
+            .attr("height", y(top) - y(newtop))
+            .style("fill","#2B95EC");
+          top = newtop;
+        }
+        if (load > 0 && 3 in fields)
+        {
+          newtop = top + load;
+          bucket.append("rect")
+            .attr("width", x_width)
+            .attr("y", y(newtop))
+            .attr("height", y(top) - y(newtop))
+            .style("fill","#AFD8F8");
+          top = newtop;
+        }
+        if (overload > 0)
+        {
+          newtop = top + overload;
+          bucket.append("rect")
+            .attr("width", x_width)
+            .attr("y", y(newtop))
+            .attr("height", y(top) - y(newtop))
+            .style("fill","#FF0000");
+        }
+
+        // Build line points
+        if (0 in fields) {
+		    if (1 in fields) {
+		      linedata.push([
+		        x(timebuckets[d['bucket']]['name']),
+		        y(d['available'] + d['unavailable'])
+		        ]);
+		      linedata.push([
+		        x(timebuckets[d['bucket']]['name']) + x_width,
+		        y(d['available'] + d['unavailable'])
+		        ]);
+		    }
+		    else {
+		      linedata.push([
+		        x(timebuckets[d['bucket']]['name']),
+		        y(d['available'])
+		        ]);
+		      linedata.push([
+		        x(timebuckets[d['bucket']]['name']) + x_width,
+		        y(d['available'])
+		        ]);
+		    };
+		};
+
+		// Draw hoover tooltip
+      	bucket.append("rect")
+	      .attr("height", height)
+	      .attr("width", x_width)
+	      .attr("fill-opacity", 0)
+	      .on("click", function(d) {
+	          if (d3.event.defaultPrevented || d['load'] + d['setup'] == 0) return;
+	          d3.select("#tooltip").style('display', 'none');
+
+	          window.location = url_prefix
+	            + "/data/input/operationplanresource/resource/"
+	            + admin_escape(d['resource'])
+	            + "/?noautofilter&operationplan__startdate__lt=" + timebuckets[d['bucket']]['enddate']
+	            + (typeof d['type'] !== 'undefined' && d['type'].includes('bucket') ?
+	               "&operationplan__startdate__gte=" :
+	               "&operationplan__enddate__gt=")
+	            + timebuckets[d['bucket']]['startdate'];
+	          d3.event.stopPropagation();
+	        })
+	      .on("mouseenter", function(d) {
+	         graph.showTooltip(
+	           '<div style="text-align:center; font-weight:bold">'
+	           + timebuckets[d['bucket']]['name'] + "&nbsp;"
+	           + d['perc'] + '%</div>'
+	           + '<table><tr><td>{{_('available')|capfirst}}</td><td style="text-align:center">'
+	           + grid.formatNumber(d['available'])
+	           + '</td></tr><tr><td>{{_('unavailable')|capfirst}}</td><td style="text-align:center">'
+	           + grid.formatNumber(d['unavailable'])
+	           + '</td></tr><tr><td>{{_('setup')|capfirst}}</td><td style="text-align:center">'
+	           + grid.formatNumber(d['setup'])
+	           + '</td></tr><tr><td>{{_('load')|capfirst}}</td><td style="text-align:center">'
+	           + grid.formatNumber(d['load'])
+	           + '</td></tr></table>'
+	           );
+	        })
+	      .on("mouseleave", graph.hideTooltip)
+	      .on("mousemove", graph.moveTooltip);
+      });
+
+    // Draw line for the available capacity
+    if (0 in fields)
+    {
+      var line = d3.svg.line()
+        .x(function(d) { return d[0]; })
+        .y(function(d) { return d[1]; });
+      svg.append("svg:path")
+        .attr('class', 'graphline')
+        .attr("stroke","#8BBA00")
+        .attr("d", line(linedata));
+    }
+
+    // Display Y-Axis
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .tickFormat(d3.format("s"));
+    {% if not args.0 %}
+    svg.append("g")
+      .attr("class", "miniaxis")
+      .call(graph.miniAxis.bind(yAxis));
+    {% else %}
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+    // Display X-axis for a single resource
+    var nth = Math.ceil(timebuckets.length / width * bucketnamelength * 10);
+    var myticks = [];
+    for (var i in timebuckets)
+      if (i % nth == 0) myticks.push(timebuckets[i]['name']);
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .tickValues(myticks)
+      .orient("bottom");
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+    // Display legend
+    var legend = svg.append("g");
+    var codes = [
+      ["{{_('available')|capfirst}}", "#8BBA00", 0],
+      ["{{_('unavailable')|capfirst}}", "#F6BD0F", 1],
+      ["{{_('setup')|capfirst}}", "#2B95EC", 2],
+      ["{{_('load')|capfirst}}", "#AFD8F8", 3],
+      ["{{_('free')|capfirst}}", "#000000", -1],
+      ["{{_('overload')|capfirst}}", "#FF0000", -2]
+      ];
+    var visible = 0;
+    for (var i in codes)
+    {
+      if (codes[i][2] == -1)
+        continue;
+      else if (codes[i][2] >= 0 && !(codes[i][2] in fields))
+        continue;
+      legend.append("rect")
+        .attr("x", width + 82)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", codes[i][1])
+        .attr("transform", "translate(0," + (visible*20+10) + ")");
+      legend.append("text")
+        .attr("x", width + 76)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(codes[i][0])
+        .attr("transform", "translate(0," + (visible*20+10) + ")");
+      visible += 1;
+    }{% endif %}
+    });
+}
+{% endif %}
+{% if args.0 or mode == "table" %}
+function crosses (cellvalue, options, rowdata)
+{
+  var result = '';
+  for (var i in cross_idx)
+    switch(cross_idx[i])
+    {
+      case 3:
+        if (cellvalue[3] != 0.0)
+          result += grid.formatNumber(cellvalue[3]) +
+            '<a href="{{request.prefix}}/data/input/operationplanresource/resource/' +
+            admin_escape(rowdata['resource']) +
+            '/?noautofilter&amp;operationplan__startdate__lt=' + options['colModel']['enddate'] +
+            (typeof rowdata['type'] !== 'undefined' && rowdata['type'].includes('bucket') ?
+            '&amp;operationplan__startdate__gte=' : '&amp;operationplan__enddate__gt=') +
+            options['colModel']['startdate'] +
+            '">&nbsp;<span class="context cross fa fa-caret-right"></span></a><br>';
+        else
+          result += '0<br>';
+        break;
+      case 4:
+        if (cellvalue[4] > 95)
+          result += '<span class="highutil">' + cellvalue[4] + '%</span><br>';
+        else
+          result += cellvalue[4] + '%<br>';
+        break;
+      default:
+        result += grid.formatNumber(cellvalue[cross_idx[i]]) + '<br>';
+    }
+  return result;
+};
+{% endif %}{% endblock %}
+
+{% block extra_grid %}{% if args.0 or mode == "graph" %}loadComplete: drawGraphs,
+{% endif %}{% endblock %}

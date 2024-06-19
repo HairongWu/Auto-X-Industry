@@ -1,0 +1,45 @@
+{% extends "admin/base_site_nav.html" %}
+{% load i18n %}
+
+{% block content %}
+{% if wizard %}
+<div class="row">
+  <div id="tasks" class="col-lg-7 order-lg-1 col-sm-12 order-sm-2 mb-3" role="tablist" aria-multiselectable="true">
+  {% for step in wizard.steps %}
+    <div class="card mb-2" id="wizard-{{ step.index }}">
+       <div id="wizardhead-{{ step.index }}" data-bs-target="#wizardcontent-{{ step.index }}" class="card-header" role="tab"
+       {% if step.locked %}data-bs-toggle="tooltip" data-bs-placement="top" title="Complete the previous step to earn access!"{% else %}data-bs-toggle="collapse"{% endif %}>
+        {% if step.icon %}<span style="font-size:1.5em" class="fa {{ step.icon }} float-end"></span>{% endif %}
+        <h5 class="card-title">{{ step.title }}&nbsp;&nbsp;<small><span class="fa fa-plus fa-xs"></span></small></h5>
+      </div>
+      {% if step.content and not step.locked %}
+      <div id="wizardcontent-{{ step.index }}" aria-labelledby="wizardhead-{{ step.index }}" class="{% if step.index != currentstep %}collapse{% endif %}" role="tabpanel">
+        <div class="card-body">{{ step.content|safe }}</div>
+      </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+  {% if mode %}
+   <div class="col-lg-5 order-lg-2 col-sm-12 order-sm-1 mb-3">
+     <div class="card">
+     <div class="card-header"><h5 class="card-title">Your progress</h5></div>
+     <div class="card-body">
+     {% if wizard.mode == "forecast" %}{% include 'wizard/progress_forecasting.svg' %}
+     {% else %}{% include 'wizard/progress_productionplanning.svg' %}{% endif %}
+     </div>
+   </div>
+  {% endif %}
+  {% if wizard.script %}
+  <script>
+  $(function() {
+  	{{ wizard.script|safe }}
+  });
+  </script>
+  {% endif %}
+  </div>
+</div>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}

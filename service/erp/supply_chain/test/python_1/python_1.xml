@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <description>
+    This test case tests the embedded Python interpreter.
+    It verifies:
+      - Executing Python code during the initialization.
+      - Executing Python code as XML processing instruction.
+      - Catching of exceptions thrown in frePPLe C++ code.
+      - Performance comparison of data loading in different ways.
+  </description>
+  <current>2009-01-01T00:00:00</current>
+
+<?python
+import sys
+import os
+myvariable = 4
+print('1. defining my variable:', myvariable)
+?>
+
+<?python
+print('2. retrieving a variable:', myvariable)
+print('3. calling a function:', end="")
+result = my_function(myvariable)
+print(result)
+print('4. python catches exceptions thrown from the frepple C++ code')
+try:
+  frepple.readXMLfile("does_not_exist.xml")
+except Exception as e:
+  print("    Caught exception: ", e)
+
+# In the next steps we are comparing the speed of 3 types of APIs each
+# achieving exactly the same final result:
+#  1) FrePPle C++ to read a XML-datafile.
+#  2) Python to read a CSV-datafile, which is reformatted in memory
+#     into XML and passed to frePPLe as a string.
+#  3) Python to read a CSV-datafile, which then the calls the C++ API
+#     directly.
+# The relative performance is pretty interesting:
+#  1) 1.20 sec
+#  2) 1.45 sec
+#  3) 0.84 sec
+# These numbers are based on a file with 200000 items and 100 operations
+# to create. The test is running on a 1.6GHz Intel i7 (R) quad core
+# Linux machine.
+# Conclusion: The overhead of parsing of the verbose XML data format
+# is considerable, even when coded in C++. Interpreted "slow" Python code
+# can easily achieve better performance.
+# Obviously a different test configuration will give different results.
+# E.g. when running many small XML messages rather than a huge data file...
+create_files(10000)
+start = os.times()
+frepple.readXMLfile("items.xml",False)
+end = os.times()
+print("5. Read XML file: user time %f, system time %f, elapsed time %f" % (end[0]-start[0], end[1]-start[1], end[4]-start[4]))
+frepple.saveXMLfile("afterXMLread.xml")
+frepple.erase(True)
+frepple.saveXMLfile("aftererase1.xml")
+
+start = os.times()
+read_csv_file()
+end = os.times()
+print("6. Read CSV file & generate XML data: user time %f, system time %f, elapsed time %f" % (end[0]-start[0], end[1]-start[1], end[4]-start[4]))
+frepple.saveXMLfile("afterCSVread.xml")
+frepple.erase(True)
+frepple.saveXMLfile("aftererase2.xml")
+
+start = os.times()
+read_csv_file_direct()
+end = os.times()
+print("7. Read CSV file: user time %f, system time %f, elapsed time %f" % (end[0]-start[0], end[1]-start[1], end[4]-start[4]))
+frepple.saveXMLfile("afterCSVDirectread.xml")
+frepple.erase(True)
+frepple.saveXMLfile("aftererase3.xml")
+frepple.saveXMLfile("output.1.xml")
+?>
+
+<?python
+#
+# A simple user interface.
+#
+def UI():
+  import Tkinter
+
+  def post_xml():
+    t.insert(Tkinter.END,"<plan>\n</plan>")
+
+  root = Tkinter.Tk("Frepple","Frepple")
+  Tkinter.Label(text="Edit your xml message", anchor=Tkinter.W).pack()
+  s = Tkinter.Scrollbar(root)
+  t = Tkinter.Text(root)
+  t.insert(Tkinter.END,"<plan>\n</plan>")
+  t.focus_set()
+  Tkinter.Button(text="exit", command=sys.exit).pack(side=Tkinter.BOTTOM,fill=Tkinter.NONE)
+  Tkinter.Button(text="submit", command=post_xml).pack(side=Tkinter.BOTTOM,fill=Tkinter.NONE)
+  Tkinter.Entry(state=Tkinter.DISABLED).pack(side=Tkinter.BOTTOM,fill=Tkinter.NONE)
+  s.pack(side=Tkinter.RIGHT, fill=Tkinter.Y)
+  t.pack(side=Tkinter.LEFT, expand=True, fill=Tkinter.BOTH)
+  s.config(command=t.yview)
+  t.config(yscrollcommand=s.set)
+  #Tkinter.Entry(state=Tkinter.DISABLED).pack()
+  Tkinter.mainloop()
+
+# Uncomment this line to show...
+#UI()
+?>
+
+  <locations>
+     <location name="Location 1" category="cat A"/>
+     <location name="Location 2" category="cat A"/>
+     <location name="Location 3" category="cat B"/>
+     <location name="Location 4" category="cat B"/>
+     <location name="Location 5" category="cat C"/>
+  </locations>
+
+<?python
+#
+# A simple web server.
+#
+def webserver():
+  import SimpleHTTPServer, SocketServer
+  PORT = 8000
+
+  class FreppleServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
+    def do_GET(self):
+      # Body
+      try:
+        # Create a simplistic page that returns a list of demands
+        self.send_response(200)
+        self.send_header("Content-type", "application/xml")
+        #self.send_header("Cache-Control", "no-cache")
+        self.end_headers()
+        print('<?xml version="1.0" encoding="UTF-8" ?%s' % '>', file=self.wfile)
+        print(r'<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><locations>', file=self.wfile)
+        for i in frepple.locations():
+          print('<location name="%s" category="%s"/>' % (i.name, i.category), file=self.wfile)
+        print(r'</locations></plan>', file=self.wfile)
+      except:
+        self.send_error(500, "Exception generating demand list page")
+
+  print("started HTTP server on port ", PORT)
+  print("Point your browser to http://localhost:" + str(PORT) + " to see the pages.")
+  print("Use ctrl-c to exit...")
+  SocketServer.TCPServer(("", PORT), FreppleServer).serve_forever()
+
+# Uncomment this line to show...
+#webserver()
+?>
+
+<?python
+#
+# An interactive debugging prompt.
+#
+def debug():
+  import code
+  code.interact("Interactive debugging prompt (use CTRL-Z to exit)")
+  print("end debugging")
+
+# Uncomment this line to show...
+#debug()
+?>
+
+<?python
+#
+# The user interface, HTTP server and the debugger are now running
+# together in different threads.
+#
+from threading import Thread
+class task(Thread):
+  def __init__(self, f):
+    super(task, self).__init__()
+    self.function = f
+  def run(self):
+    self.function()
+
+# Uncomment the folowing lines to show...
+#tasklist = ( task(debug), task(webserver), task(UI) )
+#for i in tasklist: i.start()
+#for i in tasklist: i.join()
+?>
+
+</plan>

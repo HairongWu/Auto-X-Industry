@@ -3,12 +3,12 @@
 Auto-X Service provides interactive autonomous services for practical industrial settings.
 
 ## Auto IoT Solution
+
 ### Agents
 - Auto-X AI Server
 - Eclipse Ditto
-- Auto-X AI Studio
+- Auto-X Studio
 - Auto-X ERP
-- Auto-X Supply Chain (eg. fleet mangement)
 
 ### Asset List
 - Building Asset
@@ -41,7 +41,7 @@ Auto-X Service provides interactive autonomous services for practical industrial
 - Attribute
 - KPI
 - Report
-- Mission Planner
+- Drone Mission Planner
 
 ### Quick Start
 1. Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed (v18+) and started. 
@@ -59,10 +59,54 @@ docker-compose -p openremote -f profile/dev-ui.yml up --build -d
 
 ## Auto System Development
 
+### Features
+- integrate with Auto-X AI Server
+- import legacy systems and generate technical documets
+- regenerate systems using technical documents
+- auto building, unit testing and bug reporting
+- initial codebase with technical documets
+
+Change to 'development' folder and refer to [here](https://github.com/JetBrains/intellij-community) to setup the build envireonment.
+
 ## Auto ERP
+  
+Please refer to [here](https://www.odoo.com/documentation/master/administration/on_premise/source.html) to run Odoo locally.
 
-## Auto Health Care
+### Auto Supply Chain
 
-## Auto Supply Chain
+- integrate with Auto-X IoT
+- integrate with Auto-X AI Server
+- demand forecasting
+- inventory optimization
+- production planning
 
-## Auto Finance
+1. Make sure you have [PostgreSQL](https://www.postgresql.org/download/) installed. 
+2. Change to the 'erp/supply_chain' folder and run command
+```
+mkdir build
+cd build
+cmake --build . --config Release
+```
+
+
+## Auto Clinic
+
+### Features
+
+- integrate with Auto-X Studio
+- integrate with Auto-X AI Server
+- integrated with Auto ERP (Pharmacy, Laboratory, OPD, Patient billing, Therapy, Appointment management)
+- WebRTC and digital human based auto admission/diagnosis
+- auto-generated comprehensive therapy advises
+- Face identification using Digital Persona library
+- Vaccines database
+- 3BT clinical thesaurus with validated coding aid for ICD-10 and ICPC-2
+- Snomed CT coding (diagnoses) starting from version 4.0
+- Full lab order entry and results management (LOINC coding supported). 
+- X-ray and pathology results management
+- Multimedia (pictures, video, audio) support
+- Integrates RxNorm based multi-lingual drug-drug interaction detection
+- Integrated solution for archiving of scanned documents
+- Integration of DCM4CHE/Weasis based PACS and DICOM-viewer solution
+- HL7/FHIR API for structured data exchange with external applications
+

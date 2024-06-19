@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <current>2021-01-01T00:00:00</current>
+  <individualPoolResources>true</individualPoolResources>
+
+  <!-- Case 1: basic test -->
+  <resources>
+    <resource name="1. operator pool">
+      <location name="factory"/>
+    </resource>
+    <resource name="1. operator A">
+      <owner name="1. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="1. operator B">
+      <owner name="1. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="1. operator C">
+      <owner name="1. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="1. operator D">
+      <owner name="1. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="1. operator E">
+      <owner name="1. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="1. operator F">
+      <owner name="1. operator pool"/>
+      <location name="factory"/>
+    </resource>
+  </resources>
+  <operations>
+    <operation name="1. make item 1" xsi:type="operation_fixed_time">
+      <item name="1. item 1"/>
+      <location name="factory"/>
+      <loads>
+        <load>
+          <resource name="1. operator pool"/>
+          <quantity>3</quantity>
+          <search>PRIORITY</search>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+    </operation>
+    <operation name="1. make item 2" xsi:type="operation_time_per">
+      <item name="1. item 2"/>
+      <location name="factory"/>
+      <loads>
+        <load>
+          <resource name="1. operator pool"/>
+          <quantity>2</quantity>
+          <search>PRIORITY</search>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+      <duration_per>P1D</duration_per>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="1. order 1">
+      <quantity>10</quantity>
+      <minshipment>10</minshipment>
+      <due>2021-01-01T00:00:00</due>
+      <item name="1. item 1" />
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 2">
+      <quantity>10</quantity>
+      <minshipment>10</minshipment>
+      <due>2021-01-01T00:00:00</due>
+      <item name="1. item 2" />
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 3">
+      <quantity>10</quantity>
+      <due>2021-02-01T00:00:00</due>
+      <item name="1. item 1" />
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 4">
+      <quantity>10</quantity>
+      <due>2021-02-01T00:00:00</due>
+      <item name="1. item 2" />
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 5">
+      <quantity>10</quantity>
+      <due>2021-02-02T00:00:00</due>
+      <item name="1. item 2" />
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+  <!-- Case 2: same as 1, adding skills -->
+  <resources>
+    <resource name="2. operator pool">
+      <location name="factory"/>
+    </resource>
+    <resource name="2. operator A">
+      <owner name="2. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="2. operator B">
+      <owner name="2. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="2. operator C">
+      <owner name="2. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="2. operator D">
+      <owner name="2. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="2. operator E">
+      <owner name="2. operator pool"/>
+      <location name="factory"/>
+    </resource>
+    <resource name="2. operator F">
+      <owner name="2. operator pool"/>
+      <location name="factory"/>
+    </resource>
+  </resources>
+  <skills>
+    <skill name="2. special">
+      <resourceskills>
+        <resourceskill><resource name="2. operator A"/></resourceskill>
+        <resourceskill><resource name="2. operator B"/></resourceskill>
+        <resourceskill><resource name="2. operator C"/></resourceskill>
+      </resourceskills>
+    </skill>
+  </skills>
+  <operations>
+    <operation name="2. make item 1" xsi:type="operation_fixed_time">
+      <item name="2. item 1"/>
+      <location name="factory"/>
+      <loads>
+        <load>
+          <resource name="2. operator pool"/>
+          <quantity>3</quantity>
+          <skill name="2. special"/>
+          <search>PRIORITY</search>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+    </operation>
+    <operation name="2. make item 2" xsi:type="operation_time_per">
+      <item name="2. item 2"/>
+      <location name="factory"/>
+      <loads>
+        <load>
+          <resource name="2. operator pool"/>
+          <quantity>2</quantity>
+          <skill name="2. special"/>
+          <search>PRIORITY</search>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+      <duration_per>P1D</duration_per>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="2. order 1">
+      <quantity>10</quantity>
+      <minshipment>10</minshipment>
+      <due>2021-01-01T00:00:00</due>
+      <item name="2. item 1" />
+      <location name="factory"/>
+    </demand>
+    <demand name="2. order 2">
+      <quantity>10</quantity>
+      <minshipment>10</minshipment>
+      <due>2021-01-01T00:00:00</due>
+      <item name="2. item 2" />
+      <location name="factory"/>
+    </demand>
+    <demand name="2. order 3">
+      <quantity>10</quantity>
+      <due>2021-02-01T00:00:00</due>
+      <item name="2. item 1" />
+      <location name="factory"/>
+    </demand>
+    <demand name="2. order 4">
+      <quantity>10</quantity>
+      <due>2021-02-01T00:00:00</due>
+      <item name="2. item 2" />
+      <location name="factory"/>
+    </demand>
+    <demand name="2. order 5">
+      <quantity>10</quantity>
+      <due>2021-02-02T00:00:00</due>
+      <item name="2. item 2" />
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+  <!-- Case 3: corner cases with small pool sizes -->
+  <resources>
+    <resource name="3. operator pool">
+      <location name="factory"/>
+    </resource>
+    <resource name="3. operator A">
+      <owner name="3. operator pool"/>
+      <location name="factory"/>
+    </resource>
+  </resources>
+  <operations>
+    <operation name="3. make item 1" xsi:type="operation_fixed_time">
+      <item name="3. item 1"/>
+      <location name="factory"/>
+      <loads>
+        <load>
+          <resource name="3. operator pool"/>
+          <quantity>1</quantity>
+          <search>PRIORITY</search>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+    </operation>
+    <operation name="3. make item 2" xsi:type="operation_time_per">
+      <item name="3. item 2"/>
+      <location name="factory"/>
+      <loads>
+        <load>
+          <resource name="3. operator pool"/>
+          <quantity>2</quantity>
+          <search>PRIORITY</search>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+      <duration_per>P1D</duration_per>
+    </operation>
+    <operation name="3. make item 3" xsi:type="operation_time_per">
+      <item name="3. item 3"/>
+      <location name="factory"/>
+      <loads>
+        <load>
+          <resource name="3. operator pool"/>
+          <quantity>1</quantity>
+          <skill name="3. nobody can do this"/>
+          <search>PRIORITY</search>
+        </load>
+      </loads>
+      <duration>P1D</duration>
+      <duration_per>P1D</duration_per>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="3. order 1">
+      <quantity>10</quantity>
+      <minshipment>10</minshipment>
+      <due>2021-01-01T00:00:00</due>
+      <item name="3. item 1" />
+      <location name="factory"/>
+    </demand>
+    <demand name="3. order 2">
+      <quantity>10</quantity>
+      <minshipment>10</minshipment>
+      <due>2021-01-01T00:00:00</due>
+      <item name="3. item 2" />
+      <location name="factory"/>
+    </demand>
+    <demand name="3. order 3">
+      <quantity>10</quantity>
+      <due>2021-02-01T00:00:00</due>
+      <item name="3. item 3" />
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+    <!-- Case 4: variable number of assigned operators -->
+    <resources>
+        <resource name="4. machine">
+            <location name="factory"/>
+			<efficiency>100</efficiency>
+        </resource>	
+        <resource name="4. operator pool">
+            <location name="factory"/>
+        </resource>
+        <resource name="4. operator A">
+            <owner name="4. operator pool"/>
+            <location name="factory"/>
+        </resource>
+        <resource name="4. operator B">
+            <owner name="4. operator pool"/>
+            <location name="factory"/>
+        </resource>
+        <resource name="4. operator C">
+            <owner name="4. operator pool"/>
+            <location name="factory"/>
+        </resource>
+        <resource name="4. operator D">
+            <owner name="4. operator pool"/>
+            <location name="factory"/>
+        </resource>
+        <resource name="4. operator E">
+            <owner name="4. operator pool"/>
+            <efficiency>50</efficiency>
+            <location name="factory"/>
+        </resource>
+        <resource name="4. operator F">
+            <owner name="4. operator pool"/>
+            <location name="factory"/>
+        </resource>
+    </resources>
+    <operations>
+        <operation name="4. make item 1" xsi:type="operation_time_per">
+            <item name="4. item 1"/>
+            <location name="factory"/>
+            <loads>
+                <load>
+                    <resource name="4. operator pool"/>
+                    <quantity>1</quantity>
+                    <search>PRIORITY</search>
+                </load>
+                <load>
+                    <resource name="4. machine"/>
+                    <quantity>1</quantity>
+                </load>
+            </loads>
+            <duration>P1D</duration>
+            <duration_per>P1D</duration_per>
+        </operation>
+    </operations>
+    <operationplans>
+        <operationplan>
+            <reference>MO - 1 operator</reference>
+            <operation>
+                <name>4. make item 1</name>
+            </operation>
+            <status>approved</status>
+            <start>2021-02-01T00:00:00</start>
+            <quantity>2</quantity>
+        </operationplan>
+        <operationplan>
+            <reference>MO - 2 operators</reference>
+            <operation>
+                <name>4. make item 1</name>
+            </operation>
+            <status>approved</status>
+            <start>2021-02-01T00:00:00</start>
+            <quantity>2</quantity>
+        </operationplan>
+        <operationplan>
+            <reference>MO - 2.5 operators</reference>
+			<!-- efficiency of operator E is only 50% -->
+            <operation>
+                <name>4. make item 1</name>
+            </operation>
+            <status>approved</status>
+            <start>2021-02-01T00:00:00</start>
+            <quantity>2</quantity>
+        </operationplan>
+    </operationplans>
+
+<?python
+
+opplan = frepple.operationplan(reference="MO - 2 operators")
+frepple.loadplan(operationplan=opplan, resource=frepple.resource(name="4. operator D"), action="A")
+
+opplan = frepple.operationplan(reference="MO - 2.5 operators")
+frepple.loadplan(operationplan=opplan, resource=frepple.resource(name="4. operator B"), action="A")
+frepple.loadplan(operationplan=opplan, resource=frepple.resource(name="4. operator E"), action="A")
+
+print ("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.1.xml")
+print ("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+print("CREATING SIMPLE UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=0, loglevel=2).solve()
+frepple.saveplan("output.3.xml")
+?>
+
+</plan>

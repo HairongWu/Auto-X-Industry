@@ -1,0 +1,232 @@
+{% extends "admin/base_site_nav.html" %} {% load i18n admin_list %} {% block extrahead %}{{block.super}}
+
+<style>
+  #content-main td {
+    padding-bottom: 1em;
+  }
+
+  #content-main th {
+    line-height: 2em;
+  }
+
+  #content-main .col-form-label {
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  $(function() {
+    $("#languageul li a").click(function() {
+      $("#languagebtn").text($(this).text());
+      $("#language").val($(this).attr('data-lang'));
+    });
+    $("#themeul li a").click(function() {
+      $("#themebtn").text($(this).text());
+      $("#theme").val($(this).text());
+    });
+    $("#scenarioul li a").click(function() {
+      $("#scenariobtn").text($(this).text());
+      $("#default_scenario").val($(this).prop('name'));
+    });
+    $("#ul_personalize li a").click(function() {
+      $("#btn_personalize").text($(this).text());
+      $("#personalization").val($(this).attr('data-type') + '-' + $(this).attr('data-name'));
+    });
+  });
+</script>
+
+{% endblock %} {% block content_title %}
+  <form action="." method="post" class="form" enctype="multipart/form-data">
+<div class="row mt-3">
+  <div class="col">
+    {% if title %}
+    <h1>{{ title }}&nbsp;&nbsp;
+    <input type="submit" value="{% trans "Save" %}" class="btn btn-primary">
+    </h1>
+    {% endif %}
+  </div>
+  <div class="col-auto">
+    <h1>
+      <a href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/getting-around/user-preferences.html"
+      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'help'|capfirst|force_escape %}"
+      target="_blank">
+        <span class="fa fa-question"></span>
+      </a>
+    </h1>
+  </div>
+</div>
+{% endblock %} {% block content %}
+
+<div id="content-main">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <input type="hidden" name="language" id="language" value="{{ request.user.language }}">
+    <input type="hidden" name="theme" id="theme" value="{{ request.user.theme }}">
+    <input type="hidden" name="default_scenario" id="default_scenario" value="{{ request.user.default_scenario }}">
+    <input type="hidden" name="personalization" id="personalization" value="">
+    {% if form.non_field_errors %}
+    <div  style="max-width: 500px" class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+
+      </div>
+    </div>
+
+    {% if request.user.languageList|length > 2 %}
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+        <label class="col-form-label" for="id_language" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+          data-bs-title="{% trans 'Language for the user interface<br>By default the language setting of your browser is used.' %}">
+          {% trans 'language'|capfirst%}
+          <span class="fa fa-question-circle"></span>
+        </label>
+      </div>
+      <div class="col-9" style="max-width:260px">
+        <div class="dropdown">
+          <button id="languagebtn" class="form-control dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ LANGUAGE }}
+          </button>
+          <ul id="languageul" class="dropdown-menu w-100">
+            {% for i,j in request.user.languageList %}
+              <li><a data-lang="{{i}}" class="dropdown-item" href="#">{{ j }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+        <label class="col-form-label" for="id_pagesize" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+          data-bs-title="{% trans 'Number of records per page' %}">
+          {% trans 'page size'|capfirst%}
+          <span class="fa fa-question-circle"></span>
+        </label>
+      </div>
+      <div class="col-9" style="max-width:260px">
+        <input class="form-control" id="id_pagesize" min="-7" max="10009999" name="pagesize" type="number" value="{{ request.user.pagesize }}">
+      </div>
+    </div>
+
+    {% if THEMES|length > 1 %}
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+        <label class="col-form-label" for="id_theme" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+          data-bs-title="Choose a styling theme.">
+          {% trans 'theme'|capfirst%}
+          <span class="fa fa-question-circle"></span>
+        </label>
+      </div>
+      <div class="col-9" style="max-width:260px">
+        <div class="dropdown">
+          <button id="themebtn" class="form-control dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ request.user.theme }}
+        </button>
+        <ul id="themeul" class="dropdown-menu w-100">
+          {% for j in THEMES %}
+            <li><a class="dropdown-item" href="#">{{ j }}</a></li>
+          {% endfor %}
+        </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if SCENARIOS|length > 1 %}
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+        <label class="col-form-label" for="id_default_scenario" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+          data-bs-title="{% trans 'After login you will be directed to the selected scenario' %}">
+          {% trans 'default scenario'|capfirst%}
+          <span class="fa fa-question-circle"></span>
+        </label>
+      </div>
+      <div class="col-9" style="max-width:260px">
+        <div class="dropdown">
+          <button id="scenariobtn" class="form-control dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ request.user.default_scenario }}
+          </button>
+          <ul id="scenarioul" class="dropdown-menu w-100">
+            {% for j in SCENARIOS %}
+              <li><a name="{{ j.name }}" class="dropdown-item" href="#">{%if j.description %}{{j.description}}{% else %}{{j.name}}{% endif %}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+        <label class="col-form-label" for="id_avatar" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+          data-bs-title="{% trans 'Give your user name a face' %}">
+          {% trans 'avatar'|capfirst%}
+          <span class="fa fa-question-circle"></span>
+        </label>
+      </div>
+      <div class="col-9" style="max-width:260px">
+        <div class="text-center">
+        {% if request.user.avatar %}
+        <img style="margin-bottom: 1rem; border-radius: 50%; width:100px; height:100px" src="{{request.user.avatar.url}}">
+        {% else %}<i style="margin-bottom: 1rem; font-size: 8em" class="fa fa-user-circle-o"></i>
+        {% endif %}
+        </div>
+        <input data-bs-toggle="tooltip" data-bs-html="true" class="form-control" type="file" name="avatar" accept="image/*" id="id_avatar"
+          data-bs-title="{% trans "Upload a square picture of yourself.<br>Accepted formats are jpeg, png and gif.<br>Max file size is 100kB." %}">
+      </div>
+    </div>
+
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+        <label class="col-form-label" for="id_cur_password" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+          data-bs-title="Change your password.<br>You can also do this on the login page.">
+          {% trans 'Change password'|capfirst%}
+          <span class="fa fa-question-circle"></span>
+        </label>
+      </div>
+      <div class="col-9" style="max-width:260px">
+        <input class="form-control" id="id_cur_password" name="cur_password" type="password" autocomplete="off" placeholder=" {% trans "Old password"|escape %} " style="margin-bottom: 10px">
+        <input class="form-control" id="id_new_password1" name="new_password1" type="password" autocomplete="off" placeholder=" {% trans "New password"|escape %} " style="margin-bottom: 10px">
+        <input class="form-control" id="id_new_password2" name="new_password2" type="password" autocomplete="off" placeholder=" {% trans "New password confirmation"|escape %} " style="margin-bottom: 10px">
+      </div>
+      <div class="col-3 col">
+        {% if form.new_password1.help_text %}
+        <div>
+          {% autoescape off %}{{ form.new_password1.help_text }}{% endautoescape %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row pb-3">
+      <div class="col-3" style="max-width:200px; text-align: right">
+        <label class="col-form-label" for="id_preferences" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+          data-bs-title="{% trans 'The layout of each screen can be personalized using the <span class=\'fa fa-wrench\'></span> icon.<br>Here you can (re-)initiliaze your personalizations.' %}">
+          {% trans 'reset personalizations'|capfirst%}
+          <span class="fa fa-question-circle"></span>
+        </label>
+      </div>
+      <div class="col-9" style="max-width:260px">
+        <div class="dropdown">
+          <button id="btn_personalize" class="form-control dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-</button>
+          <ul id="ul_personalize" class="dropdown-menu w-100">
+            <li><a data-type="nochange" data-name="" class="dropdown-item" href="#">{% trans "no change"|capfirst %}</a></li>
+            <li><a data-type="resetall" data-name="" class="dropdown-item" href="#">{% trans "reset all"|capfirst %}</a></li>
+            {% for j in SCENARIOS %}{% if j.name != request.database %}
+              <li><a data-type="scenario" data-name="{{ j.name }}" class="dropdown-item" href="#">{% trans "copy from scenario"|capfirst %} {%if j.description %}{{j.description}}{% else %}{{j.name}}{% endif %}</a></li>
+            {% endif %}{% endfor %}
+            {% for j in USERS %}
+              <li><a data-type="user" data-name="{{ j.username }}" class="dropdown-item" href="#">{% trans "copy from user"|capfirst %} {{j.username}}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+{% endblock %}

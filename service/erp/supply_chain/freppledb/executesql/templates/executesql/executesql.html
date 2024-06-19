@@ -1,0 +1,132 @@
+{% extends "admin/base_site_nav.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+
+<script>
+
+var wasPressed = false;
+
+function fkey(e) {
+  e = e || window.event;
+  if( wasPressed || e.code !== 'F5') return;
+  $("#executesql_launch").trigger("click");
+  wasPressed = true;
+  event.preventDefault();
+};
+
+$(document).on("keydown", fkey);
+$(document).on("keypress", fkey);
+$(document).on("keyup", function(e ) {wasPressed= false;});
+
+function render(data) {
+  var grid = $("#executesql_results");
+  $("#executesql_launch").prop('disabled', false);
+  $("#executesql_cancel").prop('disabled', true);
+  if (!grid.is(':empty'))
+    grid.jqGrid('GridUnload');
+  if (data['status'] == "ok") {
+  	$("#error").css('display','none');
+	  var colmodel = [];
+	  for (var c in data['columns'])
+	  	colmodel.push({"name": c, "label": data['columns'][c]});
+	  grid.jqGrid({
+	      colModel: colmodel,
+	      datatype: "local",
+	      data: data['data'],
+	      autowidth: true,
+	      shrinkToFit: false,
+	      rownumbers: true,
+	      maxHeight: $(window).height() - grid.offset().top - 63
+	      });
+  }
+  else {
+  	$("#error").css('display','block').text(data['status']);
+  }
+}
+
+var saveTimeout;
+var xhr;
+
+$(function() {
+
+  $("#executesql_statements").resizable({
+    handleSelector: "#resize-handle",
+    resizeWidth: false,
+    resizeHeight: true,
+    onDragEnd: function () {
+    	savePreference(
+        "executesql.executesql", {
+          'sql': $("#executesql_statements").val(),
+          'height': $("#executesql_statements").height()
+        });}
+  });
+
+	$("#executesql_launch").on("click", function(event) {
+	  $("#executesql_launch").prop('disabled', true);
+	  $("#executesql_cancel").prop('disabled', false);
+	  var sql = $("#executesql_statements");
+	  var data = sql.val();
+	  if (sql[0].selectionStart != sql[0].selectionEnd)
+	    data = data.substring(sql[0].selectionStart, sql[0].selectionEnd);
+	  xhr = $.ajax({
+	    url: url_prefix + "/executesql/",
+	    type: 'POST',
+	    dataType: 'json',
+	    data: data,
+	    success: render,
+	    error: render,
+	    async: true
+	    });
+	});
+
+	$("#executesql_cancel").on("click", function(event) {
+		if (xhr) {
+			xhr.abort();
+		  xhr = null;
+		  }
+	});
+
+	$("#executesql_statements").on("change keyup paste", function() {
+		if (saveTimeout) clearTimeout(saveTimeout);
+		saveTimeout = setTimeout(function() {
+			savePreference(
+					"executesql.executesql", {
+						'sql': $("#executesql_statements").val(),
+					  'height': $("#executesql_statements").height()
+					});
+		  }, 2000);
+	});
+
+});
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3 form-group">
+<div class="col">
+<button id="executesql_launch" class="btn btn-primary">{% trans "launch"|capfirst %}</button>
+<button id="executesql_cancel" class="btn btn-primary" disabled>{% trans "Cancel"|capfirst %}</button>
+</div>
+</div>
+
+<div class="row mb-3 formgroup" style="text-align: center">
+<div class="col">
+<textarea id="executesql_statements" rows="10" class="w-100 form-control font-monospace"
+ style="{% if request.prefs.height %}height:{{ request.prefs.height}}px; {% endif %}resize: none; font-size:1.25em; font-family:courier">
+{{ request.prefs.sql }}
+</textarea>
+</div>
+<span id="resize-handle" class="fa fa-bars handle" style="display: inline-block; touch-action: none"></span>
+</div>
+
+<div class="row mb-3 form-group">
+<div class="col">
+<div id="error"></div>
+<div style="padding-right: 10px; width:100%">
+<table id="executesql_results" class="table table-striped" style="background-color: white"></table>
+</div>
+</div>
+</div>
+{% endblock %}

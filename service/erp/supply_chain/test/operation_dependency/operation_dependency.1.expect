@@ -1,0 +1,124 @@
+1. routing step A is blocking:	1. routing step C	1.0	0	0
+1. routing step B is blocking:	1. routing step C	1.0	0	0
+1. routing step C is blocked by:	1. routing step A	1.0	0	0
+1. routing step C is blocked by:	1. routing step B	1.0	0	0
+10. constrained material and capacity is blocked by:	10. task 1	2.0	0	0
+10. task 1 is blocked by:	10. task 2	1.0	0	0
+10. task 1 is blocked by:	10. task 3	1.0	0	0
+10. task 1 is blocking:	10. constrained material and capacity	2.0	0	0
+10. task 2 is blocked by:	10. task 4	1.0	0	0
+10. task 2 is blocking:	10. task 1	1.0	0	0
+10. task 3 is blocked by:	10. task 5	1.0	0	0
+10. task 3 is blocked by:	10. task 4a	1.0	0	0
+10. task 3 is blocking:	10. task 1	1.0	0	0
+10. task 4 is blocked by:	10. task 5	1.0	0	0
+10. task 4 is blocking:	10. task 2	1.0	0	0
+10. task 4a is blocking:	10. task 4c	1.0	0	0
+10. task 4a is blocking:	10. task 3	1.0	0	0
+10. task 4b is blocking:	10. task 4c	1.0	0	0
+10. task 4c is blocked by:	10. task 4a	1.0	0	0
+10. task 4c is blocked by:	10. task 4b	1.0	0	0
+10. task 5 is blocking:	10. task 4	1.0	0	0
+10. task 5 is blocking:	10. task 3	1.0	0	0
+11. constrained material and capacity is blocked by:	11. task 1	2.0	0	0
+11. task 1 is blocked by:	11. task 2	1.0	0	0
+11. task 1 is blocked by:	11. task 3	1.0	0	0
+11. task 1 is blocking:	11. constrained material and capacity	2.0	0	0
+11. task 2 is blocked by:	11. task 4	1.0	0	0
+11. task 2 is blocking:	11. task 1	1.0	0	0
+11. task 3 is blocked by:	11. task 5	1.0	0	0
+11. task 3 is blocked by:	11. task 4a	1.0	0	0
+11. task 3 is blocking:	11. task 1	1.0	0	0
+11. task 4 is blocked by:	11. task 5	1.0	0	0
+11. task 4 is blocking:	11. task 2	1.0	0	0
+11. task 4a is blocking:	11. task 4c	1.0	0	0
+11. task 4a is blocking:	11. task 3	1.0	0	0
+11. task 4b is blocking:	11. task 4c	1.0	0	0
+11. task 4c is blocked by:	11. task 4a	1.0	0	0
+11. task 4c is blocked by:	11. task 4b	1.0	0	0
+11. task 5 is blocking:	11. task 4	1.0	0	0
+11. task 5 is blocking:	11. task 3	1.0	0	0
+2. project X is blocked by:	2. task X1	1.0	0	0
+2. project X is blocked by:	2. task X2 step 3	1.0	0	0
+2. task X1 is blocking:	2. project X	1.0	0	0
+2. task X2 step 1 is blocking:	2. task X2 step 2	1.0	0	0
+2. task X2 step 2 is blocked by:	2. task X2 step 1	1.0	0	0
+2. task X2 step 2 is blocking:	2. task X2 step 3	1.0	0	0
+2. task X2 step 3 is blocked by:	2. task X2 step 2	1.0	0	0
+2. task X2 step 3 is blocking:	2. project X	1.0	0	0
+3. project X is blocked by:	3. task X1	1.0	864000	432000
+3. project X is blocked by:	3. task X2 step 3	1.0	0	0
+3. task X1 is blocking:	3. project X	1.0	864000	432000
+3. task X2 step 1 is blocking:	3. task X2 step 2	1.0	864000	432000
+3. task X2 step 2 is blocked by:	3. task X2 step 1	1.0	864000	432000
+3. task X2 step 2 is blocking:	3. task X2 step 3	1.0	864000	432000
+3. task X2 step 3 is blocked by:	3. task X2 step 2	1.0	864000	432000
+3. task X2 step 3 is blocking:	3. project X	1.0	0	0
+4. project X is blocked by:	4. task X1	1.0	0	0
+4. project X is blocked by:	4. task X2	1.0	0	0
+4. task X1 is blocked by:	4. task X3	1.0	0	0
+4. task X1 is blocking:	4. project X	1.0	0	0
+4. task X2 is blocked by:	4. task X3	1.0	0	0
+4. task X2 is blocking:	4. project X	1.0	0	0
+4. task X3 is blocking:	4. task X1	1.0	0	0
+4. task X3 is blocking:	4. task X2	1.0	0	0
+5. project X is blocked by:	5. task X1	1.0	0	0
+5. project X is blocked by:	5. task X2	1.0	0	0
+5. task X1 is blocked by:	5. task X3	1.0	0	0
+5. task X1 is blocking:	5. project X	1.0	0	0
+5. task X2 is blocked by:	5. task X3	1.0	0	0
+5. task X2 is blocking:	5. project X	1.0	0	0
+5. task X3 is blocking:	5. task X1	1.0	0	0
+5. task X3 is blocking:	5. task X2	1.0	0	0
+6. bad project is blocked by:	6. task X1	1.0	0	0
+6. bad project is blocked by:	6. task X2	1.0	0	0
+6. bad project is blocked by:	6. task X3	1.0	0	0
+6. bad project is blocked by:	6. task X4	1.0	0	0
+6. bad project is blocked by:	6. task X5	1.0	0	0
+6. bad project is blocking:	6. task 7	1.0	0	0
+6. task 7 is blocked by:	6. bad project	1.0	0	0
+6. task X1 is blocked by:	6. task X2	1.0	0	0
+6. task X1 is blocking:	6. bad project	1.0	0	0
+6. task X2 is blocking:	6. task X1	1.0	0	0
+6. task X2 is blocking:	6. bad project	1.0	0	0
+6. task X3 is blocked by:	6. task X4	1.0	0	0
+6. task X3 is blocking:	6. bad project	1.0	0	0
+6. task X4 is blocked by:	6. task X5	1.0	0	0
+6. task X4 is blocking:	6. task X3	1.0	0	0
+6. task X4 is blocking:	6. bad project	1.0	0	0
+6. task X5 is blocking:	6. task X4	1.0	0	0
+6. task X5 is blocking:	6. bad project	1.0	0	0
+7. routing is blocked by:	7. task 1	1.0	0	0
+7. task 1 is blocked by:	7. task 2	1.0	0	0
+7. task 1 is blocked by:	7. task 3	1.0	0	0
+7. task 1 is blocking:	7. routing	1.0	0	0
+7. task 2 is blocked by:	7. task 4	1.0	0	0
+7. task 2 is blocking:	7. task 1	1.0	0	0
+7. task 3 is blocked by:	7. task 5	1.0	0	0
+7. task 3 is blocked by:	7. task 4a	1.0	0	0
+7. task 3 is blocking:	7. task 1	1.0	0	0
+7. task 4 is blocked by:	7. task 5	1.0	0	0
+7. task 4 is blocking:	7. task 2	1.0	0	0
+7. task 4a is blocking:	7. task 4c	1.0	0	0
+7. task 4a is blocking:	7. task 3	1.0	0	0
+7. task 4b is blocking:	7. task 4c	1.0	0	0
+7. task 4c is blocked by:	7. task 4a	1.0	0	0
+7. task 4c is blocked by:	7. task 4b	1.0	0	0
+7. task 5 is blocking:	7. task 4	1.0	0	0
+7. task 5 is blocking:	7. task 3	1.0	0	0
+8. project X is blocked by:	8. task X1	1.0	0	0
+8. project X is blocked by:	8. task X2 step 3	1.0	0	0
+8. task X1 is blocking:	8. project X	1.0	0	0
+8. task X2 step 1 is blocking:	8. task X2 step 2	1.0	0	172800
+8. task X2 step 2 is blocked by:	8. task X2 step 1	1.0	0	172800
+8. task X2 step 2 is blocking:	8. task X2 step 3	1.0	0	0
+8. task X2 step 3 is blocked by:	8. task X2 step 2	1.0	0	0
+8. task X2 step 3 is blocking:	8. project X	1.0	0	0
+9. project X is blocked by:	9. task X1	1.0	0	0
+9. project X is blocked by:	9. task X2 step 3	1.0	0	0
+9. task X1 is blocking:	9. project X	1.0	0	0
+9. task X2 step 1 is blocking:	9. task X2 step 2	1.0	0	0
+9. task X2 step 2 is blocked by:	9. task X2 step 1	1.0	0	0
+9. task X2 step 2 is blocking:	9. task X2 step 3	3.0	0	0
+9. task X2 step 3 is blocked by:	9. task X2 step 2	3.0	0	0
+9. task X2 step 3 is blocking:	9. project X	1.0	0	0

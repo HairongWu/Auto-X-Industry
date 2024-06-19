@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<name>demo model</name>
+	<description>unicode А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь</description>
+	<current>2009-01-01T00:00:00</current>
+	<locations>
+		<location>
+			<name>locA</name>
+		</location>
+		<location>
+			<name>locB</name>
+		</location>
+	</locations>
+	<customers>
+		<customer>
+			<name>client</name>
+		</customer>
+	</customers>
+	<calendars>
+		<calendar>
+			<name>Cal1</name>
+			<default>4.56</default>
+			<buckets>
+				<bucket>
+					<start>2009-01-01T00:00:00</start>
+					<end>2009-03-01T00:00:00</end>
+					<priority>-1</priority>
+					<value>1</value>
+				</bucket>
+				<bucket>
+					<start>2009-02-01T00:00:00</start>
+					<end>2009-03-01T00:00:00</end>
+					<priority>-3</priority>
+					<value>3</value>
+				</bucket>
+				<bucket>
+					<start>2009-02-01T00:00:00</start>
+					<end>2009-05-01T00:00:00</end>
+					<priority>-2</priority>
+					<value>2</value>
+				</bucket>
+			</buckets>
+		</calendar>
+		<calendar>
+			<name>Cal2</name>
+			<default>1.23</default>
+		</calendar>
+		<calendar>
+			<name>Capacity</name>
+			<buckets>
+				<bucket>
+					<start>2009-01-01T00:00:00</start>
+					<value>1</value>
+				</bucket>
+			</buckets>
+		</calendar>
+	</calendars>
+	<resources>
+		<resource>
+			<name>Resource</name>
+			<maximum_calendar>
+				<name>Capacity</name>
+			</maximum_calendar>
+		</resource>
+		<resource>
+			<name>machine</name>
+			<maximum_calendar>
+				<name>Cal2</name>
+			</maximum_calendar>
+		</resource>
+	</resources>
+	<items>
+		<item>
+			<name>end item</name>
+		</item>
+		<item>
+			<name>item 0</name>
+		</item>
+		<item>
+			<name>item 1</name>
+		</item>
+		<item>
+			<name>item 2</name>
+		</item>
+		<item>
+			<name>item 3</name>
+		</item>
+		<item>
+			<name>item 4</name>
+		</item>
+		<item>
+			<name>item 5</name>
+		</item>
+		<item>
+			<name>item 6</name>
+		</item>
+		<item>
+			<name>item 7</name>
+		</item>
+		<item>
+			<name>item 8</name>
+		</item>
+		<item>
+			<name>item 9</name>
+		</item>
+	</items>
+	<buffers>
+		<buffer>
+			<name>buffer1</name>
+			<category>My category</category>
+			<description>My description</description>
+			<item>
+				<name>item 1</name>
+			</item>
+			<location>
+				<name>locA</name>
+			</location>
+			<stringproperty name="myfield" value="my custom field"/>
+		</buffer>
+		<buffer>
+			<name>buffer2</name>
+			<owner>
+				<name>buffer1</name>
+				<item>
+					<name>item 1</name>
+				</item>
+				<location>
+					<name>locA</name>
+				</location>
+			</owner>
+		</buffer>
+		<buffer>
+			<name>end item</name>
+			<producing xsi:type="operation_alternate">
+				<name>make or buy item</name>
+			</producing>
+			<item>
+				<name>end item</name>
+			</item>
+		</buffer>
+	</buffers>
+	<operations>
+		<operation>
+			<name>buy item</name>
+			<flows>
+				<flow xsi:type="flow_end">
+					<item>
+						<name>end item</name>
+					</item>
+					<quantity>1</quantity>
+				</flow>
+			</flows>
+			<duration>P1D</duration>
+		</operation>
+		<operation>
+			<name>delivery end item</name>
+			<flows>
+				<flow>
+					<item>
+						<name>end item</name>
+					</item>
+					<quantity>-1</quantity>
+				</flow>
+			</flows>
+			<duration>P1D</duration>
+		</operation>
+		<operation xsi:type="operation_routing">
+			<name>make item</name>
+			<flows>
+				<flow xsi:type="flow_end">
+					<item>
+						<name>end item</name>
+					</item>
+					<quantity>1</quantity>
+				</flow>
+			</flows>
+			<suboperations>
+				<suboperation>
+					<operation>
+						<name>make item - step 1</name>
+					</operation>
+				</suboperation>
+				<suboperation>
+					<operation>
+						<name>make item - step 2</name>
+					</operation>
+					<priority>2</priority>
+				</suboperation>
+			</suboperations>
+		</operation>
+		<operation>
+			<name>make item - step 1</name>
+			<loads>
+				<load>
+					<resource>
+						<name>Resource</name>
+					</resource>
+				</load>
+			</loads>
+			<duration>P4D</duration>
+		</operation>
+		<operation>
+			<name>make item - step 2</name>
+			<loads>
+				<load>
+					<resource>
+						<name>Resource</name>
+					</resource>
+				</load>
+			</loads>
+			<duration>P3D</duration>
+		</operation>
+		<operation xsi:type="operation_alternate">
+			<name>make or buy item</name>
+			<suboperations>
+				<suboperation>
+					<operation xsi:type="operation_routing">
+						<name>make item</name>
+					</operation>
+				</suboperation>
+				<suboperation>
+					<operation>
+						<name>buy item</name>
+					</operation>
+					<priority>2</priority>
+				</suboperation>
+			</suboperations>
+		</operation>
+	</operations>
+	<demands>
+		<demand>
+			<name>order 1</name>
+			<quantity>10</quantity>
+			<item>
+				<name>end item</name>
+			</item>
+			<customer>
+				<name>client</name>
+			</customer>
+			<operation>
+				<name>delivery end item</name>
+			</operation>
+			<due>2009-03-02T09:00:00</due>
+			<priority>1</priority>
+			<maxlateness>P0D</maxlateness>
+		</demand>
+		<demand>
+			<name>order 2</name>
+			<quantity>10</quantity>
+			<item>
+				<name>end item</name>
+			</item>
+			<customer>
+				<name>client</name>
+			</customer>
+			<operation>
+				<name>delivery end item</name>
+			</operation>
+			<due>2009-03-02T08:30:00</due>
+			<priority>2</priority>
+			<maxlateness>P0D</maxlateness>
+		</demand>
+		<demand>
+			<name>order 3</name>
+			<quantity>10</quantity>
+			<item>
+				<name>end item</name>
+			</item>
+			<customer>
+				<name>client</name>
+			</customer>
+			<operation>
+				<name>delivery end item</name>
+			</operation>
+			<due>2009-03-02T20:00:00</due>
+			<priority>3</priority>
+			<maxlateness>P0D</maxlateness>
+		</demand>
+	</demands>
+	<operationplans>
+		<operationplan>
+			<reference>11</reference>
+			<operation>
+				<name>delivery end item</name>
+			</operation>
+			<demand>
+				<name>order 2</name>
+			</demand>
+			<start>2009-03-01T08:30:00</start>
+			<end>2009-03-02T08:30:00</end>
+			<quantity>10</quantity>
+		</operationplan>
+		<operationplan>
+			<reference>13</reference>
+			<operation>
+				<name>delivery end item</name>
+			</operation>
+			<demand>
+				<name>order 1</name>
+			</demand>
+			<start>2009-03-01T09:00:00</start>
+			<end>2009-03-02T09:00:00</end>
+			<quantity>10</quantity>
+		</operationplan>
+		<operationplan>
+			<reference>14</reference>
+			<operation>
+				<name>delivery end item</name>
+			</operation>
+			<demand>
+				<name>order 3</name>
+			</demand>
+			<start>2009-03-01T20:00:00</start>
+			<end>2009-03-02T20:00:00</end>
+			<quantity>10</quantity>
+		</operationplan>
+		<operationplan>
+			<reference>9</reference>
+			<operation xsi:type="operation_routing">
+				<name>make item</name>
+			</operation>
+			<start>2009-02-08T09:00:00</start>
+			<end>2009-02-15T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>16</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>10</reference>
+			<operation xsi:type="operation_routing">
+				<name>make item</name>
+			</operation>
+			<start>2009-02-15T09:00:00</start>
+			<end>2009-02-22T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>17</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>12</reference>
+			<operation xsi:type="operation_routing">
+				<name>make item</name>
+			</operation>
+			<start>2009-02-22T09:00:00</start>
+			<end>2009-03-01T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>18</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>15</reference>
+			<operation xsi:type="operation_routing">
+				<name>make item</name>
+			</operation>
+			<start>2010-12-25T00:00:00</start>
+			<end>2011-01-01T00:00:00</end>
+			<quantity>9</quantity>
+			<status>confirmed</status>
+		</operationplan>
+		<operationplan>
+			<reference>1</reference>
+			<operation>
+				<name>make item - step 1</name>
+			</operation>
+			<start>2009-02-08T09:00:00</start>
+			<end>2009-02-12T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>9</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>3</reference>
+			<operation>
+				<name>make item - step 1</name>
+			</operation>
+			<start>2009-02-15T09:00:00</start>
+			<end>2009-02-19T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>10</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>5</reference>
+			<operation>
+				<name>make item - step 1</name>
+			</operation>
+			<start>2009-02-22T09:00:00</start>
+			<end>2009-02-26T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>12</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>7</reference>
+			<operation>
+				<name>make item - step 1</name>
+			</operation>
+			<start>2010-12-25T00:00:00</start>
+			<end>2010-12-29T00:00:00</end>
+			<quantity>9</quantity>
+			<status>confirmed</status>
+			<owner>
+				<reference>15</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>2</reference>
+			<operation>
+				<name>make item - step 2</name>
+			</operation>
+			<start>2009-02-12T09:00:00</start>
+			<end>2009-02-15T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>9</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>4</reference>
+			<operation>
+				<name>make item - step 2</name>
+			</operation>
+			<start>2009-02-19T09:00:00</start>
+			<end>2009-02-22T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>10</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>6</reference>
+			<operation>
+				<name>make item - step 2</name>
+			</operation>
+			<start>2009-02-26T09:00:00</start>
+			<end>2009-03-01T09:00:00</end>
+			<quantity>10</quantity>
+			<owner>
+				<reference>12</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>8</reference>
+			<operation>
+				<name>make item - step 2</name>
+			</operation>
+			<start>2010-12-29T00:00:00</start>
+			<end>2011-01-01T00:00:00</end>
+			<quantity>9</quantity>
+			<status>confirmed</status>
+			<owner>
+				<reference>15</reference>
+			</owner>
+		</operationplan>
+		<operationplan>
+			<reference>16</reference>
+			<operation xsi:type="operation_alternate">
+				<name>make or buy item</name>
+			</operation>
+			<start>2009-02-08T09:00:00</start>
+			<end>2009-02-15T09:00:00</end>
+			<quantity>10</quantity>
+			<ordertype>ALT</ordertype>
+		</operationplan>
+		<operationplan>
+			<reference>17</reference>
+			<operation xsi:type="operation_alternate">
+				<name>make or buy item</name>
+			</operation>
+			<start>2009-02-15T09:00:00</start>
+			<end>2009-02-22T09:00:00</end>
+			<quantity>10</quantity>
+			<ordertype>ALT</ordertype>
+		</operationplan>
+		<operationplan>
+			<reference>18</reference>
+			<operation xsi:type="operation_alternate">
+				<name>make or buy item</name>
+			</operation>
+			<start>2009-02-22T09:00:00</start>
+			<end>2009-03-01T09:00:00</end>
+			<quantity>10</quantity>
+			<ordertype>ALT</ordertype>
+		</operationplan>
+	</operationplans>
+</plan>

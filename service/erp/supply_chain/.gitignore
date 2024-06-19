@@ -1,0 +1,39 @@
+# Generated folders
+/static
+/build*
+/logs
+/node_modules
+/localsettings*
+/test/*/output.*.xml
+.vs
+
+# Executables
+*.exe
+*.dll
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+dist
+build
+venv
+
+# Log files
+*.log
+*.out
+*.stackdump
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Packaging
+*.deb
+*.rpm
+*.tar.gz
+*.tgz
+*.egg-info

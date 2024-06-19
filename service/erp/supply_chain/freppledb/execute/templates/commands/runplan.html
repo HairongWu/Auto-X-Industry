@@ -1,0 +1,98 @@
+{% load i18n %}
+{% if widget %}
+<script type="text/javascript">
+  function launchRunPlan(event) {
+    $.ajax({
+          url: "{{request.prefix}}/execute/api/runplan/",
+          data: $(event.target).parents('form:first').serialize(),
+          type: "POST",
+          error: ajaxerror
+        });
+    event.preventDefault();
+  }
+
+  function cancelTask() {
+    $.ajax({
+      url: "{{request.prefix}}/execute/cancel/{{lastrun.id}}/",
+      type: "POST",
+      });
+  }
+</script>
+{% endif %}
+<form role="form" method="post" {% if not widget %}action="{{request.prefix}}/execute/launch/runplan/"{% endif %}>{% csrf_token %}
+    <table class="w-100">
+    <tr>
+    <td style="vertical-align:top; padding: 15px">
+        <button type="submit" class="btn btn-primary"{% if widget %} onclick="launchRunPlan(event)"{% endif%}>{% trans "launch"|capfirst %}</button>
+    </td>
+    <td class="ps-3 pt-3 pe-3">
+    {% if widget and lastrun %}
+    <div class="row w-100 mb-2">
+    <div class="col mb-1"><span class="fw-bold">{% trans "started"|capfirst %}</span><br>{% if lastrun.started %}{{lastrun.started|date:"DATE_FORMAT"}} {{lastrun.started|date:"H:i:s"}}{% endif %}</div>
+    <div class="col mb-1"><span class="fw-bold">{% trans "finished"|capfirst %}</span><br>{% if lastrun.finished %}{{lastrun.finished|date:"DATE_FORMAT"}} {{lastrun.finished|date:"H:i:s"}}{% endif %}</div>
+    <div class="col mb-1"><span class="fw-bold">{% trans "status"|capfirst %}</span><br>
+      <span class="{% if lastrun.status != 'Done' and lastrun.status != 'Canceled' %}badge bg-danger{% endif %}">{{lastrun.status}}</span>
+      {% if lastrun.status == 'Waiting' or "%" in lastrun.status %}&nbsp;
+         <button class='btn btn-sm btn-primary' style='font-size:66%' onclick='cancelTask()'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>
+      {% endif %}
+    </div>
+    </div>
+    {% endif %}
+    {% translate "Load all input data, run the planning algorithm, and export the results." %}<br><br>
+    {% if planning_options %}
+    <div {% if planning_options|length <= 1 %}class="d-none"{% endif %}><b>{% filter capfirst %}{% translate "planning steps" %}{% endfilter %}</b><br>
+    {% for b in planning_options %}
+    <div class="form-check">
+    <label class="form-check-label" for="option_{{b.0}}"
+    {% if b.2 %}data-bs-toggle="tooltip" data-bs-title="{{ b.2 }}"{% endif %}>
+    <input type="checkbox" class="form-check-input" name="env" {% if b.0 in current_options %}checked {% endif %}value="{{b.0}}" id="option_{{b.0}}">
+    {{b.1}}
+    {% if b.2 %}<span class="fa fa-question-circle"></span>{% endif %}
+    </label>
+    </div>
+    {% endfor %}
+    <br>
+    </div>
+    {% endif %}
+    <b>{% translate "Plan type" %}</b><br>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" id="plantype1" name="plantype" {% if plantype != '2' %}checked {% endif %}value="1"/>
+    <label class="form-check-label" for="plantype1">
+        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Generate a supply plan that respects all constraints.<br>In case of shortages the demand is planned late or short.">Constrained plan</span>{% endblocktrans %}
+    <span class="fa fa-question-circle" style="display:inline-block;"></span>
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" id="plantype2" name="plantype" {% if plantype == '2' %}checked {% endif %}value="2"/>
+    <label class="form-check-label" for="plantype2">
+        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Generate a supply plan that shows material, capacity and operation problems that prevent the demand from being planned in time.<br>The demand is always met completely and on time.">Unconstrained plan</span>{% endblocktrans %}
+    <span class="fa fa-question-circle" style="display:inline-block;"></span>
+    </label>
+    </div>
+        <br>
+        <b>{% filter capfirst %}{% translate "constraints" %}{% endfilter %}</b><br>
+        <div class="form-check">
+        <label class="form-check-label" for="cb4">
+        <input class="form-check-input" type="checkbox" name="constraint" {% if capa_constrained %}checked {% endif %}value="capa" id="cb4"/>
+        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Respect the capacity limits of your resources.">Capacity: respect capacity limits</span>{% endblocktrans %}
+        <span class="fa fa-question-circle"></span>
+        </label>
+        </div>
+        <div class="form-check">
+        <label class="form-check-label" for="cb16">
+        <input class="form-check-input" type="checkbox" name="constraint" {% if mfg_lt_constrained %}checked {% endif %}value="mfg_lt" id="cb16"/>
+        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Don't generate manufacturing orders or distribution orders that start or end in the past.<br>Proposed and approved activities must all be in the future.<br>Only confirmed activities are allowed to be in the past.">Manufacturing lead time: do not manufacture in the past</span>{% endblocktrans %}
+        <span class="fa fa-question-circle"></span>
+        </label>
+        </div>
+        <div class="form-check">
+        <label class="form-check-label" for="cb32">
+        <input class="form-check-input" type="checkbox" name="constraint" {% if po_lt_constrained %}checked {% endif %}value="po_lt" id="cb32"/>
+        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Don't generate purchase orders that start or end in the past.<br>Proposed and approved activities must all be in the future.<br>Only confirmed activities are allowed to be in the past.">Purchasing lead time: do not purchase in the past</span>{% endblocktrans %}
+          <span class="fa fa-question-circle"></span>
+        </label>
+        </div>
+    </td>
+    </tr>
+    </table>
+</form>

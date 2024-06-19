@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Test model for effective operations</name>
+  <description>
+    This test checks date effective fields on operations.
+
+    The first part of this test verifies alternate operations with date
+    effective suboperations.
+    The end product in this test can be produced in 2 locations.
+    In a first part of the horizon location A is the only allowed source,
+    while in the last part of the horizon only sourcing from location B
+    is possible.
+    Case 1: No constraints and we have demands in different parts of the horizon.
+    Case 2: A demand due in the first part of the horizon is delayed such that
+            it spans into the second part of the horizon.
+    Case 3: A demand due in the second part of the horizon requires capacity in
+            the first part of the effectivity horizon.
+
+    A second part of this test verifies the behavior of date effective minimum size
+    on operations.
+    Case 4: The minimum size of the replenishing operation increases over time.
+    Case 5: The minimum size of the replenishing operation decreases over time.
+    
+    A third part of the test verifies the behavior when material is requested
+    far outside the effective range of an operation.
+    Case 6: The operation only becomes effective much later.
+    Case 7: The operation has already passed way earlier.
+    
+  </description>
+  <current>2015-01-01T00:00:00</current>
+
+  <!--
+    Case 1
+  -->
+  <operations>
+    <operation name="1. make end item in A" xsi:type="operation_time_per"
+      duration_per="P1D" >
+      <item name="1. end item"/>
+      <location name="location A"/>
+      <size_multiple>1</size_multiple>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="1. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="1. capacity in A">
+            <maximum_calendar name="1. capacity A">
+              <buckets>
+                <bucket start="2015-01-01T00:00:00" value="2"/>
+                <bucket start="2015-01-15T00:00:00" value="3"/>
+              </buckets>
+            </maximum_calendar>
+          </resource>
+        </load>
+      </loads>
+    </operation>
+    <operation name="1. make end item in B" xsi:type="operation_time_per"
+      duration_per="P1D">
+      <item name="1. end item"/>
+      <location name="location B"/>
+      <size_multiple>1</size_multiple>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="1. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="1. capacity in B">
+            <maximum_calendar name="1. capacity B">
+              <buckets>
+                <bucket start="2015-01-01T00:00:00">
+                  <value>1</value>
+                </bucket>
+              </buckets>
+            </maximum_calendar>
+          </resource>
+        </load>
+      </loads>
+    </operation>
+    <operation name="1. Source end item" xsi:type="operation_alternate">
+      <suboperations>
+        <suboperation>
+          <operation name="1. sourcing from location A"
+            xsi:type="operation_fixed_time" duration="P1D">
+            <location name="location A"/>
+            <flows>
+              <flow xsi:type="flow_start">
+                <item name="1. end item"/>
+                <quantity>-1</quantity>
+              </flow>
+            </flows>
+          </operation>
+          <priority>1</priority>
+          <effective_end>2015-02-01T00:00:00</effective_end>
+        </suboperation>
+        <suboperation>
+          <operation name="1. sourcing from location B"
+            xsi:type="operation_fixed_time" duration="P2D">
+            <location name="location B"/>
+            <flows>
+              <flow xsi:type="flow_start">
+                <item name="1. end item"/>
+                <quantity>-1</quantity>
+              </flow>
+            </flows>
+          </operation>
+          <priority>2</priority>
+          <effective_start>2015-02-01T00:00:00</effective_start>
+        </suboperation>
+      </suboperations>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="1. order 1">
+      <description>Planned completely on A.</description>
+      <quantity>5</quantity>
+      <due>2015-01-14T00:00:00</due>
+      <priority>11</priority>
+      <item name="1. end item"/>
+      <operation name="1. Source end item"/>
+    </demand>
+    <demand name="1. order 2">
+      <description>Planned completely on B.
+      The operation starts in the effective dates of alternate A, but
+      ends in the effectivity range of B.</description>
+      <quantity>5</quantity>
+      <due>2015-02-03T12:00:00</due>
+      <priority>12</priority>
+      <item name="1. end item"/>
+      <operation name="1. Source end item"/>
+    </demand>
+    <demand name="1. order 3">
+      <description>Planned completely on B.</description>
+      <quantity>5</quantity>
+      <due>2015-02-14T00:00:00</due>
+      <priority>13</priority>
+      <item name="1. end item"/>
+      <operation name="1. Source end item"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 2
+  -->
+  <operations>
+    <operation name="2. make end item in A" xsi:type="operation_time_per"
+      duration_per="P1D" >
+      <item name="2. end item"/>
+      <location name="location A"/>
+      <size_multiple>1</size_multiple>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="2. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="2. capacity in A">
+            <maximum_calendar name="2. capacity A">
+              <buckets>
+                <bucket start="2015-01-01T00:00:00" value="2"/>
+                <bucket start="2015-01-15T00:00:00" value="3"/>
+              </buckets>
+            </maximum_calendar>
+          </resource>
+        </load>
+      </loads>
+    </operation>
+    <operation name="2. make end item in B" xsi:type="operation_time_per"
+      duration_per="P1D">
+      <item name="2. end item"/>
+      <location name="location B"/>
+      <size_multiple>1</size_multiple>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="2. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="2. capacity in B">
+            <maximum_calendar name="2. capacity B">
+              <buckets>
+                <bucket start="2015-01-01T00:00:00">
+                  <value>1</value>
+                </bucket>
+              </buckets>
+            </maximum_calendar>
+          </resource>
+        </load>
+      </loads>
+    </operation>
+    <operation name="2. Source end item" xsi:type="operation_alternate">
+      <suboperations>
+        <suboperation>
+          <operation name="2. sourcing from location A"
+            xsi:type="operation_fixed_time" duration="P1D">
+              <location name="location A"/>
+              <flows>
+                <flow xsi:type="flow_start">
+                  <item name="2. end item"/>
+                  <quantity>-1</quantity>
+                </flow>
+              </flows>
+          </operation>
+          <priority>1</priority>
+          <effective_end>2015-02-01T00:00:00</effective_end>
+        </suboperation>
+        <suboperation>
+          <operation name="2. sourcing from location B"
+            xsi:type="operation_fixed_time" duration="P2D">
+              <location name="location B"/>
+              <flows>
+                <flow xsi:type="flow_start">
+                  <item name="2. end item"/>
+                  <quantity>-1</quantity>
+                </flow>
+              </flows>
+          </operation>
+          <priority>2</priority>
+          <effective_start>2015-02-01T00:00:00</effective_start>
+        </suboperation>
+      </suboperations>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="2. order 1">
+      <description>This order consumes all capacity on A, and then
+      searches capacity on B.</description>
+      <quantity>140</quantity>
+      <minshipment>1</minshipment>
+      <due>2015-01-14T00:00:00</due>
+      <priority>11</priority>
+      <item name="2. end item"/>
+      <operation name="2. Source end item"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 3
+  -->
+  <operations>
+    <operation name="3. make end item in A" xsi:type="operation_time_per"
+      duration_per="P1D" >
+      <item name="3. end item"/>
+      <location name="location A"/>
+      <size_multiple>1</size_multiple>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="3. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="3. capacity in A">
+            <maximum_calendar name="3. capacity A">
+              <buckets>
+                <bucket start="2015-01-01T00:00:00" value="2"/>
+                <bucket start="2015-01-15T00:00:00" value="3"/>
+              </buckets>
+            </maximum_calendar>
+          </resource>
+        </load>
+      </loads>
+    </operation>
+    <operation name="3. make end item in B" xsi:type="operation_time_per"
+      duration_per="P1D">
+      <item name="3. end item"/>
+      <location name="location B"/>
+      <size_multiple>1</size_multiple>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="3. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="3. capacity in B">
+            <maximum_calendar name="3. capacity B">
+              <buckets>
+                <bucket start="2015-01-01T00:00:00">
+                  <value>1</value>
+                </bucket>
+              </buckets>
+            </maximum_calendar>
+          </resource>
+        </load>
+      </loads>
+    </operation>
+    <operation name="3. Source end item" xsi:type="operation_alternate">
+      <suboperations>
+        <suboperation>
+          <operation name="3. sourcing from location A"
+            xsi:type="operation_fixed_time" duration="P1D">
+              <location name="location A"/>
+              <flows>
+                <flow xsi:type="flow_start">
+                  <item name="3. end item"/>
+                  <quantity>-1</quantity>
+                </flow>
+              </flows>
+          </operation>
+          <priority>1</priority>
+          <effective_end>2015-02-01T00:00:00</effective_end>
+        </suboperation>
+        <suboperation>
+          <operation name="3. sourcing from location B"
+            xsi:type="operation_fixed_time" duration="P2D">
+              <location name="location B"/>
+              <flows>
+                <flow xsi:type="flow_start">
+                  <item name="3. end item"/>
+                  <quantity>-1</quantity>
+                </flow>
+              </flows>
+          </operation>
+          <priority>2</priority>
+          <effective_start>2015-02-01T00:00:00</effective_start>
+        </suboperation>
+      </suboperations>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="3. order 1">
+      <description>This order consumes all capacity on resource B (even in the
+      first effective period since the END date remains in the effective period
+      of B). Next capacity on alternate A is used as well to meet the demand
+      in time.
+      Note that the delivery delay of this demand is identical to case 2, since
+      the requested quantity is the same.
+      </description>
+      <quantity>140</quantity>
+      <minshipment>1</minshipment>
+      <due>2015-02-14T00:00:00</due>
+      <priority>11</priority>
+      <item name="3. end item"/>
+      <operation name="3. Source end item"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 4
+  -->
+  <operations>
+    <operation name="4. make end item">
+      <item name="4. end item"/>
+      <location name="factory"/>
+      <duration>P7D</duration>
+      <size_multiple>1</size_multiple>
+	  <!-- We use the max between this constant and time varying minimum -->
+      <size_minimum>1</size_minimum>
+      <size_minimum_calendar name="4. ROQ calendar">
+        <default>10</default>
+        <buckets>
+          <bucket start="2015-01-07T00:00:00" value="20" priority="100"/>
+          <bucket start="2015-01-14T00:00:00" value="30" priority="99"/>
+          <bucket start="2015-01-21T00:00:00" value="40" priority="98"/>
+          <bucket start="2015-01-28T00:00:00" value="50" priority="97"/>
+        </buckets>
+      </size_minimum_calendar>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="4. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="4. order 1">
+      <quantity>5</quantity>
+      <due>2015-01-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="4. order 2">
+      <quantity>5</quantity>
+      <due>2015-01-02T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 3">
+      <quantity>5</quantity>
+      <due>2015-01-03T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 4">
+      <quantity>5</quantity>
+      <due>2015-01-04T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 5">
+      <quantity>5</quantity>
+      <due>2015-01-05T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 6">
+      <quantity>5</quantity>
+      <due>2015-01-06T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 7">
+      <quantity>5</quantity>
+      <due>2015-01-07T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 8">
+      <quantity>5</quantity>
+      <due>2015-01-08T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 9">
+      <quantity>5</quantity>
+      <due>2015-01-09T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="4. order 10">
+      <quantity>5</quantity>
+      <due>2015-01-10T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="4. order 11">
+      <quantity>5</quantity>
+      <due>2015-01-11T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="4. order 12">
+      <quantity>5</quantity>
+      <due>2015-01-12T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 13">
+      <quantity>5</quantity>
+      <due>2015-01-13T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 14">
+      <quantity>5</quantity>
+      <due>2015-01-14T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 15">
+      <quantity>5</quantity>
+      <due>2015-01-15T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 16">
+      <quantity>5</quantity>
+      <due>2015-01-16T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 17">
+      <quantity>5</quantity>
+      <due>2015-01-17T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 18">
+      <quantity>5</quantity>
+      <due>2015-01-18T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 19">
+      <quantity>5</quantity>
+      <due>2015-01-19T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="4. order 20">
+      <quantity>5</quantity>
+      <due>2015-01-20T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="4. order 21">
+      <quantity>5</quantity>
+      <due>2015-01-21T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="4. order 22">
+      <quantity>5</quantity>
+      <due>2015-01-22T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 23">
+      <quantity>5</quantity>
+      <due>2015-01-23T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 24">
+      <quantity>5</quantity>
+      <due>2015-01-24T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 25">
+      <quantity>5</quantity>
+      <due>2015-01-25T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 26">
+      <quantity>5</quantity>
+      <due>2015-01-26T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 27">
+      <quantity>5</quantity>
+      <due>2015-01-27T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 28">
+      <quantity>5</quantity>
+      <due>2015-01-28T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="4. order 29">
+      <quantity>5</quantity>
+      <due>2015-01-29T00:00:00</due>
+      <priority>1</priority>
+      <item name="4. end item"/>
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 5
+  -->
+  <operations>
+    <operation name="5. make end item">
+      <item name="5. end item"/>
+      <location name="factory"/>
+      <duration>P7D</duration>
+      <size_multiple>1</size_multiple>
+	  <!-- We use the max between this constant and time varying minimum -->
+      <size_minimum>20</size_minimum>
+      <size_minimum_calendar name="5. ROQ calendar">
+        <default>50</default>
+        <buckets>
+          <bucket start="2015-01-07T00:00:00" value="40" priority="100"/>
+          <bucket start="2015-01-14T00:00:00" value="30" priority="99"/>
+          <bucket start="2015-01-21T00:00:00" value="20" priority="98"/>
+          <bucket start="2015-01-28T00:00:00" value="10" priority="97"/>
+        </buckets>
+      </size_minimum_calendar>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="5. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+    </operation>
+  </operations>
+  <demands>
+    <demand name="5. order 1">
+      <quantity>5</quantity>
+      <due>2015-01-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="5. order 2">
+      <quantity>5</quantity>
+      <due>2015-01-02T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 3">
+      <quantity>5</quantity>
+      <due>2015-01-03T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 4">
+      <quantity>5</quantity>
+      <due>2015-01-04T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 5">
+      <quantity>5</quantity>
+      <due>2015-01-05T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 6">
+      <quantity>5</quantity>
+      <due>2015-01-06T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 7">
+      <quantity>5</quantity>
+      <due>2015-01-07T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 8">
+      <quantity>5</quantity>
+      <due>2015-01-08T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 9">
+      <quantity>5</quantity>
+      <due>2015-01-09T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="5. order 10">
+      <quantity>5</quantity>
+      <due>2015-01-10T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="5. order 11">
+      <quantity>5</quantity>
+      <due>2015-01-11T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="5. order 12">
+      <quantity>5</quantity>
+      <due>2015-01-12T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 13">
+      <quantity>5</quantity>
+      <due>2015-01-13T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 14">
+      <quantity>5</quantity>
+      <due>2015-01-14T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 15">
+      <quantity>5</quantity>
+      <due>2015-01-15T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 16">
+      <quantity>5</quantity>
+      <due>2015-01-16T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 17">
+      <quantity>5</quantity>
+      <due>2015-01-17T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 18">
+      <quantity>5</quantity>
+      <due>2015-01-18T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 19">
+      <quantity>5</quantity>
+      <due>2015-01-19T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="5. order 20">
+      <quantity>5</quantity>
+      <due>2015-01-20T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="5. order 21">
+      <quantity>5</quantity>
+      <due>2015-01-21T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="5. order 22">
+      <quantity>5</quantity>
+      <due>2015-01-22T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 23">
+      <quantity>5</quantity>
+      <due>2015-01-23T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 24">
+      <quantity>5</quantity>
+      <due>2015-01-24T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 25">
+      <quantity>5</quantity>
+      <due>2015-01-25T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 26">
+      <quantity>5</quantity>
+      <due>2015-01-26T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 27">
+      <quantity>5</quantity>
+      <due>2015-01-27T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 28">
+      <quantity>5</quantity>
+      <due>2015-01-28T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+      <demand name="5. order 29">
+      <quantity>5</quantity>
+      <due>2015-01-29T00:00:00</due>
+      <priority>1</priority>
+      <item name="5. end item"/>
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 6
+  -->
+  <operations>
+    <operation name="Replenish item 6" xsi:type="operation_alternate" >
+      <item name="6. end item"/>
+      <location name="factory"/>
+      <suboperations>
+        <suboperation>
+          <operation name="6. make end item">
+            <location name="factory"/>
+            <size_multiple>1</size_multiple>
+            <flows>
+              <flow xsi:type="flow_end">
+                <item name="6. end item"/>
+                <quantity>1</quantity>
+              </flow>
+            </flows>
+            <duration>P7D</duration>
+          </operation>          
+          <effective_start>2018-01-01T00:00:00</effective_start>
+        </suboperation>
+      </suboperations>
+    </operation>  
+  </operations>
+  <demands>
+    <demand name="6. order 1">
+      <quantity>5</quantity>
+      <due>2017-01-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="6. end item"/>
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 7
+  -->
+  <operations>
+    <operation name="Replenish item 7" xsi:type="operation_alternate" >
+      <item name="7. end item"/>
+      <location name="factory"/>
+      <suboperations>
+        <suboperation>
+          <operation name="7. make end item">
+            <location name="factory"/>
+            <size_multiple>1</size_multiple>
+            <flows>
+              <flow xsi:type="flow_end">
+                <item name="7. end item"/>
+                <quantity>1</quantity>
+              </flow>
+            </flows>
+            <duration>P7D</duration>
+          </operation>
+          <effective_end>2016-01-01T00:00:00</effective_end>
+        </suboperation>
+      </suboperations>
+    </operation>  
+  </operations>
+  <demands>
+    <demand name="7. order 1">
+      <quantity>5</quantity>
+      <due>2017-01-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="7. end item"/>
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+<?python
+print("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.1.xml")
+print("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+?>
+
+</plan>

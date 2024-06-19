@@ -1,0 +1,480 @@
+{% extends "admin/base_site_grid.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+<style>
+svg {
+  background-color: #FFF;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+path.flow {
+  fill: none;
+  stroke: #000;
+  cursor: default;
+  marker-mid: url(#arrow);
+}
+
+path.load {
+  fill: none;
+  stroke: #000;
+  cursor: default;
+  stroke-dasharray: 5,5;
+}
+
+path.depends {
+  fill: none;
+  stroke: #000;
+  cursor: default;
+  marker-mid: url(#dependsmarker);
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+text.id {
+  text-anchor: middle;
+}
+</style>
+<script src="{{STATIC_URL}}js/d3.min.js"></script>
+<script>
+
+function reslistfmt(cellvalue, options, row)
+{
+  if (cellvalue === undefined || cellvalue ==='') return '';
+  var result = '';
+  for (var i in cellvalue)
+    result += cellvalue[i][0]
+      + "<a href=\"" + url_prefix + "/detail/input/resource/" + admin_escape(cellvalue[i][0]) + "/\">"
+      + "<span class='ps-2 fa fa-caret-right'></span></a><br>";
+  return result;
+}
+
+var force;
+var nodes = [];
+var links = [];
+var operations = {};
+var operindices = {};
+var buffers = {};
+var resources = {};
+var width = 800;
+var width_level = 100;
+var minlevel = 0;
+var maxlevel = 0;
+var path;
+var shapes;
+
+function clickedShaped(d)
+{
+  if (
+  	d.hasOwnProperty('type')
+  	&& ['routing',  'purchase', 'itemsupplier', 'itemdistribution'].includes(d.type)
+  	)
+    return; // Don't show links for non existing operations
+  window.open(
+  	url_prefix + '/detail/input/' + d.type.replace('_alternate', '') + '/' + admin_escape(d.name) +'/',
+  	"_self"
+  	);
+}
+
+
+// Update force layout (called automatically each iteration)
+function tick(e)
+{
+  var k = 2*e.alpha;
+  // Bring operations vertically closer to the center and
+  // horizontally close to the position linked to their level.
+  shapes.attr('transform', function(d, i) {
+    if (d.type == 'operation' || d.type == 'operation_alternate' || d.type == 'routing' || d.type == 'split' || d.type == 'alternate' || d.type == 'buffer')
+    {
+      if (d.parent >= 0)
+      {
+        if (d.suboperindex < 0)
+        {
+          // Suboperation of an alternate or split operation
+          d.x = nodes[d.parent].x;
+          d.y = nodes[d.parent].y + (d.suboperindex + nodes[d.parent].numsuboperations + 1) * 30 - 5;
+        }
+        else
+        {
+          // Suboperation of a routing
+          if (d.rownb > 0) {
+          	d.y = nodes[d.parent].y - 40 + (d.rownb-0.5) * 80 / nodes[d.parent].rownb;
+          	d.x = nodes[d.parent].x - 52.5 + (d.colnb-0.5) * 105 / nodes[d.parent].colnb;
+    	  }
+    	  else {
+    	  	d.y = nodes[d.parent].y;
+          	d.x = nodes[d.parent].x - 52.5 + (d.suboperindex-0.5) * 105 / nodes[d.parent].numsuboperations;
+    	 }
+        }
+      }
+      else
+      {
+        d.x += (width_level * (0.5 + maxlevel - d.level) - d.x) * k;
+        if (d.type != 'buffer')
+           d.y += (1000 - d.y) * k / 10;
+      }
+    }
+    if (d.parent >= 0 && d.suboperindex >= 0) {
+      // Suboperation of a routing
+      if (d.rownb > 0)
+      	return 'translate(' + d.x + ' ' + d.y + ') scale(' + (1.0/nodes[d.parent].colnb) + ' 1)';
+      else
+      	return 'translate(' + d.x + ' ' + d.y + ') scale(' + (1.0/nodes[d.parent].numsuboperations) + ' 1)';
+	}
+    else
+      return 'translate(' + d.x + ' ' + d.y + ')';
+    });
+
+  // Gradually increase the repulsive charges between objects to "-2000 * object size"
+  for (var i in e.charges)
+    if (e.charges[i]) e.charges[i] -= (2000 * (nodes[i].numsuboperations+1) + e.charges[i]) * 0.3;
+
+  // Draw paths
+  path.attr('d', function(d) {
+    return 'M' + d.source.x + ',' + d.source.y
+       + 'L' + ((d.source.x+d.target.x)/2) + ',' + ((d.source.y+d.target.y)/2)
+       + 'L' + d.target.x + ',' + d.target.y;
+  });
+}
+
+function drawGraph(jsondata)
+{
+  if ($("#svggraph").children().length > 1)
+  	// It has already been drawn!
+  	return;
+
+  var count = -1;
+  for (var oper in jsondata['rows'])
+  {
+    // Don't add the same operation twice
+    if ( jsondata['rows'][oper]['operation'] in operations) continue;
+
+    // Keep track of the levels
+    var level = parseInt(jsondata['rows'][oper]['realdepth']);
+    if (level < minlevel) minlevel = level;
+    if (level > maxlevel) maxlevel = level;
+
+    // Add the operation node
+    var parentoper = -1;
+    if ('parentoper' in jsondata['rows'][oper])
+      parentoper = operations[jsondata['rows'][oper]['parentoper']];
+    var nodetype = 'operation';
+    if (jsondata['rows'][oper]['alternate'] == 'true')
+    	nodetype = 'operation_alternate';
+    if (jsondata['rows'][oper]['type'] == 'alternate'
+      || jsondata['rows'][oper]['type'] == 'routing'
+      || jsondata['rows'][oper]['type'] == 'split')
+      nodetype = jsondata['rows'][oper]['type'];
+    else if (jsondata['rows'][oper]['type'] == 'purchase') {
+    	if (jsondata['rows'][oper]['alternate'] == 'true')
+          nodetype = 'itemsupplier_alternate';
+    	else
+    	  nodetype = 'itemsupplier';
+    }
+    else if (jsondata['rows'][oper]['type'] == 'distribution') {
+    	if (jsondata['rows'][oper]['alternate'] == 'true')
+            nodetype = 'itemdistribution_alternate';
+      	else
+      	  nodetype = 'itemdistribution';
+    }
+    var numsuboperations = 0;
+    if ('numsuboperations' in jsondata['rows'][oper])
+      numsuboperations = Math.abs(parseInt(jsondata['rows'][oper]['numsuboperations']));
+    count ++;
+    var operindex = nodes.push({
+       id: count,
+       level: level,
+       name: jsondata['rows'][oper]['operation'],
+       weight:1,
+       type: nodetype,
+       parent: parentoper,
+       suboperindex: parseInt(jsondata['rows'][oper]['suboperation']),
+       numsuboperations: numsuboperations,
+       y: 1000 + count,
+       charge: parentoper>-1 ? 0 : -200,
+       rownb: parseInt(jsondata['rows'][oper]['rownb']),
+       colnb: parseInt(jsondata['rows'][oper]['colnb']),
+       }) - 1;
+    operations[jsondata['rows'][oper]['operation']] = count;
+
+    // Check if a blocking/blockedby operation exists
+
+    if (jsondata['rows'][oper]['blockedby'] != null)
+      for (var i = 0; i < jsondata['rows'][oper]['blockedby'].length; i++) {
+          if (jsondata['rows'][oper]['blockedby'][i][0] in operations) {
+            links.push({source: nodes[operations[jsondata['rows'][oper]['blockedby'][i][0]]], target: nodes[operindex], type: 'depends'});
+          }
+      }
+    if (jsondata['rows'][oper]['blocking'] != null)
+    for (var i = 0; i < jsondata['rows'][oper]['blocking'].length; i++) {
+        if (jsondata['rows'][oper]['blocking'][i][0] in operations) {
+          links.push({source: nodes[operindex], target: nodes[operations[jsondata['rows'][oper]['blocking'][i][0]]], type: 'depends'});
+        }
+    }
+
+
+
+    // Add nodes for the resources and load links
+    for (var res in jsondata['rows'][oper]['resources'])
+    {
+      if (jsondata['rows'][oper]['resources'][res][0] in resources)
+        links.push({source: nodes[operindex], target: nodes[resources[jsondata['rows'][oper]['resources'][res][0]]], type: 'load'});
+      else
+      {
+        count ++;
+        var resindx = nodes.push({
+          id: count,
+          level: level,
+          name: jsondata['rows'][oper]['resources'][res][0],
+          weight:1,
+          type: 'resource',
+          numsuboperations: 0,
+          y: 950 + count,
+          charge: -200
+          }) - 1;
+        resources[jsondata['rows'][oper]['resources'][res][0]] = resindx;
+        links.push({source: nodes[operindex], target: nodes[resindx], type: 'load'});
+      }
+    }
+
+    // Add nodes for the buffers and flow links
+    for (var buf in jsondata['rows'][oper]['buffers'])
+    {
+      var producer = jsondata['rows'][oper]['buffers'][buf][1] > 0;
+      var buflevel = producer ? level - 0.5 : level + 0.5;
+      if (buflevel < minlevel) minlevel = buflevel;
+      if (buflevel > maxlevel) maxlevel = buflevel;
+      if (jsondata['rows'][oper]['buffers'][buf][0] in buffers)
+      {
+        if (nodes[buffers[jsondata['rows'][oper]['buffers'][buf][0]]]['level'] < buflevel)
+          nodes[buffers[jsondata['rows'][oper]['buffers'][buf][0]]]['level'] = buflevel;
+        if (producer)
+          links.push({source: nodes[operindex], target: nodes[buffers[jsondata['rows'][oper]['buffers'][buf][0]]], type: 'flow'});
+        else
+          links.push({source: nodes[buffers[jsondata['rows'][oper]['buffers'][buf][0]]], target: nodes[operindex], type: 'flow'});
+      }
+      else
+      {
+        count ++;
+        var bufindx = nodes.push({
+          id: count,
+          level: buflevel,
+          name: jsondata['rows'][oper]['buffers'][buf][0],
+          weight:1,
+          type: 'buffer',
+          numsuboperations: 0,
+          y: 1050,
+          charge: -200
+          }) - 1;
+        buffers[jsondata['rows'][oper]['buffers'][buf][0]] = bufindx;
+        if (producer)
+          links.push({source: nodes[operindex], target: nodes[bufindx], type: 'flow'});
+        else
+          links.push({source: nodes[bufindx], target: nodes[operindex], type: 'flow'});
+      }
+    }
+  }
+
+  // Compute the initial horizontal position
+  width = $("#graph").width();
+  width_level = width / (maxlevel - minlevel + 1);
+  if (width_level < 500) width_level = 500;
+  for (var i in nodes)
+    nodes[i].x = width_level * (0.5 + maxlevel - nodes[i].level);
+
+  // Initialize D3 force layout
+  var svg = d3.select('#svggraph')
+    .attr('width', width)
+    .attr('height', 2000)
+    .attr('viewBox','0 0 ' + width + ' 400')
+    .call(d3.behavior.zoom().on("zoom", function() {
+        var ev = d3.event;
+        $("#svggraph > g").attr("transform", "translate(" + ev.translate + ") scale(" + ev.scale + ")");
+      }));
+
+  $("#graph").scrollTop(800);
+  force = d3.layout.force()
+    .nodes(nodes)
+    .links(links)
+    .size([width, $("#svggraph").height()])
+    .gravity(0)   // Gravity would pull objects towards the center
+    .charge( function(d,i) { return d.charge; } )
+    .linkStrength( function(d,i) {
+      return (d.type == 'load') ? 0.5 : 1;
+      })
+    .on('tick', tick);
+
+  // Handles to link and node element groups
+  path = svg.append('svg:g').selectAll('path');
+  shapes = svg.append('svg:g').selectAll('g');
+
+  // Path (link) group
+  path = path.data(links);
+  path.enter().append('svg:path')
+    .attr('class', function(d) { return d.type; });
+  path.exit().remove();
+
+  // Shapes (node) group
+  // NB: the function arg is crucial here! nodes are known by id, not by index!
+  shapes = shapes.data(nodes, function(d) { return d.id; });
+
+  // Add new nodes
+  var g = shapes.enter().append('svg:g').on('click', function(d) {clickedShaped(d);});
+  g.append("svg:use")
+    .attr("xlink:href", function(d) { return "#" + d.type; })
+    .style("opacity", function(d) { return (d.suboperindex > 0) ? 0.75 : 1; })
+    .attr("transform", function(d) {
+       if (d.numsuboperations)
+       {
+         if (d.type == 'alternate' || d.type == 'split')
+           // Top alternate operation
+           return "scale(1,"+ (2+d.numsuboperations) +")";
+         else
+           // Top routing operation
+           if (d.rownb > 0)
+           	return "translate(0 -8) scale(1,"+ (1+d.rownb) +")";
+           else
+           	return "scale(1,1.4)";
+       }
+       else
+         return '';
+       });
+    //.call(force.drag);
+
+  // Show node IDs
+  g.filter( function(d, i) {return (d.type != 'operation' && d.type != 'operation_alternate')|| d.suboperindex <= 0;} )
+   .append('svg:text')
+   .attr('x', 0)
+   .attr('y', 4)
+   .attr('class', 'id')
+   .text(function(d) { return d.name; });
+
+  // Remove old nodes
+  shapes.exit().remove();
+
+  // Set the graph in motion
+  force.start();
+}
+
+$(window).bind('resize', function() {
+  var width = $("#graph").width();
+  d3.select('#svggraph')
+  .attr('width', width)
+  .attr('viewBox','0 0 ' + width + ' 400');
+});
+
+$(function(){
+  if ($("#graph").height() > $(window).height() - 340) $("#graph").height($(window).height() - 340);
+
+  $("#graph").resizable({
+    handleSelector: "#graph-resize-handle",
+    resizeWidth: false,
+    resizeHeight: true,
+    onDrag: function (e, $el, opt) {
+      var width = $("#graph").width();
+      var height = $("#graph").height();
+      d3.select('#svggraph').attr('width', width).attr('viewBox','0 0 ' + width +' '+ height );
+
+      // Resize the bottom grid to fill the remaining space of the window
+      var gridheight = $(window).height() - $("#content-main").offset().top - 40;
+      if (gridheight < 200)
+      	gridheight = 200;
+      $("#grid").setGridHeight(gridheight);
+    }
+  });
+
+});
+
+$(window).resize(function() {
+  var parentheight = $("#content-main").height;
+  setTimeout(function(){$(".ui-jqgrid").setGridHeight(parentheight)},300);
+
+	if ($("#content-main").height() < 150) $(".ui-jqgrid").css({height:150});
+	if ($("#graph").height() > $(window).height() - 350) $("#graph").height($(window).height() - 350);
+	$(".ui-jqgrid").css({height: ($(".ui-jqgrid-view").height() + $(".ui-jqgrid-pager").height()) + "px"});
+});
+
+</script>
+{% endblock %}
+
+{% block extra_grid %}loadComplete: drawGraph,
+treeGrid: true,
+treeGridModel: 'adjacency',
+ExpandColumn: 'depth',
+treeIcons: {
+  plus:'fa-caret-right',
+  minus:'fa-caret-down',
+  leaf:'fa-genderless'
+  },
+tree_root_level: 0,
+treeReader: {
+  level_field: 'depth',
+  parent_id_field: 'parent',
+  leaf_field: 'leaf',
+  expanded_field: 'expanded'
+  },
+ExpandColClick: true,
+{% endblock %}
+
+{% block tools %}{% include "common/snippet_follow.html" %}{% endblock %}
+
+{% block tabs %}{% tabs model %}{% endblock %}
+
+{% block before_table %}
+<div class="row" id="graphrow" style="min-height: 100px; text-align: center;">
+<div id="graph" class="col-md-12" style="min-height: 100px; clear: both; height: 345px; overflow: hidden;">
+<svg id="svggraph" width="100%" preserveAspectRatio="xMinYMin meet" style="cursor: move;">
+<defs>
+  <marker id="arrow" viewBox="0 -5 10 10" refX="6" markerWidth="5" markerHeight="5" orient="auto">
+    <polygon points="0,-5 10,0 0,5" style="fill: #000;">
+    </polygon>
+  </marker>
+  <marker id="dependsmarker" viewBox="0 -5 10 10" refX="6" markerWidth="5" markerHeight="5" orient="auto">
+    <polygon points="0,-5 10,0 0,5 5,0" style="fill: black">
+    </polygon>
+  </marker>
+  <rect id="operation" class="operation" width="100" height="25" x="-50" y="-9" rx="2" ry="2"
+    style="cursor: pointer; fill: #1f77b4;">
+  </rect>
+  <rect id="itemsupplier" class="itemsupplier" width="100" height="25" x="-50" y="-9" rx="2" ry="2"
+    style="cursor: pointer; fill: #1f77b4;">
+  </rect>
+  <rect id="itemdistribution" class="itemdistribution" width="100" height="25" x="-50" y="-9" rx="2" ry="2"
+    style="cursor: pointer; fill: #1f77b4;">
+  <rect id="operation_alternate" class="operation_alternate" width="100" height="25" x="-50" y="-9" rx="2" ry="2"
+    style="cursor: pointer; fill: #a8d1f0;">
+  </rect>
+  <rect id="itemsupplier_alternate" class="itemsupplier_alternate" width="100" height="25" x="-50" y="-9" rx="2" ry="2"
+    style="cursor: pointer; fill: #a8d1f0;">
+  </rect>
+  <rect id="itemdistribution_alternate" class="itemdistribution_alternate" width="100" height="25" x="-50" y="-9" rx="2" ry="2"
+    style="cursor: pointer; fill: #a8d1f0;">
+  </rect>
+  <rect id="routing" class="routing" width="110" height="25" x="-55" y="-9" rx="2" ry="2"
+    style="cursor: pointer; fill: #ffffff; stroke: black; vector-effect: non-scaling-stroke;">
+  </rect>
+  <rect id="alternate" class="alternate" width="110" height="25" x="-55" y="-5" rx="2" ry="2"
+    style="cursor: pointer; fill: #ffffff; fill-opacity: 0; stroke: black; vector-effect: non-scaling-stroke;">
+  </rect>
+  <rect id="split" class="split" width="110" height="25" x="-55" y="-5" rx="2" ry="2"
+    style="cursor: pointer; fill: #ffffff; fill-opacity: 0; stroke: black; vector-effect: non-scaling-stroke;">
+  </rect>
+  <polygon id="buffer" class="buffer" points="0,-40 35,20 -35,20"
+    style="cursor: pointer; fill: #2ca02c;">
+  </polygon>
+  <circle id="resource" class="resource" cx="0" cy="0" r="30"
+    style="cursor: pointer; fill: #ff7f0e;">
+  </circle>
+</defs>
+</svg>
+</div><span id="graph-resize-handle" class="fa fa-bars handle"></span>
+</div>
+{% endblock %}

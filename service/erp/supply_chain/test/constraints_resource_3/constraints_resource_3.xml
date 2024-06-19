@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>actual plan</name>
+  <description>
+    resource constraint test model. In this test the third demand can't be
+    planned in time due to leadtime and capacity constraints. It is planned
+    late.
+    The model also includes a resource with infinite capacity.
+  </description>
+  <current>2009-01-01T00:00:00</current>
+  <operations>
+    <operation name="make end item" xsi:type="operation_fixed_time">
+      <duration>P1D</duration>
+    </operation>
+    <operation name="delivery end item" xsi:type="operation_fixed_time">
+      <duration>P1D</duration>
+    </operation>
+  </operations>
+  <buffers>
+    <buffer name="end item">
+      <producing name="make end item" />
+      <item name="end item" />
+    </buffer>
+  </buffers>
+  <resources>
+    <resource name="Resource">
+      <maximum_calendar name="Capacity">
+        <buckets>
+          <bucket start="2009-01-01T00:00:00">
+            <value>1</value>
+          </bucket>
+        </buckets>
+      </maximum_calendar>
+      <loads>
+        <load>
+          <operation name="make end item" />
+        </load>
+      </loads>
+    </resource>
+    <resource name="Resource_Infinite" xsi:type="resource_infinite">
+      <loads>
+        <load>
+          <operation name="delivery end item" />
+        </load>
+        <load>
+          <operation name="make end item" />
+        </load>
+      </loads>
+    </resource>
+  </resources>
+  <flows>
+    <flow xsi:type="flow_start">
+      <operation name="delivery end item" />
+      <buffer name="end item" />
+      <quantity>-1</quantity>
+    </flow>
+    <flow xsi:type="flow_end">
+      <operation name="make end item" />
+      <buffer name="end item" />
+      <quantity>1</quantity>
+    </flow>
+  </flows>
+  <demands>
+    <demand name="order 1">
+      <quantity>10</quantity>
+      <due>2009-01-04T09:00:00</due>
+      <priority>1</priority>
+      <item name="end item" />
+      <operation name="delivery end item" />
+    </demand>
+    <demand name="order 2">
+      <quantity>10</quantity>
+      <due>2009-01-04T08:00:00</due>
+      <priority>2</priority>
+      <item name="end item" />
+      <operation name="delivery end item" />
+    </demand>
+    <demand name="order 3">
+      <quantity>10</quantity>
+      <due>2009-01-04T08:00:00</due>
+      <priority>3</priority>
+      <item name="end item" />
+      <operation name="delivery end item" />
+    </demand>
+  </demands>
+
+<?python
+print("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.1.xml")
+print("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+frepple.solver_mrp(plantype=2, constraints=0, loglevel=2).solve()
+frepple.saveplan("output.3.xml")
+?>
+
+</plan>

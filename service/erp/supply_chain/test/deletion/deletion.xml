@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Deletion test model</name>
+  <description>
+    This model tests how static and dynamic entities can be deleted from the
+    model. The tests loads a model, plans it, and then runs a number of delete
+    commands. After each delete command, the model is replanned and saved. Since
+    planning and saving a model requires going over all objects in memory, any
+    dangling pointers likely to surface soon and crash the application. Ha...
+  </description>
+  <current>2009-01-01T00:00:00</current>
+  <calendars>
+    <calendar name="months">
+      <buckets>
+        <bucket start="2009-01-01T00:00:00" end="2009-01-01T00:00:00" />
+        <bucket start="2009-02-01T00:00:00" end="2009-02-01T00:00:00" />
+        <bucket start="2009-03-01T00:00:00" end="2009-03-01T00:00:00" />
+        <bucket start="2009-04-01T00:00:00" end="2009-04-01T00:00:00" />
+        <bucket start="2009-05-01T00:00:00" end="2009-05-01T00:00:00" />
+        <bucket start="2009-06-01T00:00:00" end="2009-06-01T00:00:00" />
+        <bucket start="2009-07-01T00:00:00" end="2009-07-01T00:00:00" />
+        <bucket start="2009-08-01T00:00:00" end="2009-08-01T00:00:00" />
+      </buckets>
+    </calendar>
+  </calendars>
+  <items>
+    <item name="item 1" xsi:type="item_mts" />
+  </items>
+  <buffers>
+    <buffer name="buffer 1">
+      <item name="item 1" />
+      <producing name="make item 1" xsi:type="operation_fixed_time">
+        <duration>P1D</duration>
+      </producing>
+      <location name="Location 1">
+        <owner name="All places" />
+        <members>
+          <location name="Sublocation 1" />
+          <location name="Sublocation 2" />
+        </members>
+      </location>
+    </buffer>
+    <buffer name="buffer A">
+      <item name="component A" />
+      <location name="Location 1" />
+      <producing name="supply component A" xsi:type="operation_alternate">
+        <suboperations>
+          <suboperation>
+            <operation name="supply component A from supplier 1"
+              duration="P1D" xsi:type="operation_fixed_time" />
+            <priority>1</priority>
+          </suboperation>
+          <suboperation>
+            <operation name="supply component A from supplier 2"
+              duration="P2D" xsi:type="operation_fixed_time" />
+            <priority>2</priority>
+          </suboperation>
+        </suboperations>
+      </producing>
+    </buffer>
+    <buffer name="buffer B">
+      <item name="component B" />
+      <location name="Location 1" />
+    </buffer>
+  </buffers>
+  <flows>
+    <flow xsi:type="flow_end">
+      <operation name="make item 1" />
+      <buffer name="buffer 1" />
+      <quantity>1</quantity>
+    </flow>
+    <flow xsi:type="flow_start">
+      <operation name="make item 1" />
+      <buffer name="buffer A" />
+      <quantity>-1</quantity>
+    </flow>
+    <flow xsi:type="flow_start">
+      <operation name="make item 1" />
+      <buffer name="buffer B" />
+      <quantity>-1</quantity>
+    </flow>
+    <flow xsi:type="flow_end">
+      <operation name="supply component A from supplier 1" />
+      <buffer name="buffer A" />
+      <quantity>1</quantity>
+    </flow>
+    <flow xsi:type="flow_end">
+      <operation name="supply component A from supplier 2" />
+      <buffer name="buffer A" />
+      <quantity>1</quantity>
+    </flow>
+  </flows>
+  <setupmatrices>
+    <setupmatrix name="assembly setup">
+      <rules>
+        <rule priority="1" fromsetup="product family 1" tosetup="product family 2" duration="P10D" cost="10" />
+        <rule priority="2" fromsetup="product family 2" tosetup="product family 1" duration="P10D" cost="10" />
+      </rules>
+    </setupmatrix>
+  </setupmatrices>
+  <resources>
+    <resource name="assemble">
+      <location name="Location 1" />
+      <maximum_calendar name="assembly capacity">
+        <default>1</default>
+        <buckets>
+          <bucket start="2009-01-01T00:00:00">
+            <value>2</value>
+          </bucket>
+        </buckets>
+      </maximum_calendar>
+      <loads>
+        <load>
+          <operation name="make item 1" />
+        </load>
+      </loads>
+      <setupmatrix name="assembly setup" />
+    </resource>
+    <resource name="transport">
+      <location name="Sublocation 1" />
+    </resource>
+  </resources>
+  <demands>
+    <demand name="order 1">
+      <item name="item 1" />
+      <priority>1</priority>
+      <due>2009-03-01T00:00:00</due>
+      <quantity>1</quantity>
+      <customer name="Customer 1" />
+      <operation name="delivery 1" xsi:type="operation_fixed_time">
+        <flows>
+          <flow xsi:type="flow_start">
+            <buffer name="buffer 1" />
+            <quantity>-1</quantity>
+          </flow>
+         </flows>
+        <duration>P1D</duration>
+      </operation>
+    </demand>
+    <demand name="order 2">
+      <item name="item 1" />
+      <priority>1</priority>
+      <due>2009-02-01T00:00:00</due>
+      <quantity>1</quantity>
+      <customer name="Customer 1" />
+      <operation name="delivery 1" xsi:type="operation_fixed_time"/>
+    </demand>
+    <demand name="order 3">
+      <item name="item 1" />
+      <priority>1</priority>
+      <due>2009-04-01T00:00:00</due>
+      <quantity>1</quantity>
+      <customer name="Customer 2" />
+      <operation name="delivery 1" xsi:type="operation_fixed_time"/>
+    </demand>
+  </demands>
+
+<?python
+
+# Starting position...
+solver = frepple.solver_mrp(plantype=2)
+frepple.saveXMLfile("output.1.xml")
+solver.solve()
+frepple.saveplan("output.2.xml")
+
+# Now we delete the plan and then recreate it. The plan summary
+# and static plan should be identical.
+frepple.erase(False)
+frepple.saveXMLfile("output.3.xml")
+solver.solve()
+frepple.saveplan("output.4.xml")
+frepple.erase(False)
+
+# Now we delete a location. Its sublocations will get a new parent.
+# References to the location are being removed from buffers and
+# resources.
+frepple.location(name="Sublocation 1", action="R")
+frepple.saveXMLfile("output.5.xml")
+
+# Now we delete a customer. References to it will be removed from demands.
+# Also delete a flow and a load. References to them from operations and removes any
+# existing flowplans and loadplans.
+solver.solve()
+frepple.customer(name="Customer 1", action="R")
+frepple.readXMLdata(r'''
+	<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	  <flows>
+		  <flow action="R">
+    		<buffer name="buffer B"/>
+			  <operation name="make item 1"/>
+		  </flow>
+		</flows>
+	  <loads>
+		  <load action="R">
+    		<resource name="assemble"/>
+			  <operation name="make item 1"/>
+		  </load>
+		</loads>
+	</plan>''')
+frepple.saveXMLfile("output.6.xml")
+
+# Now we delete an operationplan.
+# IMPORTANT: Because we rely on the operationplan id to find the
+# operationplan to delete, a change in the solver algorithm might
+# require this test to be updated. The id of the operationplan to
+# delete is different...   @todo use the python api
+frepple.readXMLdata(r'''
+      <plan>
+        <operationplans>
+          <operationplan reference="10" action="R"/>
+        </operationplans>
+      </plan>''')
+# Now we delete a setup matrix.
+frepple.setupmatrix(name="assembly setup", action="R")
+frepple.saveXMLfile("output.7.xml")
+
+# Now we delete a resource. operationsplans are being deleted of
+# operations that are loading the resource. The loads are also deleted.
+solver.solve()
+frepple.resource(name="assemble", action="R")
+solver.solve()
+frepple.saveplan("output.8.xml")
+
+# Now we delete a buffer. operationsplans are being deleted of
+# operations that are consuming or producing material from it. The flows
+# are also deleted.
+frepple.buffer(name="buffer A", action="R")
+solver.solve()
+frepple.saveplan("output.9.xml")
+
+# Now we delete an operation.
+frepple.operation(name="make item 1", action="R")
+solver.solve()
+frepple.saveXMLfile("output.10.xml")
+
+# Now we delete an item
+frepple.item(name="item 1", action="R")
+solver.solve()
+frepple.saveXMLfile("output.11.xml")
+
+# Now we delete a calendar and a calendar bucket.
+frepple.readXMLdata(r'''
+	<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<calendars>
+			 <calendar name="assembly capacity" action="R"/>
+			 <calendar name="months">
+				<buckets>
+					<bucket start="2009-01-01T00:00:00" end="2009-01-01T00:00:00" action="R"/>
+					<bucket start="2009-05-01T00:00:00" end="2009-05-01T00:00:00" action="R"/>
+				</buckets>
+			</calendar>
+		</calendars>
+	</plan>
+	''')
+frepple.saveXMLfile("output.12.xml")
+
+# To finish we delete the complete model.
+frepple.erase(True)
+frepple.saveXMLfile("output.13.xml")
+?>
+
+</plan>

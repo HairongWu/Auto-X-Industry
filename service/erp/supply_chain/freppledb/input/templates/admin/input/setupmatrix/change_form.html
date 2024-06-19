@@ -1,0 +1,17 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block inline_field_sets %}
+{{ block.super }}
+{% if object_id %}
+<fieldset class="module mb-3 container-fluid" id="fieldset-3" style="background:transparent">
+<h1 class="text-capitalize">{% trans "related" %}</h1>
+<div class="row">
+  <div class="col-form-label col-3">
+     <a href="{{ request.prefix }}/data/input/setuprule/?setupmatrix={{ object_id | urlencode }}&noautofilter">
+     {% trans "setup matrix rules"|capfirst %}&nbsp;<i class="fa fa-caret-right"></i></a>
+  </div>
+</div>
+</fieldset>
+{% endif %}
+{% endblock %}

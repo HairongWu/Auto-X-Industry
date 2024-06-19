@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Test model for effective operations</name>
+  <description>
+  This model verifies the behavior of date effective loads:
+    - case 1: unconstrained situation where operationplans intersect in
+      various ways with the effective period.
+    - case 2: similar to 1 but with a capacity constraint, which is solved by
+      producing early.
+    - case 3: similar to 1 but with a capacity constraint and late demand.
+  </description>
+  <current>2009-01-01T00:00:00</current>
+
+  <!--
+    Case 1: unconstrained situation where operationplans intersect in
+    various ways with the effective period
+  -->
+  <operations>
+    <operation name="1. make end item" xsi:type="operation_time_per"
+      duration="P1D" duration_per="P1D">
+      <item name="1. end item"/>
+      <location name="factory"/>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="1. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="1. Resource"/>
+          <quantity>2</quantity>
+          <effective_start>2009-01-10T00:00:00</effective_start>
+          <effective_end>2009-01-20T00:00:00</effective_end>
+        </load>
+      </loads>
+    </operation>
+  </operations>
+  <resources>
+    <resource name="1. Resource" maximum="100"/>
+  </resources>
+  <demands>
+    <demand name="1. order 1">
+      <quantity>1</quantity>
+      <due>2009-01-25T00:00:00</due>
+      <priority>11</priority>
+      <item name="1. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 2">
+      <quantity>10</quantity>
+      <due>2009-01-25T00:00:00</due>
+      <priority>12</priority>
+      <item name="1. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 3">
+      <quantity>20</quantity>
+      <due>2009-01-25T00:00:00</due>
+      <priority>13</priority>
+      <item name="1. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 4">
+      <quantity>1</quantity>
+      <due>2009-01-15T00:00:00</due>
+      <priority>14</priority>
+      <item name="1. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 5">
+      <quantity>10</quantity>
+      <due>2009-01-15T00:00:00</due>
+      <priority>15</priority>
+      <item name="1. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="1. order 6">
+      <quantity>1</quantity>
+      <due>2009-01-09T00:00:00</due>
+      <priority>16</priority>
+      <item name="1. end item"/>
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 2: similar to 1 but with a capacity constraint, which is solved by
+    producing early.
+  -->
+  <operations>
+    <operation name="2. make end item" xsi:type="operation_time_per"
+      duration="P1D" duration_per="P1D">
+      <item name="2. end item"/>
+      <location name="factory"/>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="2. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="2. Resource"/>
+          <quantity>2</quantity>
+          <effective_start>2009-01-10T00:00:00</effective_start>
+          <effective_end>2009-01-20T00:00:00</effective_end>
+        </load>
+      </loads>
+    </operation>
+  </operations>
+  <resources>
+    <resource name="2. Resource" maximum="4"/>
+  </resources>
+  <demands>
+    <demand name="2. order 1">
+      <quantity>10</quantity>
+      <due>2009-01-25T00:00:00</due>
+      <priority>12</priority>
+      <item name="2. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="2. order 2">
+      <quantity>20</quantity>
+      <due>2009-01-25T00:00:00</due>
+      <priority>13</priority>
+      <item name="2. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="2. order 3">
+      <quantity>1</quantity>
+      <due>2009-01-15T00:00:00</due>
+      <priority>14</priority>
+      <item name="2. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="2. order 4">
+      <quantity>13</quantity>
+      <due>2009-01-15T00:00:00</due>
+      <priority>15</priority>
+      <item name="2. end item"/>
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+  <!--
+    Case 3: similar to 1 but with a capacity constraint and late demand.
+  -->
+  <operations>
+    <operation name="3. make end item" xsi:type="operation_time_per"
+      duration="P5D" duration_per="P6D">
+      <item name="3. end item"/>
+      <location name="factory"/>
+      <flows>
+        <flow xsi:type="flow_end">
+          <item name="3. end item"/>
+          <quantity>1</quantity>
+        </flow>
+      </flows>
+      <loads>
+        <load>
+          <resource name="3. Resource"/>
+          <quantity>2</quantity>
+          <effective_start>2009-01-10T00:00:00</effective_start>
+          <effective_end>2009-01-20T00:00:00</effective_end>
+        </load>
+      </loads>
+    </operation>
+  </operations>
+  <resources>
+    <resource name="3. Resource" maximum="4"/>
+  </resources>
+  <demands>
+    <demand name="3. order 1">
+      <quantity>3</quantity>
+      <due>2009-01-26T00:00:00</due>
+      <priority>12</priority>
+      <item name="3. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="3. order 2">
+      <quantity>1</quantity>
+      <due>2009-01-18T00:00:00</due>
+      <priority>13</priority>
+      <item name="3. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="3. order 3">
+      <quantity>1</quantity>
+      <due>2009-01-26T00:00:00</due>
+      <priority>14</priority>
+      <item name="3. end item"/>
+      <location name="factory"/>
+    </demand>
+    <demand name="3. order 4">
+      <quantity>1</quantity>
+      <due>2009-01-26T00:00:00</due>
+      <priority>15</priority>
+      <item name="3. end item"/>
+      <location name="factory"/>
+    </demand>
+  </demands>
+
+<?python
+print("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.1.xml")
+print("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+?>
+
+</plan>

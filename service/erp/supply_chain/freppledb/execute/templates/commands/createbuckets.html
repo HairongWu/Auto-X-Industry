@@ -1,0 +1,72 @@
+{% load i18n %}
+<form class="form-horizontal" role="form" method="post" action="{{request.prefix}}/execute/launch/createbuckets/">{% csrf_token %}
+<input type="hidden" name="weekstart" id="weekstart" value="1">
+<table>
+  <tr>
+    <td style="vertical-align:top; padding: 15px">
+      <button class="btn btn-primary" type="submit" value="{% trans "launch"|capfirst %}">{% trans "launch"|capfirst %}</button>
+    </td>
+    <td style="padding: 15px; width:99%">
+         <p>{% trans "create time buckets for reporting."|capfirst %}</p>
+         <div class="row mb-3">
+         <label class="col-3 col-form-label" for="weekstart1">{% trans "week starts on"|capfirst %}</label>
+         <div class="col-9">
+         <div class="dropdown">
+           <button class="dropdown-toggle form-control"  id="weekstart1" value="1" type="button" data-bs-toggle="dropdown">
+             <span>{% trans "Monday" %}</span>&nbsp;&nbsp;
+             <i class="caret"></i>
+           </button>
+           <ul class="dropdown-menu col-12" aria-labelledby="weekstart1" id="weekstartul">
+             <li><a class="dropdown-item">{% trans "Sunday" %}</a></li>
+             <li><a class="dropdown-item">{% trans "Monday" %}</a></li>
+             <li><a class="dropdown-item">{% trans "Tuesday" %}</a></li>
+             <li><a class="dropdown-item">{% trans "Wednesday" %}</a></li>
+             <li><a class="dropdown-item">{% trans "Thursday" %}</a></li>
+             <li><a class="dropdown-item">{% trans "Friday" %}</a></li>
+             <li><a class="dropdown-item">{% trans "Saturday" %}</a></li>
+           </ul>
+         </div>
+         </div>
+         </div>
+         <div class="row mb-3">
+         <label class="col-3 col-form-label">{% trans "day name"|capfirst %}</label>
+         <div class="col-9">
+         <input class="form-control" name="format-day" type="text" size="12" value="%Y-%m-%d"/>
+         </div>
+         </div>
+         <div class="row mb-3">
+         <label class="col-3 col-form-label">{% trans "week name"|capfirst %}</label>
+         <div class="col-9">
+         <input class="form-control" name="format-week" type="text" size="12" value="%y W%W"/>
+         </div>
+         </div>
+         <div class="row mb-3">
+         <label class="col-3 col-form-label">{% trans "month name"|capfirst %}</label>
+         <div class="col-9">
+         <input class="form-control" name="format-month" type="text" size="12" value="%b %y"/>
+         </div>
+         </div>
+         <div class="row mb-3">
+         <label class="col-3 col-form-label">{% trans "quarter name"|capfirst %}</label>
+         <div class="col-9">
+         <input class="form-control" name="format-quarter" type="text" size="12" value="%y Q%q"/>
+         </div>
+         </div>
+         <div class="row">
+         <label class="col-3 col-form-label">{% trans "year name"|capfirst %}</label>
+         <div class="col-9">
+         <input class="form-control" name="format-year" type="text" size="12" value="%Y"/>
+         </div>
+         </div>
+     </td>
+   </tr>
+</table>
+</form>
+<script>
+$(function() {
+  $("#weekstartul li a").click(function(){
+    $("#weekstart1 span").text($(this).text());
+    $("#weekstart").val($(this).parent().index());
+  });
+});
+</script>

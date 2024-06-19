@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>plan</name>
+  <description>XML structure test model</description>
+  <current>2009-01-01T00:00:00</current>
+  <customers>
+  <customer name="customer level 1">  
+    <stringproperty name="test" value="customer level 1"/>
+    <members>
+    <customer name="customer level 2">
+    <stringproperty name="test" value="customer level 2"/>
+    </customer>
+    </members>
+    </customer>
+  </customers>
+  <items>
+    <item name="item level 1" cost="1.000000" category="category1" description="description1">
+      <stringproperty name="property1" value="inactive"/>
+      <itemsuppliers>
+        <itemsupplier leadtime="P1D" priority="1" size_minimum="0.000000" cost="15.000000">
+          <supplier name="supplier level 2"/>
+        </itemsupplier>
+      </itemsuppliers>
+    </item>
+  </items>
+  <demands>
+    <!-- Level 1: Lot -->
+    <demand name=" แผ่นดินฮั่นเสื่อมโทรมแสนสังเวช พระปกเกศกองบู๊กู้ขึ้นใหม่">
+      <quantity>10</quantity>
+      <due>2009-01-27T00:00:00</due>
+      <priority>1</priority>
+      <item name="item 1">
+        <!-- Level 2: item -->
+        <description>А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь</description>
+        <category>item category</category>
+      </item>
+      <operation name="operation 1" xsi:type="operation_routing">
+        <!-- Level 2: operation -->
+        <size_multiple>3</size_multiple>
+        <suboperations>
+          <suboperation>
+          <operation name="operation 1 step1"
+            xsi:type="operation_fixed_time">
+            <!-- Level 3: operation -->
+            <flows>
+              <flow xsi:type="flow_start">
+                <!-- Level 4: flow -->
+                <quantity>-1</quantity>
+                <buffer name="STCK1">
+                  <!-- Level 5: buffer -->
+                  <item name="item 1" />
+                  <onhand>100</onhand>
+                  <!-- Level 6: location -->
+                  <location name="location 1" category="manufacturing" />
+                </buffer>
+              </flow>
+            </flows>
+            <loads>
+              <load>
+                <!-- Level 4: load -->
+                <resource name="resource 1">
+                  <!-- Level 5: resource -->
+                  <maximum_calendar name="weeks">
+                    <!-- Level 6: calendar -->
+                    <buckets>
+                      <!-- Level 7: bucket -->
+                      <bucket start="2009-01-01T00:00:00" value="0"/>
+                    </buckets>
+                  </maximum_calendar>
+                </resource>
+              </load>
+            </loads>
+            <duration>P7D</duration>
+          </operation>
+          </suboperation>
+          <suboperation>
+          <operation name="operation 1 step2"
+            xsi:type="operation_fixed_time">
+            <duration>P7D</duration>
+          </operation>
+          </suboperation>
+        </suboperations>
+      </operation>
+    </demand>
+  </demands>
+  <problems>
+    <!-- Input being ignored. It is still being validated. -->
+  </problems>
+
+<?python
+frepple.solver_mrp(constraints=0, loglevel=0).solve()
+frepple.saveplan("output.1.xml")
+frepple.saveXMLfile("output.2.xml")
+?>
+
+</plan>

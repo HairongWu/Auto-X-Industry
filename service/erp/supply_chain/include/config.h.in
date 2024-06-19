@@ -1,0 +1,22 @@
+
+#define PACKAGE_VERSION "@PROJECT_VERSION@"
+#define PACKAGE_BRANCH "@PROJECT_BRANCH@"
+
+#cmakedefine HAVE_SYS_PRCTL_H 1
+#cmakedefine HAVE_LOCALTIME_R 1
+#cmakedefine HAVE_DUP2 1
+#cmakedefine HAVE_MEMSET 1
+#cmakedefine HAVE_STRNCASECMP 1
+#cmakedefine HAVE_STRNICMP 1
+#cmakedefine HAVE_STRPTIME 1
+#cmakedefine HAVE_PRCTL 1
+#cmakedefine HAVE_ERRNO_H 1
+#cmakedefine HAVE_UNISTD_H 1
+#cmakedefine HAVE_CRYPT_H 1
+
+#ifndef _MSC_VER
+// Only for unix-style directory layouts
+#define DATADIRECTORY "@CMAKE_INSTALL_FULL_DATADIR@"
+#define LIBDIRECTORY "@CMAKE_INSTALL_FULL_LIBDIR@"
+#define SYSCONFDIRECTORY "@CMAKE_INSTALL_FULL_SYSCONFDIR@/frepple"
+#endif

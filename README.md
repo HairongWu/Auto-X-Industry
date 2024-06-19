@@ -23,29 +23,29 @@ Contributors and Sponsors are welcomed.
 
 - [X] Initialize codebase
 
-- [ ] Release Auto IoT solution (based on OpenRemote)
+- [ ] Release Auto IoT， eg. Energy, Real Estate,... (based on OpenRemote)
 
 - [ ] Release Auto System Development (based on IntelliJ IDEA Community)
-- [ ] Release Auto ERP (based on ERPNext)
-- [ ] Release Auto Health Care (based on Frappe Health)
-- [ ] Release Auto Supply Chain (based on frePPLe)
 
-- [ ] Release Auto Finance (based on FinGPT)
+- [ ] Release Auto ERP (based on Odoo)
 
-- [ ] Release Auto-X Consultant
+- [ ] Release Auto-X Clinic (based on OpenClinic GA and Open Hospital)
+
 
 ## Other Plans
-
+- Auto Finance (based on FinGPT)
+- Auto Insurance (based on openIMIS)
 - Auto EDA (based on KiCad)
+- Auto CAD (based on FreeCAD)
 
+- Auto-X Consultant (All-In-One)
 
 ## Acknowledgments
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
 - [openremote](https://github.com/openremote/openremote)
-- [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)
-- [ERPNext](https://github.com/frappe/erpnext)
-- [frePPLe](https://github.com/frePPLe/frepple)
-- [FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)
-- [Frappe Health](https://github.com/frappe/health)
+- [IntelliJ IDEA Community Edition](https://github.com/JetBrains/intellij-community)
+- [Odoo](https://github.com/odoo/odoo)
 - [flutter-webrtc](https://github.com/flutter-webrtc/flutter-webrtc)
+- [OpenClinic GA](https://sourceforge.net/projects/open-clinic/)
+- [Open Hospital](https://github.com/informatici/openhospital)

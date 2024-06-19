@@ -1,0 +1,16 @@
+{% extends "admin/base_site_grid.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+<script>
+
+var dont_show_related_objects_for_deletion = true;
+
+function reportlink(cellvalue, options, row)
+{
+  return "<a href=\"" + url_prefix + "/reportmanager/" + row["id"] + "/\">"
+      + cellvalue
+      + "<span class='ps-2 fa fa-caret-right'></span></a><br>";
+}
+</script>
+{% endblock %}

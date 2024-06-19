@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Test model for suppliers</name>
+  <description>
+  This test model demonstrates the distribution network modeling features.
+  </description>
+  <current>2015-01-01T00:00:00</current>
+  <locations>
+    <location name="Region 1"/>
+    <location name="Region 2"/>
+    <location name="Central WH"/>
+    <location name="Regional DC 1"/>
+    <location name="Local DC 1a">
+      <owner name="Region 1"/>
+    </location>
+    <location name="Local DC 1b">
+      <owner name="Region 1"/>
+    </location>
+    <location name="Regional DC 2"/>
+    <location name="Local DC 2a">
+      <owner name="Region 2"/>
+    </location>
+    <location name="Local DC 2b">
+      <owner name="Region 2"/>
+    </location>
+  </locations>
+  <suppliers>
+    <supplier name="Supplier 1"/>
+    <supplier name="Supplier 2"/>
+    <supplier name="Supplier 3"/>
+  </suppliers>
+  <items>
+    <!-- DEFAULT NETWORK FOR ALL PRODUCTS -->
+    <item name="All products" cost="1">
+	    <itemsuppliers>
+	      <itemsupplier>
+          <supplier name="Supplier 1" />
+          <leadtime>P7D</leadtime>
+          <location name="Central WH"/>
+          <priority>1</priority>
+        </itemsupplier>
+        <itemsupplier>
+          <supplier name="Supplier 1" />
+          <leadtime>P7D</leadtime>
+          <location name="Regional DC 2"/>
+          <priority>2</priority>
+        </itemsupplier>
+	    </itemsuppliers>
+	    <itemdistributions>
+        <itemdistribution>
+          <origin name="Central WH" />
+          <leadtime>P10D</leadtime>
+          <destination name="Regional DC 1"/>
+          <priority>1</priority>
+        </itemdistribution>
+        <itemdistribution>
+          <origin name="Central WH" />
+          <leadtime>P12D</leadtime>
+          <destination name="Regional DC 2"/>
+          <priority>1</priority>
+        </itemdistribution>
+        <itemdistribution>
+          <origin name="Regional DC 1" />
+          <destination name="Local DC 1a"/>
+          <leadtime>P3D</leadtime>
+          <priority>1</priority>
+        </itemdistribution>
+        <itemdistribution>
+          <origin name="Regional DC 1" />
+          <destination name="Local DC 1b"/>
+          <leadtime>P3D</leadtime>
+          <priority>1</priority>
+        </itemdistribution>
+        <itemdistribution>
+          <origin name="Regional DC 2" />
+          <destination name="Local DC 2a"/>
+          <leadtime>P3D</leadtime>
+          <priority>1</priority>
+        </itemdistribution>
+        <itemdistribution>
+          <origin name="Regional DC 2" />
+          <destination name="Local DC 2b"/>
+          <leadtime>P3D</leadtime>
+          <priority>1</priority>
+        </itemdistribution>
+      </itemdistributions>
+    </item>
+    <!-- ITEM USING DEFAULT DISTRIBUTION AND PURCHASING -->
+    <item name="product A">
+      <owner name="All products"/>
+      <cost>2</cost>
+    </item>
+  </items>
+
+  <buffers>
+    <buffer name="product A @ Central WH" onhand="10"><item name="product A"/><location name="Central WH"/></buffer>
+  </buffers>
+
+  <demands>
+    <!--
+    Generates a material flow: Supplier 1 -> Central WH -> Regional DC 1 -> Local DC 1a
+    Partial shipment of the inventory in the Central WH, followed with a late delivery.
+    -->
+    <demand name="order 1a for product A">
+      <quantity>50</quantity>
+      <due>2015-01-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="product A"/>
+      <location name="Local DC 1a"/>
+    </demand>
+    <demand name="order 1b for product A">
+      <quantity>50</quantity>
+      <due>2015-01-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="product A"/>
+      <location name="Local DC 1a"/>
+    </demand>
+        <!--
+    Generates a material flow: Supplier 1 -> Central WH -> Regional DC 1 -> Local DC 1a
+    Unconstrained case.
+    -->
+    <demand name="order 2 for product A">
+      <quantity>100</quantity>
+      <due>2015-03-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="product A"/>
+      <location name="Local DC 1b"/>
+    </demand>
+    <!--
+    Generates a material flow: Supplier 1 -> Regional DC 2 -> Local DC 2a
+    The supplier ships directly to the regional DC2 to reduce the lateness.
+    -->
+    <demand name="order 3 for product A">
+      <quantity>100</quantity>
+      <due>2015-01-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="product A"/>
+      <location name="Local DC 2a"/>
+    </demand>
+    <!--
+    Generates a material flow: Supplier 1 -> Central WH -> Regional DC 1 -> Local DC 1a
+    Unconstrained case.
+    -->
+    <demand name="order 4 for product A">
+      <quantity>100</quantity>
+      <due>2015-03-01T00:00:00</due>
+      <priority>1</priority>
+      <item name="product A"/>
+      <location name="Local DC 2b"/>
+    </demand>
+  </demands>
+
+  <operationplans>
+    <operationplan ordertype="DO" end="2015-06-06T00:00:00"
+      quantity="100" status="confirmed">
+      <item name="product A"/>
+      <location name="Local DC 2b"/>
+      <origin name="Central WH"/>
+    </operationplan>
+	
+	<!-- Testing intransit with blank source or destination location. -->
+	<operationplan ordertype="DO" end="2015-06-05T00:00:00"
+      quantity="100" status="confirmed">
+      <item name="In transit product"/>
+      <location name="Destination"/>
+      <origin name="Source"/>
+    </operationplan>
+	<operationplan ordertype="DO" end="2015-06-06T00:00:00"
+      quantity="100" status="confirmed">
+      <item name="In transit product"/>
+      <location name="Destination"/>
+    </operationplan>
+	<operationplan ordertype="DO" start="2015-06-07T00:00:00"
+      quantity="100" status="confirmed">
+      <item name="In transit product"/>
+      <origin name="Source"/>
+    </operationplan>	
+  </operationplans>
+
+<?python
+print("SAVING MODEL IN XML FORMAT")
+frepple.saveXMLfile("output.1.xml")
+
+print("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+
+print("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.3.xml")
+
+print("TESTING PYTHON API")
+s = frepple.location(name='X')
+d = frepple.location(name='Z')
+r = frepple.item(name='Y')
+frepple.itemdistribution(origin=s, destination=d, item=r)
+with open("output.4.xml","wt") as output:
+  for i in frepple.items():
+    print("Item ", i.name, ":", file=output)
+    for j in i.itemdistributions:
+      print(
+        "     ", j.origin.name if j.origin else "",
+        j.destination.name if j.destination else "",
+        j.leadtime, j.priority,
+        file=output
+        )
+
+print("ERASE PLAN DATA")
+frepple.erase(False)
+
+print("ERASE ALL DATA")
+# This delete erases all frePPLe objects. Some of these objects
+# are still referenced in the above Python. This will give some
+# errors in the output, which we can ignore in this case.
+frepple.erase(True)
+?>
+
+</plan>

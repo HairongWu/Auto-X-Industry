@@ -1,0 +1,125 @@
+{% extends "admin/base_site_nav.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+<script>
+
+function updateApp(appname, action, el) {
+   $(el).find(".fa-cog").removeClass("d-none");
+   $("#installedapps .btn-sm, #installableapps .btn-sm").prop('disabled', true);
+   $.ajax({
+      url: window.location.href,
+      type: 'POST',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        app: appname,
+        action: action
+        }),
+      success: function () {
+		// We need to wait a bit after success to allow the web server to restart
+		setTimeout(function(){
+			window.location.href = window.location.href;
+			$(el).find(".fa-cog").addClass("d-none");
+			$("#installedapps .btn-sm, #installableapps .btn-sm").prop('disabled', false);
+		}, 2000);
+	  },
+      error: function(result, stat, errorThrown) {
+		$(el).find(".fa-cog").addClass("d-none");
+		$("#installedapps .btn-sm, #installableapps .btn-sm").prop('disabled', false);
+		ajaxerror(result, stat, errorThrown)
+	  }
+    });
+}
+
+</script>
+{% endblock %}
+
+{% block content_title %}
+<div class="row mt-3">
+  <div class="col">
+    <h1>{{title|capfirst|force_escape}}&nbsp;&nbsp;<small>{{edition|capfirst}}</small></h1>
+  </div>
+  <div class="col-auto d-flex ms-auto align-items-center">
+	<h1>
+	<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'help'|capfirst|force_escape %}"
+	  href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/getting-around/apps.html"
+	  target="_blank">
+	    <span class="fa fa-question"></span>
+	</a>
+	</h1>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-2">
+	<div class="col">
+	From this screen you can install and uninstall extension apps.<br>
+	Extensions can be provided by the frepple team, the frepple user community
+	or developed by yourself.
+	</div>
+</div>
+
+<!-- Installed apps -->
+<div class="row mb-2">
+	<div class="col">
+		<h1>{% trans "installed apps"|capfirst %}</h1>
+	</div>
+</div>
+<div class="row mb-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4" id="installedapps">
+	{% for app in apps %}{% if app.installed %}
+	<div class="col d-flex align-items-stretch">
+	<div class="card w-100">
+		<div class="card-body d-flex flex-column">
+			<h5 class="mb-2 fw-bold row align-items-center">
+			<div class="col">{{ app.summary|capfirst|safe }} {% if app.version %}&nbsp;&nbsp;<span class="fs-6 fw-normal">v{{ app.version }}{% endif %}</div>
+			{% if request.user.is_superuser %}
+				<div class="col-auto">
+					<button type="button" class="btn btn-danger btn-sm" onclick="updateApp('{{ app.name }}', 'uninstall', this)">
+						<span class="fa fa-cog fa-spin d-none"></span>
+						{% trans "uninstall"|capfirst %}
+					</button>
+				</div>
+			{% endif %}
+		    </h5>
+			{% if app.description %}<div class="row mb-1">{{ app.description|safe }}</div>{% endif %}
+			<div class="row mt-auto mb-0">
+			   {% if app.documentation_url %}<div class="col"><a role="button" rel="noopener" href="{{ app.documentation_url|safe }}" target="_blank" class="btn btn-primary btn-sm float-end">{% trans "documentation"|capfirst %}</a></div>{% endif %}
+			</div>
+		</div>
+	</div>
+    </div>
+	{% endif %}{% endfor %}
+</div>
+
+<div class="row mb-2">
+	<div class="col">
+		<h1>{% trans "optional extra apps"|capfirst %}</h1>
+	</div>
+</div>
+<div class="row mb-2 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4" id="installableapps">
+	{% for app in apps %}{% if not app.installed %}
+	<div class="col d-flex align-items-stretch">
+	<div class="card w-100">
+		<div class="card-body d-flex flex-column">
+			<h5 class="mb-2 fw-bold row align-items-center">
+			<div class="col">{{ app.summary|capfirst|safe }} {% if app.version %}&nbsp;&nbsp;<span class="fs-6 fw-normal">v{{ app.version }}{% endif %}</div>
+			{% if request.user.is_superuser %}
+				<div class="col-auto">
+					<button type="button" class="btn btn-danger btn-sm" onclick="updateApp('{{ app.name }}', 'install', this)">
+						<span class="fa fa-cog fa-spin d-none"></span>
+						{% trans "install"|capfirst %}
+					</button>
+				</div>
+			{% endif %}
+		    </h5>
+			{% if app.description %}<div class="row mb-1">{{ app.description|safe }}</div>{% endif %}
+			<div class="row mt-auto mb-0">
+			   {% if app.documentation_url %}<div class="col"><a role="button" rel="noopener" href="{{ app.documentation_url|safe }}" target="_blank" class="btn btn-primary btn-sm float-end">{% trans "documentation"|capfirst %}</a></div>{% endif %}
+			</div>
+		</div>
+	</div>
+    </div>
+	{% endif %}{% endfor %}
+</div>
+{% endblock %}

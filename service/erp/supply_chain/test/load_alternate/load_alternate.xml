@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Test model for effective operations</name>
+  <description>
+  This model verifies the behavior of alternate loads.
+  An assembly operation needs 2 resources each of which have alternates:
+    * Resource A or resource B are loaded.
+      Resource A is the preferred one, and resource B is only used when
+      constraints are found on A.
+    * Resource C can be replaced by resource D till a certain date, or by
+      resource E valid from a date.
+  </description>
+  <current>2009-01-01T00:00:00</current>
+
+  <buffers>
+    <buffer name="end item">
+      <item name="end item" />
+      <producing name="make end item" xsi:type="operation_time_per"
+        duration="P1D" duration_per="P1D">
+        <flows>
+          <flow xsi:type="flow_end">
+            <buffer name="end item" />
+            <quantity>1</quantity>
+          </flow>
+        </flows>
+        <loads>
+          <load>
+            <resource name="Resource A"/>
+            <quantity>1.5</quantity>
+            <name>group1</name>
+            <priority>1</priority>
+          </load>
+          <load>
+            <resource name="Resource B"/>
+            <quantity>2</quantity>
+            <name>group1</name>
+            <priority>2</priority>
+          </load>
+          <load>
+            <resource name="Resource C"/>
+            <quantity>1</quantity>
+            <name>group2</name>
+            <priority>1</priority>
+            <!--
+            <effective_start>2009-01-10T00:00:00</effective_start>
+            <effective_end>2009-01-20T00:00:00</effective_end>
+            -->
+          </load>
+          <load>
+            <resource name="Resource D"/>
+            <quantity>1</quantity>
+            <priority>2</priority>
+            <name>group2</name>
+            <!--
+            <effective_start>2009-01-10T00:00:00</effective_start>
+            <effective_end>2009-01-20T00:00:00</effective_end>
+            -->
+          </load>
+        </loads>
+      </producing>
+    </buffer>
+  </buffers>
+  <resources>
+    <resource name="Resource A">
+      <maximum>1</maximum>
+    </resource>
+    <resource name="Resource B">
+      <maximum_calendar name="Capacity B">
+        <buckets>
+          <bucket start="2009-01-01T00:00:00" value="1" />
+          <bucket start="2009-01-10T00:00:00" value="3" />
+        </buckets>
+      </maximum_calendar>
+    </resource>
+    <resource name="Resource C" maximum="1" />
+    <resource name="Resource D" />
+  </resources>
+  <demands>
+    <demand name="order 1">
+      <quantity>1</quantity>
+      <due>2009-01-01T00:00:00</due>
+      <priority>11</priority>
+      <item name="end item" />
+      <operation name="deliver end item" xsi:type="operation_fixed_time"
+        duration="P1D">
+        <flows>
+          <flow xsi:type="flow_start">
+            <buffer name="end item" />
+            <quantity>-1</quantity>
+          </flow>
+        </flows>
+      </operation>
+    </demand>
+    <!--
+    <demand name="1. order 2">
+      <quantity>10</quantity>
+      <due>2009-01-25T00:00:00</due>
+      <priority>12</priority>
+      <item name="1. end item" />
+    </demand>
+    <demand name="1. order 3">
+      <quantity>20</quantity>
+      <due>2009-01-25T00:00:00</due>
+      <priority>13</priority>
+      <item name="1. end item" />
+    </demand>
+    <demand name="1. order 4">
+      <quantity>1</quantity>
+      <due>2009-01-15T00:00:00</due>
+      <priority>14</priority>
+      <item name="1. end item" />
+    </demand>
+    <demand name="1. order 5">
+      <quantity>10</quantity>
+      <due>2009-01-15T00:00:00</due>
+      <priority>15</priority>
+      <item name="1. end item" />
+    </demand>
+    <demand name="1. order 6">
+      <quantity>1</quantity>
+      <due>2009-01-09T00:00:00</due>
+      <priority>16</priority>
+      <item name="1. end item" />
+    </demand>
+    -->
+  </demands>
+
+<?python
+print("CREATING CONSTRAINED PLAN")
+frepple.solver_mrp(plantype=1, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.1.xml")
+print("CREATING UNCONSTRAINED PLAN")
+frepple.solver_mrp(plantype=2, constraints=15, loglevel=2).solve()
+frepple.saveplan("output.2.xml")
+?>
+
+</plan>

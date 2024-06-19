@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <description>
+  This test shows how we can access frePPLe objects from Python.
+  </description>
+  <current>2009-01-01T00:00:00</current>
+<?python
+
+def printmodel():
+  '''This function prints out information about the model to the output file'''
+
+  # Open the file
+  out = open("output.1.xml", "wt", 1)
+
+  # Print information
+  try:
+
+    print("start exporting the items")
+    print("Items:", file=out)
+    for i in frepple.items():
+      print(i.name, "has owner", i.owner, file=out)
+      for j in i.members:
+        print(i.name, "has member", j.name, file=out)
+
+    print("start exporting the problems")
+    print("\nProblems:", file=out)
+    for i in frepple.problems():
+      print(i.entity, i.name, i.start, i.end, i.description, i.weight, file=out)
+
+    print("start exporting the operation plans")
+    print("\nOperationplans:", file=out)
+    for i in frepple.operationplans():
+      print(i.id, i.operation.name, i.quantity,
+        i.start, i.end, i.demand and i.demand.name or None, file=out)
+
+    print("start exporting the buffer plans")
+    print("\nBuffers:", file=out)
+    for i in frepple.buffers():
+      print(i.name, i.category, i.subcategory,
+        i.description, i.onhand, i.location and i.location.name or None,
+        i.item and i.item.name or None,
+        i.maximum_calendar and i.maximum_calendar.name or i.maximum,
+        i.minimum_calendar and i.minimum_calendar.name or i.minimum,
+        i.producing and i.producing.name or None, file=out)
+      for j in i.flowplans:
+        print("     ", j.operationplan.id,
+          j.quantity, j.date, j.onhand, file=out)
+
+    print("start exporting the resource plans")
+    print("\nResources:", file=out)
+    for i in frepple.resources():
+      print(i.name, i.category, i.subcategory, i.description,
+        i.location and i.location.name or None,
+        i.maximum_calendar and i.maximum_calendar.name or i.maximum,
+        i.owner and i.owner.name or None, file=out)
+      for j in i.loadplans:
+        print("     ", j.operationplan.id, j.quantity, j.startdate,
+          j.enddate, file=out)
+
+    print("start exporting the demand plans")
+    print("\nDemands:", file=out)
+    for i in frepple.demands():
+      print(i.name, i.quantity, i.due, i.priority,
+        i.item.name, i.operation or None,
+        i.owner and i.owner.name or None,
+        i.customer and i.customer.name or None, file=out)
+
+    print("Done")
+
+  # Close the file
+  finally:
+    out.close()
+
+# Read a file, run the solver and export the results
+frepple.readXMLfile('data.xml')
+frepple.solver_mrp(constraints=15).solve()
+printmodel()
+frepple.printsize()
+frepple.saveXMLfile('output.2.xml')
+?>
+</plan>

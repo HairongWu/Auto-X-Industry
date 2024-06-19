@@ -1,0 +1,368 @@
+#
+# Copyright (C) 2007 by Johan De Taeye
+#
+# This library is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public
+# License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-24 12:27+0200\n"
+"PO-Revision-Date: 2023-10-24 12:35+0200\n"
+"Last-Translator: \n"
+"Language-Team: frepple <jdetaeye@users.sourceforge.net>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: common/static/js/frepple.js:201
+msgid "Connection failed"
+msgstr ""
+
+#: common/static/js/frepple.js:213 common/static/js/frepple.js:1513
+#: common/static/js/frepple.js:1562 common/static/js/frepple.js:2196
+#: quoting/static/quoting/src/quoteCtrl.js:62
+msgid "Error"
+msgstr "錯誤"
+
+#: common/static/js/frepple.js:220 common/static/js/frepple.js:884
+#: common/static/js/frepple.js:1181 common/static/js/frepple.js:2171
+#: common/static/js/frepple.js:2788 common/static/js/frepple.js:2915
+#: common/static/js/frepple.js:3677
+msgid "Close"
+msgstr "關閉"
+
+#: common/static/js/frepple.js:234 common/static/js/frepple.js:320
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:350
+msgid "There are unsaved changes on this page."
+msgstr "此頁面有未保存的變動。"
+
+#: common/static/js/frepple.js:317
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:347
+msgid "Save or cancel your changes first"
+msgstr "先保存或取消你的變動"
+
+#: common/static/js/frepple.js:323 common/static/js/frepple.js:2397
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:354
+msgid "Save"
+msgstr "保存"
+
+#: common/static/js/frepple.js:324
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:353
+msgid "Return to page"
+msgstr ""
+
+#: common/static/js/frepple.js:577
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:427
+msgid "days early"
+msgstr "提早的天数"
+
+#: common/static/js/frepple.js:579
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:429
+msgid "on time"
+msgstr "準時"
+
+#: common/static/js/frepple.js:582 common/static/js/frepple.js:584
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:432
+#: input/static/operationplandetail/src/operationplandetailCtrl.js:434
+msgid "days late"
+msgstr "延遲的天數"
+
+#: common/static/js/frepple.js:780
+msgid "Selected options"
+msgstr "選定的選項"
+
+#: common/static/js/frepple.js:787
+msgid "Available options"
+msgstr "可用的選項"
+
+#: common/static/js/frepple.js:825 forecast/static/forecast/src/forecast.js:936
+msgid "Selected Cross"
+msgstr "選定的交叉"
+
+#: common/static/js/frepple.js:835 forecast/static/forecast/src/forecast.js:944
+msgid "Available Cross"
+msgstr "可用的交叉"
+
+#: common/static/js/frepple.js:857
+msgid "Frozen columns"
+msgstr "凍結的列"
+
+#: common/static/js/frepple.js:883 common/static/js/frepple.js:2490
+#: forecast/static/forecast/src/forecast.js:929
+msgid "Customize"
+msgstr "定制"
+
+#: common/static/js/frepple.js:893 common/static/js/frepple.js:1272
+#: common/static/js/frepple.js:1489 common/static/js/frepple.js:1538
+#: common/static/js/frepple.js:2150 common/static/js/frepple.js:2396
+#: forecast/static/forecast/src/forecast.js:956
+msgid "Cancel"
+msgstr "取消"
+
+#: common/static/js/frepple.js:894 forecast/static/forecast/src/forecast.js:957
+msgid "Reset"
+msgstr "重置"
+
+#: common/static/js/frepple.js:895 forecast/static/forecast/src/forecast.js:958
+msgid "OK"
+msgstr "確定"
+
+#: common/static/js/frepple.js:1180
+msgid "Export CSV or Excel file"
+msgstr "出口CSV或Excel文件"
+
+#: common/static/js/frepple.js:1187 common/static/js/frepple.js:1210
+msgid "Export format"
+msgstr "匯出格式"
+
+#: common/static/js/frepple.js:1190 common/static/js/frepple.js:1217
+msgid "Spreadsheet list"
+msgstr "試算表列表"
+
+#: common/static/js/frepple.js:1194 common/static/js/frepple.js:1225
+msgid "CSV list"
+msgstr "CSV列表"
+
+#: common/static/js/frepple.js:1196 common/static/js/frepple.js:1227
+msgid "Data source URL"
+msgstr ""
+
+#: common/static/js/frepple.js:1198 common/static/js/frepple.js:1229
+msgid "Using this link external applications can pull data from frePPLe"
+msgstr ""
+
+#: common/static/js/frepple.js:1213
+msgid "Spreadsheet table"
+msgstr "電子表格表"
+
+#: common/static/js/frepple.js:1221
+msgid "CSV table"
+msgstr "CSV表"
+
+#: common/static/js/frepple.js:1246
+msgid "Scenarios to export"
+msgstr ""
+
+#: common/static/js/frepple.js:1273 common/static/js/frepple.js:2143
+msgid "Export"
+msgstr "輸出"
+
+#: common/static/js/frepple.js:1482
+msgid "Delete data"
+msgstr "刪除資料"
+
+#: common/static/js/frepple.js:1486
+#, javascript-format
+msgid "You are about to delete %s objects AND ALL RELATED RECORDS!"
+msgstr "你將會刪除 %s 對象和所有相關的數據記錄！"
+
+#: common/static/js/frepple.js:1490 common/static/js/frepple.js:1539
+#: common/static/js/frepple.js:2151
+msgid "Confirm"
+msgstr "確定"
+
+#: common/static/js/frepple.js:1531
+msgid "Copy data"
+msgstr "複製數據"
+
+#: common/static/js/frepple.js:1535
+#, javascript-format
+msgid "You are about to duplicate %s objects"
+msgstr "你將會複製% s對象"
+
+#: common/static/js/frepple.js:1688
+msgid "Search"
+msgstr "搜索"
+
+#: common/static/js/frepple.js:1753
+msgid "is child of"
+msgstr ""
+
+#: common/static/js/frepple.js:1755
+msgid "is null"
+msgstr ""
+
+#: common/static/js/frepple.js:1787
+msgid "days"
+msgstr "天"
+
+#: common/static/js/frepple.js:1817 common/static/js/frepple.js:1828
+msgid "or"
+msgstr "或"
+
+#: common/static/js/frepple.js:1819
+msgid "and"
+msgstr "和"
+
+#: common/static/js/frepple.js:1973
+msgid "Click ok to confirm deleting the favorite"
+msgstr ""
+
+#: common/static/js/frepple.js:2147
+msgid "Export selected records?"
+msgstr ""
+
+#: common/static/js/frepple.js:2161
+msgid "connecting"
+msgstr ""
+
+#: common/static/js/frepple.js:2170
+msgid "Export successful"
+msgstr "輸出成功"
+
+#: common/static/js/frepple.js:2199
+msgid "retry"
+msgstr "重審"
+
+#: common/static/js/frepple.js:2340
+msgid "Customize a dashboard row"
+msgstr "自定義儀表板行"
+
+#: common/static/js/frepple.js:2347
+msgid "Name"
+msgstr "名稱"
+
+#: common/static/js/frepple.js:2353
+msgid "Layout"
+msgstr "佈置"
+
+#: common/static/js/frepple.js:2359
+msgid "Single column"
+msgstr "單列"
+
+#: common/static/js/frepple.js:2362
+msgid "Two columns"
+msgstr "兩列"
+
+#: common/static/js/frepple.js:2369
+msgid "Three columns"
+msgstr "三列"
+
+#: common/static/js/frepple.js:2373
+msgid "Four columns"
+msgstr "四列"
+
+#: common/static/js/frepple.js:2379
+msgid "Add widget"
+msgstr "添加小工"
+
+#: common/static/js/frepple.js:2398
+msgid "Add new below"
+msgstr "添加新在下面"
+
+#: common/static/js/frepple.js:2399
+msgid "Add new above"
+msgstr "添加新在上面"
+
+#: common/static/js/frepple.js:2400
+msgid "Delete"
+msgstr "刪除"
+
+#: common/static/js/frepple.js:2553
+#, javascript-format
+msgid "%s unread messages"
+msgstr ""
+
+#: common/static/js/frepple.js:2705
+msgid "Installed apps"
+msgstr "已安裝的應用程序"
+
+#: common/static/js/frepple.js:2751
+msgid "Import CSV or Excel file"
+msgstr "導入CSV或Excel文件"
+
+#: common/static/js/frepple.js:2758
+msgid "Load an Excel file or a CSV-formatted text file."
+msgstr "載入一個Excel檔或CSV-formatted文字檔。"
+
+#: common/static/js/frepple.js:2759
+msgid "The first row should contain the field names."
+msgstr "第一行包含了欄位名。"
+
+#: common/static/js/frepple.js:2761
+msgid "First delete all existing records AND ALL RELATED TABLES"
+msgstr "首先刪除所有存在的記錄和所有相關的表"
+
+#: common/static/js/frepple.js:2769
+msgid "Select files to upload"
+msgstr ""
+
+#: common/static/js/frepple.js:2770
+msgid "or drop them here"
+msgstr ""
+
+#: common/static/js/frepple.js:2779
+msgid "Data file"
+msgstr "數據文件"
+
+#: common/static/js/frepple.js:2790
+msgid "Import"
+msgstr "導入"
+
+#: common/static/js/frepple.js:2791
+msgid "Cancel Import"
+msgstr "取消導入"
+
+#: common/static/js/frepple.js:2856
+msgid "Importing..."
+msgstr "導入中..."
+
+#: common/static/js/frepple.js:2875
+msgid "Canceled"
+msgstr "已取消"
+
+#: common/static/js/frepple.js:2930
+#, javascript-format
+msgid "%s records processed"
+msgstr ""
+
+#: common/static/js/frepple.js:3678
+msgid "Update"
+msgstr ""
+
+#: common/static/js/frepple.js:3683
+#, javascript-format
+msgid "Manage notifications of %s"
+msgstr ""
+
+#: common/static/js/frepple.js:3712
+msgid "Add followers"
+msgstr ""
+
+#: forecast/static/forecast/src/forecast.js:952
+msgid "Show descriptions"
+msgstr ""
+
+#: input/static/operationplandetail/src/supplypositionpanelDrv.js:22
+msgid "inventory status"
+msgstr "庫存狀況"
+
+#: input/static/operationplandetail/src/supplypositionpanelDrv.js:29
+msgid "onhand at lead time"
+msgstr "在交貨期的現有量"
+
+#: input/static/operationplandetail/src/supplypositionpanelDrv.js:63
+msgid "current inventory"
+msgstr "目前存貨"
+
+#: planningboard/static/planningboard/src/module.js:69
+#: planningboard/static/planningboard/src/planningboard.js:939
+#: planningboard/static/planningboard/src/planningboard.js:950
+#: planningboard/static/planningboard/src/planningboard.js:951
+msgid "hours"
+msgstr "小時"
