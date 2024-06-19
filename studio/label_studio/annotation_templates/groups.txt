@@ -1,3 +1,7 @@
 Computer Vision
 Time Series Analysis
 Videos
+3D
+Vector Database
+Knowledge Creation
+Scraping
