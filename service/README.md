@@ -66,7 +66,7 @@ docker-compose -p openremote -f profile/dev-ui.yml up --build -d
 - auto building, unit testing and bug reporting
 - initial codebase with technical documets
 
-Change to 'development' folder and refer to [here](https://github.com/JetBrains/intellij-community) to setup the build envireonment.
+Please refer to [here](https://github.com/HairongWu/auto-intellij-community) to setup the build envireonment.
 
 ## Auto ERP
   
@@ -86,6 +86,7 @@ Please refer to [here](https://www.odoo.com/documentation/master/administration/
 mkdir build
 cd build
 cmake --build . --config Release
+cmake --install .
 ```
 
 
