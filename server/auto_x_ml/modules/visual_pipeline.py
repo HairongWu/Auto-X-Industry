@@ -245,60 +245,56 @@ class VisualPipeline():
     
     def run_keypoints(self, image_paths):
         # Fix me: Change to batch inferences
-        self.get_prompts(image_paths)
-        if len(self.prompts) > 0:
+        all_keypoints = []
+        all_lengths = []
 
-            all_keypoints = []
-            all_lengths = []
+        all_boxes = []
+        all_logits = []
+        all_labels = []
 
-            all_boxes = []
-            all_logits = []
-            all_labels = []
+        for img in image_paths:
+            src, img = load_image(img)
+            H, W, _ = src.shape
+            keypoints = []
+            boxes_xyxy = []
+            prompts = []
+            logits = []
+            for prompt in predefined_keypoints:
+                keypoint_dict = globals()[prompt]
+                keypoint_text_prompt = keypoint_dict.get("keypoints")
+                num_kpts = len(keypoint_text_prompt)
+                boxes_filt,keypoints_filt, logits_filt = get_unipose_output(
+                    self.pose_model, 
+                    img, 
+                    prompt, 
+                    keypoint_text_prompt, 
+                    box_threshold=float(self.BOX_THRESHOLD), 
+                    iou_threshold=float(self.IOU_THRESHOLD), 
+                    device=self.device
+                )
 
-            for img in image_paths:
-                src, img = load_image(img)
-                H, W, _ = src.shape
-                keypoints = []
-                boxes_xyxy = []
-                prompts = []
-                logits = []
-                for prompt in self.prompts:
-                    if prompt in predefined_keypoints:
-                        keypoint_dict = globals()[prompt]
-                        keypoint_text_prompt = keypoint_dict.get("keypoints")
-                        num_kpts = len(keypoint_text_prompt)
-                        boxes_filt,keypoints_filt, logits_filt = get_unipose_output(
-                            self.pose_model, 
-                            img, 
-                            prompt, 
-                            keypoint_text_prompt, 
-                            box_threshold=float(self.BOX_THRESHOLD), 
-                            iou_threshold=float(self.IOU_THRESHOLD), 
-                            device=self.device
-                        )
+                for idx, ann in enumerate(keypoints_filt):
+                    kp = np.array(ann.cpu())
+                    Z = kp[:num_kpts*2] * np.array([W, H] * num_kpts)
+                    x = Z[0::2]
+                    y = Z[1::2]
+                    for i in range(num_kpts):
+                        keypoints.append((x[i], y[i], keypoint_text_prompt[i]))
 
-                        for idx, ann in enumerate(keypoints_filt):
-                            kp = np.array(ann.cpu())
-                            Z = kp[:num_kpts*2] * np.array([W, H] * num_kpts)
-                            x = Z[0::2]
-                            y = Z[1::2]
-                            for i in range(num_kpts):
-                                keypoints.append((x[i], y[i], keypoint_text_prompt[i]))
+                boxes_filt = box_cxcywh_to_xyxy(boxes_filt) * torch.Tensor([W, H, W, H])
+                boxes_xyxy.extend(boxes_filt.cpu().numpy())
+                prompts.extend([prompt]*len(boxes_xyxy))
 
-                        boxes_filt = box_cxcywh_to_xyxy(boxes_filt) * torch.Tensor([W, H, W, H])
-                        boxes_xyxy.extend(boxes_filt.cpu().numpy())
-                        prompts.extend([prompt]*len(boxes_xyxy))
-
-                        logits_filt = logits_filt.cpu().numpy()
-                        logits.extend(logits_filt[:,0:1])
+                logits_filt = logits_filt.cpu().numpy()
+                logits.extend(logits_filt[:,0:1])
 
 
-                all_keypoints.append(keypoints)
-                all_lengths.append((H, W))  
+            all_keypoints.append(keypoints)
+            all_lengths.append((H, W))  
 
-                all_boxes.append(boxes_xyxy)
-                all_labels.append(prompts)
-                all_logits.append(logits)
+            all_boxes.append(boxes_xyxy)
+            all_labels.append(prompts)
+            all_logits.append(logits)
                         
 
         return all_keypoints, all_boxes, all_labels, all_logits, all_lengths

@@ -1,0 +1,16 @@
+title: ASR
+type: community
+group: Virtual Huamn
+image: /static/templates/contextual_scrolling.png
+details: <h1>Provide transcript for the audio</h1>
+config: |
+  <View>
+    <Audio name="audio" value="$audio" zoom="true" hotkey="ctrl+enter" />
+    <Labels name="label" toName="audio" zoom="true" hotkey="ctrl+enter">
+      <Label value="Speaker one" background="#00FF00"/>
+      <Label value="Speaker two" background="#12ad59"/>
+    </Labels>
+    <TextArea name="transcription" toName="audio"
+              rows="4" editable="true" maxSubmissions="1" />
+  </View>
+

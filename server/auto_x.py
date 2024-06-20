@@ -32,6 +32,7 @@ class AutoSolution(AutoXMLBase):
         image_dec_tasks = []
         image_kp_tasks = []
         image_ocr_tasks = []
+        video_tasks = []
         
         print(self.parsed_label_config)
         from_name_r, to_name_r, from_name_k, to_name_k = '','','',''
@@ -84,7 +85,7 @@ class AutoSolution(AutoXMLBase):
                         image_ocr_tasks.append(img_path)
 
                 elif 'video/' in mime:
-                    pass
+                    video_tasks.append(img_path)
                 elif 'audio/' in mime:
                     pass
                 elif mime == 'application/pdf':

@@ -74,14 +74,15 @@ predefined_keypoints = ['person','face','hand','animal_in_AnimalKindom','animal_
                         'trousers','sling_dress','vest_dress','skirt','short_sleeved_dress','shorts',
                         'table','chair','bed','sofa','swivelchair']
 
-predefined_detection = ['dog','cat', 'person']
+fo = open("ram_tag_list.txt", "r")
+predefined_detection = fo.readlines()
 
-def generate(fileName):
+def generate_detection_labels(fileName):
     root = gfg.Element("View") 
       
     m1 = gfg.Element("Image") 
     m1.set('name','image')
-    m1.set('value','$image')
+    m1.set('value','$dec')
     root.append (m1) 
 
     m1= gfg.Element("RectangleLabels") 
@@ -94,9 +95,32 @@ def generate(fileName):
         b1.set('background',getDistinctColors(i))
 
     root.append (m1)
+    tree = gfg.ElementTree(root) 
+
+    gfg.indent(tree)
+      
+    with open (fileName, "wb") as files : 
+        tree.write(files) 
+
+def generate_kp_labels(fileName):
+    root = gfg.Element("View") 
+    m1 = gfg.Element("Image") 
+    m1.set('name','image')
+    m1.set('value','$kp')
+    root.append (m1) 
+
+    m1= gfg.Element("RectangleLabels") 
+    m1.set('name','label')
+    m1.set('toName','image')
+ 
+    for i, pred in enumerate(predefined_keypoints):
+        b1 = gfg.SubElement(m1, "Label") 
+        b1.set('value',pred)
+        b1.set('background',getDistinctColors(i))
+    root.append (m1)
 
     m1 = gfg.Element("KeyPointLabels") 
-    m1.set('name','kp')
+    m1.set('name','keypoint')
     m1.set('toName','image')
 
     kp_labels = []
@@ -115,8 +139,9 @@ def generate(fileName):
     root.append (m1) 
       
     tree = gfg.ElementTree(root) 
-      
+    gfg.indent(tree)
     with open (fileName, "wb") as files : 
         tree.write(files) 
 
-generate("visual.xml")
+generate_detection_labels("detection.xml")
+generate_kp_labels("keypoints.xml")

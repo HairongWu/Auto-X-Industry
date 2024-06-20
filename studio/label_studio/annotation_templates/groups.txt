@@ -1,6 +1,5 @@
 Computer Vision
 Time Series Analysis
-Videos
-3D
+Virtual Huamn
 Knowledge Creation
-Scraping
+Development

@@ -1,0 +1,21 @@
+title: Video Understanding
+type: community
+group: Computer Vision
+image: /static/templates/video-timeline-segmentation.png
+details: <h1>Select and classify video segments</h1>
+config: |
+  <View>
+    <Video name="video" value="$video_url" sync="audio"/>
+    <Audio name="audio" value="$video_url" sync="video" speed="false"/>
+    <TextArea name="v_caption" toName="video" placeholder="Enter description here..." rows="2" maxSubmissions="1"/>
+    <TextArea name="a_caption" toName="audio" placeholder="Enter description here..." rows="2" maxSubmissions="1"/>
+  </View>
+
+  <!--
+    Audio tag uses the same $video file to be in sync, video is muted
+  -->
+
+  <!--{
+   "video_url": "/static/samples/opossum_snow.mp4"
+  }-->
+

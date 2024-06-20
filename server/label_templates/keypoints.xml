@@ -1,0 +1,315 @@
+<View>
+  <Image name="image" value="$kp" />
+  <RectangleLabels name="label" toName="image">
+    <Label value="person" background="#ff0000" />
+    <Label value="face" background="#00ffff" />
+    <Label value="hand" background="#0000ff" />
+    <Label value="animal_in_AnimalKindom" background="#7f00ff" />
+    <Label value="animal_in_AP10K" background="#cc00ff" />
+    <Label value="animal" background="#ff00ff" />
+    <Label value="animal_face" background="#ff00da" />
+    <Label value="fly" background="#ff00bf" />
+    <Label value="locust" background="#ff00aa" />
+    <Label value="car" background="#ff0098" />
+    <Label value="short_sleeved_shirt" background="#ff008b" />
+    <Label value="long_sleeved_outwear" background="#ff007f" />
+    <Label value="short_sleeved_outwear" background="#ff0075" />
+    <Label value="sling" background="#ff006d" />
+    <Label value="vest" background="#ff0066" />
+    <Label value="long_sleeved_dress" background="#ff005f" />
+    <Label value="long_sleeved_shirt" background="#ff005a" />
+    <Label value="trousers" background="#ff0055" />
+    <Label value="sling_dress" background="#ff0050" />
+    <Label value="vest_dress" background="#ff004c" />
+    <Label value="skirt" background="#ff0048" />
+    <Label value="short_sleeved_dress" background="#ff0045" />
+    <Label value="shorts" background="#ff0042" />
+    <Label value="table" background="#ff003f" />
+    <Label value="chair" background="#ff003d" />
+    <Label value="bed" background="#ff003a" />
+    <Label value="sofa" background="#ff0038" />
+    <Label value="swivelchair" background="#ff0036" />
+  </RectangleLabels>
+  <KeyPointLabels name="keypoint" toName="image">
+    <Label value="right side 3" background="#ff0000" />
+    <Label value="right eye lower eyelid 1" background="#00ffff" />
+    <Label value="left back paw" background="#0000ff" />
+    <Label value="chin center" background="#7f00ff" />
+    <Label value="lower lip outer edge 1" background="#cc00ff" />
+    <Label value="ring finger's third knuckle" background="#ff00ff" />
+    <Label value="midleg left base" background="#ff00da" />
+    <Label value="left cuff outside" background="#ff00bf" />
+    <Label value="roof back right" background="#ff00aa" />
+    <Label value="left side 4" background="#ff0098" />
+    <Label value="left cheekbone 1" background="#ff008b" />
+    <Label value="left eye upper eyelid 1" background="#ff007f" />
+    <Label value="table leg 1" background="#ff0075" />
+    <Label value="right eye" background="#ff006d" />
+    <Label value="thumb root" background="#ff0066" />
+    <Label value="left mouth corner" background="#ff005f" />
+    <Label value="right shoulder" background="#ff005a" />
+    <Label value="left eye left" background="#ff0055" />
+    <Label value="right cuff outside" background="#ff0050" />
+    <Label value="left eyebrow 4" background="#ff004c" />
+    <Label value="left elbow" background="#ff0048" />
+    <Label value="left knee" background="#ff0045" />
+    <Label value="mouth back left" background="#ff0042" />
+    <Label value="left wrist" background="#ff003f" />
+    <Label value="upper right neckline" background="#ff003d" />
+    <Label value="left sleeve" background="#ff003a" />
+    <Label value="right side outside 1" background="#ff0038" />
+    <Label value="left eye eye corner 2" background="#ff0036" />
+    <Label value="right sleeve outside 2" background="#ff0034" />
+    <Label value="mouth front bottom" background="#ff0033" />
+    <Label value="left ear" background="#ff0031" />
+    <Label value="left eyebrow 1" background="#ff002f" />
+    <Label value="right eye upper eyelid 1" background="#ff002e" />
+    <Label value="midleg left tip" background="#ff002d" />
+    <Label value="left rear wheel center" background="#ff002b" />
+    <Label value="right sleeve inside 4" background="#ff002a" />
+    <Label value="left cheek 3" background="#ff0029" />
+    <Label value="hip right" background="#ff0028" />
+    <Label value="left front wheel center" background="#ff0027" />
+    <Label value="legs leftbottomcorner" background="#ff0026" />
+    <Label value="left side inside 2" background="#ff0025" />
+    <Label value="lower right neckline" background="#ff0024" />
+    <Label value="left eyebrow 5" background="#ff0023" />
+    <Label value="right side inside 3" background="#ff0022" />
+    <Label value="left nasal wing 1" background="#ff0021" />
+    <Label value="left side inside 3" background="#ff0021" />
+    <Label value="foreleg left tip" background="#ff0020" />
+    <Label value="left eyebrow 3" background="#ff001f" />
+    <Label value="roof front left" background="#ff001f" />
+    <Label value="nasal bridge 3" background="#ff001e" />
+    <Label value="right side 1" background="#ff001e" />
+    <Label value="left eye" background="#ff001d" />
+    <Label value="center hem" background="#ff001c" />
+    <Label value="left sleeve inside 4" background="#ff001c" />
+    <Label value="abdomen1" background="#ff001b" />
+    <Label value="forefinger's third knuckle" background="#ff001b" />
+    <Label value="upper lip inter edge 3" background="#ff001a" />
+    <Label value="upper lip outer edge 4" background="#ff001a" />
+    <Label value="shoulder left" background="#ff0019" />
+    <Label value="right chin" background="#ff0019" />
+    <Label value="pinky finger's second knuckle" background="#ff0019" />
+    <Label value="shoulder right" background="#ff0018" />
+    <Label value="left eye lower eyelid 2" background="#ff0018" />
+    <Label value="wrist right" background="#ff0017" />
+    <Label value="right front paw" background="#ff0017" />
+    <Label value="abdomen2" background="#ff0017" />
+    <Label value="legs rightbottomcorner" background="#ff0016" />
+    <Label value="thorax" background="#ff0016" />
+    <Label value="left sleeve outside 1" background="#ff0016" />
+    <Label value="left eyebrow 2" background="#ff0015" />
+    <Label value="right eyebrow 3" background="#ff0015" />
+    <Label value="left sleeve inside 2" background="#ff0015" />
+    <Label value="middle finger's root" background="#ff0014" />
+    <Label value="head" background="#ff0014" />
+    <Label value="none" background="#ff0014" />
+    <Label value="left sleeve inside 1" background="#ff0014" />
+    <Label value="left side outside 1" background="#ff0013" />
+    <Label value="left sleeve outside 2" background="#ff0013" />
+    <Label value="hindleg right first segment" background="#ff0013" />
+    <Label value="legs righttopcorner" background="#ff0013" />
+    <Label value="left cheek 2" background="#ff0012" />
+    <Label value="knee right" background="#ff0012" />
+    <Label value="lower lip outer edge 3" background="#ff0012" />
+    <Label value="right cheek 4" background="#ff0012" />
+    <Label value="left side 5" background="#ff0011" />
+    <Label value="mouth back right" background="#ff0011" />
+    <Label value="lip right" background="#ff0011" />
+    <Label value="nasal bridge 4" background="#ff0011" />
+    <Label value="left side 1" background="#ff0011" />
+    <Label value="nasal wing center" background="#ff0010" />
+    <Label value="right hip" background="#ff0010" />
+    <Label value="desktop corner 1" background="#ff0010" />
+    <Label value="left hip" background="#ff0010" />
+    <Label value="lower lip inter edge 1" background="#ff0010" />
+    <Label value="midleg right second segment" background="#ff0010" />
+    <Label value="thumb's second knuckle" background="#ff000f" />
+    <Label value="left cheek 5" background="#ff000f" />
+    <Label value="right eyebrow 5" background="#ff000f" />
+    <Label value="wing right" background="#ff000f" />
+    <Label value="headboard lefttop" background="#ff000f" />
+    <Label value="pinky finger's first knuckle" background="#ff000f" />
+    <Label value="elbow left" background="#ff000e" />
+    <Label value="pinky finger's root" background="#ff000e" />
+    <Label value="midleg right base" background="#ff000e" />
+    <Label value="right sleeve" background="#ff000e" />
+    <Label value="lower lip outer edge 2" background="#ff000e" />
+    <Label value="right side outside 2" background="#ff000e" />
+    <Label value="rotatingbase 2" background="#ff000e" />
+    <Label value="right eye lower eyelid 2" background="#ff000e" />
+    <Label value="pinky finger's third knuckle" background="#ff000d" />
+    <Label value="right cheekbone 2" background="#ff000d" />
+    <Label value="left eye lower eyelid 1" background="#ff000d" />
+    <Label value="crotch" background="#ff000d" />
+    <Label value="base lefttop" background="#ff000d" />
+    <Label value="headboard righttop" background="#ff000d" />
+    <Label value="middle finger's third knuckle" background="#ff000d" />
+    <Label value="roof back left" background="#ff000d" />
+    <Label value="desktop corner 2" background="#ff000c" />
+    <Label value="backrest righttop" background="#ff000c" />
+    <Label value="armrests leftbottomcorner" background="#ff000c" />
+    <Label value="midleg right tip" background="#ff000c" />
+    <Label value="left side inside 1" background="#ff000c" />
+    <Label value="right rear wheel center" background="#ff000c" />
+    <Label value="left chin" background="#ff000c" />
+    <Label value="left sleeve outside 4" background="#ff000c" />
+    <Label value="left cheek 4" background="#ff000c" />
+    <Label value="eye right" background="#ff000c" />
+    <Label value="upper center neckline" background="#ff000b" />
+    <Label value="nasal bridge 2" background="#ff000b" />
+    <Label value="rotatingbase 4" background="#ff000b" />
+    <Label value="wing left" background="#ff000b" />
+    <Label value="ankle left " background="#ff000b" />
+    <Label value="upper center" background="#ff000b" />
+    <Label value="nose" background="#ff000b" />
+    <Label value="right front wheel center" background="#ff000b" />
+    <Label value="right eye upper eyelid 2" background="#ff000b" />
+    <Label value="front right" background="#ff000b" />
+    <Label value="upper lip" background="#ff000b" />
+    <Label value="wrist left" background="#ff000b" />
+    <Label value="armrests rightbottomcorner" background="#ff000a" />
+    <Label value="foreleg left second segment" background="#ff000a" />
+    <Label value="left eye upper eyelid 2" background="#ff000a" />
+    <Label value="right sleeve inside 3" background="#ff000a" />
+    <Label value="right eye right" background="#ff000a" />
+    <Label value="right wrist" background="#ff000a" />
+    <Label value="right cheek 3" background="#ff000a" />
+    <Label value="lip left" background="#ff000a" />
+    <Label value="foreleg right base" background="#ff000a" />
+    <Label value="right side 2" background="#ff000a" />
+    <Label value="lower right center neckline" background="#ff000a" />
+    <Label value="rotatingbase 3" background="#ff000a" />
+    <Label value="right eyebrow 2" background="#ff000a" />
+    <Label value="knee left" background="#ff0009" />
+    <Label value="thumb's third knuckle" background="#ff0009" />
+    <Label value="antbase left" background="#ff0009" />
+    <Label value="hindleg left base" background="#ff0009" />
+    <Label value="left side 6" background="#ff0009" />
+    <Label value="right side 6" background="#ff0009" />
+    <Label value="table leg 3" background="#ff0009" />
+    <Label value="rotatingbase 5" background="#ff0009" />
+    <Label value="middle finger's second knuckle" background="#ff0009" />
+    <Label value="table leg 2" background="#ff0009" />
+    <Label value="head mid top" background="#ff0009" />
+    <Label value="tail top back" background="#ff0009" />
+    <Label value="backrest lefttop" background="#ff0009" />
+    <Label value="forefinger's root" background="#ff0009" />
+    <Label value="upper lip outer edge 1" background="#ff0009" />
+    <Label value="right knee" background="#ff0009" />
+    <Label value="thumb's first knuckle" background="#ff0009" />
+    <Label value="elbow right" background="#ff0008" />
+    <Label value="desktop corner 4" background="#ff0008" />
+    <Label value="right eye eye corner 1" background="#ff0008" />
+    <Label value="hindleg right tip" background="#ff0008" />
+    <Label value="foreleg left first segment" background="#ff0008" />
+    <Label value="lower lip inter edge 2" background="#ff0008" />
+    <Label value="lower lip" background="#ff0008" />
+    <Label value="root of tail" background="#ff0008" />
+    <Label value="front left" background="#ff0008" />
+    <Label value="left side outside 3" background="#ff0008" />
+    <Label value="base righttop" background="#ff0008" />
+    <Label value="right nasal wing 2" background="#ff0008" />
+    <Label value="tail end back" background="#ff0008" />
+    <Label value="right cheek 5" background="#ff0008" />
+    <Label value="left front paw" background="#ff0008" />
+    <Label value="base leftbottom" background="#ff0008" />
+    <Label value="right mouth corner" background="#ff0008" />
+    <Label value="hindleg right second segment" background="#ff0008" />
+    <Label value="foreleg left base" background="#ff0008" />
+    <Label value="right back paw" background="#ff0008" />
+    <Label value="roof front right" background="#ff0008" />
+    <Label value="right side outside 3" background="#ff0008" />
+    <Label value="hip left" background="#ff0007" />
+    <Label value="right sleeve outside 4" background="#ff0007" />
+    <Label value="midleg left first segment" background="#ff0007" />
+    <Label value="right nasal wing 1" background="#ff0007" />
+    <Label value="left eye right" background="#ff0007" />
+    <Label value="base rightbottom" background="#ff0007" />
+    <Label value="left nasal wing 2" background="#ff0007" />
+    <Label value="right cuff inside" background="#ff0007" />
+    <Label value="foreleg right tip" background="#ff0007" />
+    <Label value="tail mid back" background="#ff0007" />
+    <Label value="right cheekbone 1" background="#ff0007" />
+    <Label value="left cuff inside" background="#ff0007" />
+    <Label value="right side inside 2" background="#ff0007" />
+    <Label value="hindleg left second segment" background="#ff0007" />
+    <Label value="anttip left" background="#ff0007" />
+    <Label value="left cheek 1" background="#ff0007" />
+    <Label value="mouth front top" background="#ff0007" />
+    <Label value="torso mid back" background="#ff0007" />
+    <Label value="right ankle" background="#ff0007" />
+    <Label value="right ear" background="#ff0007" />
+    <Label value="right elbow" background="#ff0007" />
+    <Label value="lower left neckline" background="#ff0007" />
+    <Label value="ring finger's first knuckle" background="#ff0007" />
+    <Label value="lower lip outer edge 5" background="#ff0007" />
+    <Label value="right eyebrow 4" background="#ff0007" />
+    <Label value="right cheek 2" background="#ff0007" />
+    <Label value="middle finger's first knuckle" background="#ff0007" />
+    <Label value="hindleg left first segment" background="#ff0006" />
+    <Label value="upper lip outer edge 2" background="#ff0006" />
+    <Label value="right sleeve inside 1" background="#ff0006" />
+    <Label value="table leg 4" background="#ff0006" />
+    <Label value="left shoulder" background="#ff0006" />
+    <Label value="right sleeve outside 3" background="#ff0006" />
+    <Label value="right sleeve outside 1" background="#ff0006" />
+    <Label value="foreleg right second segment" background="#ff0006" />
+    <Label value="antbase right" background="#ff0006" />
+    <Label value="upper lip inter edge 2" background="#ff0006" />
+    <Label value="midleg right first segment" background="#ff0006" />
+    <Label value="lower lip outer edge 4" background="#ff0006" />
+    <Label value="lower lip inter edge 3" background="#ff0006" />
+    <Label value="wrist" background="#ff0006" />
+    <Label value="armrests righttopcorner" background="#ff0006" />
+    <Label value="armrests lefttopcorner" background="#ff0006" />
+    <Label value="left eye eye corner 1" background="#ff0006" />
+    <Label value="foreleg right first segment" background="#ff0006" />
+    <Label value="right side inside 1" background="#ff0006" />
+    <Label value="left side 2" background="#ff0006" />
+    <Label value="left ankle" background="#ff0006" />
+    <Label value="left sleeve inside 3" background="#ff0006" />
+    <Label value="right sleeve inside 2" background="#ff0006" />
+    <Label value="right eye eye corner 2" background="#ff0006" />
+    <Label value="ring finger's root" background="#ff0006" />
+    <Label value="midleg left second segment" background="#ff0006" />
+    <Label value="upper lip outer edge 5" background="#ff0006" />
+    <Label value="right eye left" background="#ff0006" />
+    <Label value="hindleg left tip" background="#ff0006" />
+    <Label value="nose tip" background="#ff0006" />
+    <Label value="eye left" background="#ff0006" />
+    <Label value="hindleg right base" background="#ff0006" />
+    <Label value="left side 3" background="#ff0006" />
+    <Label value="left sleeve outside 3" background="#ff0006" />
+    <Label value="upper lip inter edge 1" background="#ff0006" />
+    <Label value="legs lefttopcorner" background="#ff0006" />
+    <Label value="desktop corner 3" background="#ff0005" />
+    <Label value="forefinger's first knuckle" background="#ff0005" />
+    <Label value="lower center neckline" background="#ff0005" />
+    <Label value="abdomen" background="#ff0005" />
+    <Label value="anttip right" background="#ff0005" />
+    <Label value="left cheekbone 2" background="#ff0005" />
+    <Label value="upper lip inter edge 4" background="#ff0005" />
+    <Label value="right side 4" background="#ff0005" />
+    <Label value="right side 5" background="#ff0005" />
+    <Label value="neck" background="#ff0005" />
+    <Label value="nasal bridge 1" background="#ff0005" />
+    <Label value="left side outside 2" background="#ff0005" />
+    <Label value="lower left center neckline" background="#ff0005" />
+    <Label value="ring finger's second knuckle" background="#ff0005" />
+    <Label value="right cheek 1" background="#ff0005" />
+    <Label value="ankle right" background="#ff0005" />
+    <Label value="right eyebrow 1" background="#ff0005" />
+    <Label value="back right" background="#ff0005" />
+    <Label value="back left" background="#ff0005" />
+    <Label value="base center" background="#ff0005" />
+    <Label value="forefinger's second knuckle" background="#ff0005" />
+    <Label value="upper left neckline" background="#ff0005" />
+    <Label value="upper lip outer edge 3" background="#ff0005" />
+    <Label value="rotatingbase 1" background="#ff0005" />
+    <Label value="rotatingbase center" background="#ff0005" />
+    <Label value="upper lip inter edge 5" background="#ff0005" />
+  </KeyPointLabels>
+</View>

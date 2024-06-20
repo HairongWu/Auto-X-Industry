@@ -1,0 +1,35 @@
+title: Create From Docs
+type: community
+group: Knowledge Creation
+image: /static/templates/Docs2KG.jpg
+details: <h1>Label exact products on the shelves</h1>
+config: |
+  <View>
+    <Labels name="label" toName="text">
+      <Label value="PER" background="red"/>
+      <Label value="ORG" background="darkorange"/>
+      <Label value="LOC" background="orange"/>
+      <Label value="MISC" background="green"/>
+    </Labels>
+    <Taxonomy name="taxonomy" toName="text">
+      <Choice value="Archaea" />
+      <Choice value="Bacteria" />
+      <Choice value="Eukarya">
+        <Choice value="Human" />
+        <Choice value="Opossum" />
+        <Choice value="Extraterrestrial" />
+      </Choice>
+    </Taxonomy>
+    <Relations>
+      <Relation value="org:founded_by"/>
+      <Relation value="org:founded"/>
+    </Relations>
+    <Labels name="label" toName="text">
+      <Label value="Organization" background="orange"/>
+      <Label value="Person" background="green"/>
+      <Label value="Datetime" background="blue"/>
+    </Labels>
+    <Text name="text" value="$text"/>
+    <HyperText name="pdf" value="$pdf" inline="true"/>
+  </View>
+ 

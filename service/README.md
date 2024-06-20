@@ -4,67 +4,10 @@ Auto-X Service provides interactive autonomous services for practical industrial
 
 ## Auto IoT Solution
 
-### Agents
-- Auto-X AI Server
-- Eclipse Ditto
-- Auto-X Studio
-- Auto-X ERP
-
-### Asset List
-- Building Asset
-- City Asset
-- Parking Asset
-- Room Asset
-- Ship Asset
-
-- Electric Vehicle Asset
-- Electricity Asset (Provider and Consumer)
-- Gas Asset (Provider and Consumer)
-- Water Asset (Provider and Consumer)
-- Gauge Asset
-- Light Asset
-- PV Solar Asset
-- Wind Turbine Asset
-- Weather Asset
-- Environment Sensor Asset
-
-- People Counter Asset
-- Drone Asset
-
-### Widgets for Visualization
-- Image
-- Line Chart
-- Gauge
-- Table
-- Map
-- Gateway
-- Attribute
-- KPI
-- Report
-- Drone Mission Planner
-
-### Quick Start
-1. Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed (v18+) and started. 
-2. Install JDK17
-3. change to the 'iot' folder and run CMD:
-```
-./gradlew clean installDist
-docker-compose -p openremote -f profile/dev-ui.yml up --build -d
-```
-4. If all goes well then you should now be able to access the OpenRemote Manager UI at https://localhost. 
-   The default login is username 'admin' with password 'secret'.
-
-### Tutorials
+Please refer to [here](https://github.com/HairongWu/Auto-X-IoT) for details.
 
 
 ## Auto System Development
-
-### Features
-- integrate with Auto-X AI Server
-- import legacy systems and generate technical documets
-- regenerate systems using technical documents
-- auto building, unit testing and bug reporting
-- initial codebase with technical documets
 
 Please refer to [here](https://github.com/HairongWu/auto-intellij-community) to setup the build envireonment.
 
