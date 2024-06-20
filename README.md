@@ -19,7 +19,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 Not stable for now. Please wait for the first release.
 Contributors and Sponsors are welcomed.
 
-## Release Plans
+## Service Release Plans
 
 - [X] Initialize codebase
 
