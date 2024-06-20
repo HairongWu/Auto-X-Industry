@@ -1,3 +1,0 @@
-[
-{"model": "execute.dataexport", "fields": {"name":"forecastreport.csv.gz","report":"freppledb.forecast.views.OverviewReport","arguments":{"buckets": "month", "horizontype": true, "horizonunit": "month", "horizonlength": 6}}}
-]

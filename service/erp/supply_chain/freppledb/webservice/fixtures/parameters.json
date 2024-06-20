@@ -1,3 +1,0 @@
-[
-{"pk": "plan.webservice", "model": "common.parameter", "fields": {"value": "true", "description": "Specifies whether to use the web service or not"}}
-]

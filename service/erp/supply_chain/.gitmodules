@@ -1,4 +1,0 @@
-[submodule "freppledb/odoo/odoo_addon"]
-	path = freppledb/odoo/odoo_addon
-	url = https://github.com/frepple/odoo.git
-	branch = 14.0

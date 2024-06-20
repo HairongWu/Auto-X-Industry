@@ -10,10 +10,6 @@ import "./CreateProject.styl";
 import { ImportPage } from "./Import/Import";
 import { useImportPage } from "./Import/useImportPage";
 import { useDraftProject } from "./utils/useDraftProject";
-import { Select } from "../../components/Form";
-import { EnterpriseBadge } from "../../components/Badges/Enterprise";
-import { Caption } from "../../components/Caption/Caption";
-import { FF_LSDV_E_297, isFF } from "../../utils/feature-flags";
 
 const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, setDescription, show = true }) =>
   !show ? null : (

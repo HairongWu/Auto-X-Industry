@@ -2,12 +2,6 @@
 
 Auto-X Studio is based on Label Studio and provides full functions to build AI solutions from the start.
 
-It has the following features:
-- full workflow to build models: pre-labeling, labeling manually, fine-tuning/training and deploy
-- built-in solution templates
-- support knowledge graph creation tasks
-- support data scraping tasks
-
 ## Install for local development
 
 You can run the latest Auto-X Studio locally without installing the package. 

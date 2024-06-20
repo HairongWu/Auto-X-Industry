@@ -19,17 +19,24 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 Not stable for now. Please wait for the first release.
 Contributors and Sponsors are welcomed.
 
+## Auto-X Studio
+
+- [ ] full workflow to build models: pre-labeling, labeling manually, fine-tuning/pre-training and deployment
+- [ ] built-in solution templates
+- [ ] support three types of knowledge graph creation tasks: from docs, from websites, and from search engine
+- [ ] integrate with Auto-X Server
+
 ## Service Release Plans
 
 - [X] Initialize codebase
 
-- [ ] Release Auto IoT， eg. Energy, Real Estate,... (based on OpenRemote)
+- [ ] Release [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT)， eg. Energy, Real Estate,... (based on OpenRemote)
 
-- [ ] Release Auto System Development (based on IntelliJ IDEA Community)
+- [ ] Release [Auto-X IDE](https://github.com/HairongWu/auto-intellij-community) (based on IntelliJ IDEA Community)
 
-- [ ] Release Auto ERP (based on Odoo)
+- [ ] Release [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP) (based on Odoo)
 
-- [ ] Release Auto-X Clinic (based on OpenClinic GA and Open Hospital)
+- [ ] Release [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
 
 
 ## Other Plans
