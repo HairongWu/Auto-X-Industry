@@ -7,7 +7,7 @@
 
 Auto-X for Industries is an autonomous solution that aims to solve the following challenges:
 
-- High running cost and low efficiency for practical industrial uses with current AI services. Customers often defer to use GPUs for some reasons.
+- High running cost and low efficiency for practical industrial uses with current AI services. Customers sometimes defer to use GPUs for some reasons.
 - Difficult to annotate/pretrain/finetune for specific scenarios using private datasets with most of current AI services
 - Insufficient accuracy and safety for industrial scenarios with current AI services. In some cases, you should use on-premise services only.
 - Only part of the business processes can be automated with existing services. A mixed of AI serives can often reduce efficiency and accuracy. 
@@ -18,6 +18,18 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 Not stable for now. Please wait for the first release.
 Contributors and Sponsors are welcomed.
+
+## Auto-X Server
+
+- [ ] Provides all the AI pipelines needed by Auto-X Studio and Auto-X Services
+
+## Auto-X Engine
+
+- [ ] Big models (llama2, whisper, ...)
+- [ ] Tiny models (picodet, paddleocr, ...)
+- [ ] Convert pre-trained models to Auto-X Engine Codes
+- [ ] Demos (timer camera, drone, robot, ...)
+- [ ] Auto-X RTOS (based on NuttX)
 
 ## Auto-X Studio
 
