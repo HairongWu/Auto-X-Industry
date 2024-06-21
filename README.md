@@ -21,7 +21,7 @@ Contributors and Sponsors are welcomed.
 
 ## Auto-X Server
 
-- [ ] Provides all the AI pipelines needed by Auto-X Studio and Auto-X Services
+- [ ] Provides all the AI pipelines and antonomous agents needed by Auto-X Studio and Auto-X Services
 
 ## Auto-X Engine
 
@@ -33,9 +33,9 @@ Contributors and Sponsors are welcomed.
 
 ## Auto-X Studio
 
-- [ ] Full workflow to build models: pre-labeling, labeling manually, fine-tuning/pre-training and deployment
+- [ ] Full workflow to build solution oriented models: pre-labeling, labeling manually, fine-tuning/pre-training and deployment
 - [ ] Built-in solution templates
-- [ ] Support three types of knowledge graph creation tasks: from docs, from websites, and from search engine
+- [ ] Support two types of knowledge graph creation tasks: from docs, and from websites
 - [ ] Integrate with Auto-X Server
 
 ## Service Release Plans
