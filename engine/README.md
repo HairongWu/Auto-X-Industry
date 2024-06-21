@@ -46,13 +46,14 @@ Get more information about the hardware at [Timer Camera X](https://docs.m5stack
 
 To send image data to Auto-X IoT, please refer to [here](./demos/M5StackTimerCamera/).
 
-###  Raspberry Pi 4 Navio2 Autopilot
+###  Raspberry Pi 4 Navio2
 
 Get more information about the hardware at [Navio2](https://docs.px4.io/main/en/flight_controller/raspberry_pi_navio2.html)
 <div  align="center">
   <img src="../assets/navio2-and-RP4-ebef5594.webp" width="200"/>
 </div>
 This demo simulates the following industrial scenarios:
+
 1. Schedule the drone to autonomously collect images of specified objects at some specified places with Auto-X Engine.
 2. Exchange drone status with Auto-X IoT during the flight
 3. Upload the collected images to Auto-X IoT when drone goes home

@@ -1,5 +1,9 @@
 Computer Vision
+Natural Language Processing
+Audio/Speech Processing
+Conversational AI
+Ranking & Scoring
+Structured Data Parsing
 Time Series Analysis
-Virtual Huamn
-Knowledge Creation
-Development
+Videos
+Generative AI

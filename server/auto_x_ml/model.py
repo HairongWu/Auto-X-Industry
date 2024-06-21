@@ -6,6 +6,7 @@ import json
 import importlib
 import importlib.util
 import inspect
+import xml.etree.ElementTree as ET
 
 try:
     import torch.multiprocessing as mp
@@ -23,9 +24,12 @@ from typing import Tuple, Callable, Union, List, Dict, Optional
 from abc import ABC
 from colorama import Fore
 
-from label_studio_sdk.label_interface import LabelInterface
-from label_studio_tools.core.label_config import parse_config
-from label_studio_tools.core.utils.io import get_local_path
+from label_studio_sdk.client import LabelStudio
+from label_studio_sdk._extensions.label_studio_tools.core.utils.io import (
+    get_local_path,
+    _DIR_APP_NAME,
+)
+
 from .response import ModelResponse
 from .utils import is_preload_needed
 from .cache import create_cache
@@ -36,11 +40,17 @@ CACHE = create_cache(
     os.getenv('CACHE_TYPE', 'sqlite'),
     path=os.getenv('MODEL_DIR', '.'))
 
+API_KEY = (
+        ''
+)
+LABEL_STUDIO_URL = (
+        'http://127.0.0.1:8080/'
+)
 
 # Decorator to register predict function
 _predict_fn: Callable = None
 _update_fn: Callable = None
-
+_generate_fn: Callable = None
 
 def predict_fn(f):
     global _predict_fn
@@ -55,6 +65,11 @@ def update_fn(f):
     logger.info(f'{Fore.GREEN}Update function "{_update_fn.__name__}" registered{Fore.RESET}')
     return f
 
+def generate_fn(f):
+    global _generate_fn
+    _generate_fn = f
+    logger.info(f'{Fore.GREEN}Update function "{_generate_fn.__name__}" registered{Fore.RESET}')
+    return f
 
 class AutoXMLBase(ABC):
     """
@@ -78,8 +93,10 @@ class AutoXMLBase(ABC):
             project_id (str, optional): The project ID. Defaults to None.
         """
         self.project_id = project_id or ''
+        # Connect to the Label Studio API and check the connection
+        self.label_studio = LabelStudio(base_url=LABEL_STUDIO_URL, api_key=API_KEY)
+        
         self.use_label_config(label_config)
-
         # set initial model version
         if not self.model_version:
             self.set("model_version", self.INITIAL_MODEL_VERSION)
@@ -94,8 +111,17 @@ class AutoXMLBase(ABC):
         """
         
         # self.set("model_version", "0.0.2")
-        
-        
+
+    def get_config_item(self, node_str):
+        current_label_config = self.get('label_config')    
+        root = ET.fromstring(current_label_config)
+        for node in root.findall(node_str):
+            name = node.get('name')
+            toname = node.get('toName')
+            if name != None and toname != None:
+                return name, toname
+        return None, None
+            
     def use_label_config(self, label_config: str):
         """
         Apply label configuration and set the model version and parsed label config.
@@ -103,8 +129,7 @@ class AutoXMLBase(ABC):
         Args:
             label_config (str): The label configuration.
         """
-        self.label_interface = LabelInterface(config=label_config)
-        
+
         # if not current_label_config:
             # first time model is initialized
             # self.set('model_version', 'INITIAL')                            
@@ -112,9 +137,7 @@ class AutoXMLBase(ABC):
         current_label_config = self.get('label_config')    
         # label config has been changed, need to save
         if current_label_config != label_config:
-            self.set('label_config', label_config)
-            self.set('parsed_label_config', json.dumps(parse_config(label_config)))        
-            
+            self.set('label_config', label_config)   
 
     def set_extra_params(self, extra_params):
         """Set extra parameters. Extra params could be used to pass
@@ -154,10 +177,6 @@ class AutoXMLBase(ABC):
     @property
     def label_config(self):
         return self.get('label_config')
-
-    @property
-    def parsed_label_config(self):        
-        return json.loads(self.get('parsed_label_config'))
 
     @property
     def model_version(self):
@@ -200,35 +219,37 @@ class AutoXMLBase(ABC):
         # if there is a registered predict function, use it
         if _predict_fn:
             return _predict_fn(tasks, context, helper=self, **kwargs)
-
-    def process_event(self, event, data, job_id, additional_params):
+    
+     # @abstractmethod
+    def generate(self) -> Union[List[Dict], ModelResponse]:
         """
-        Process a given event. If event is of TRAIN type, start fitting the model.
+        Predict and return a list of dicts with predictions for each task.
 
         Args:
-          event: Current event to process.
-          data: The data relevant to the event.
-          job_id: ID of the job related to the event.
-          additional_params: Additional parameters to be processed.
-        """
-        if event in self.TRAIN_EVENTS:
-            logger.debug(f'Job {job_id}: Received event={event}: calling {self.__class__.__name__}.fit()')
-            train_output = self.fit(event=event, data=data, job_id=job_id, **additional_params)
-            logger.debug(f'Job {job_id}: Train finished.')
-            return train_output
+            tasks (list[dict]): A list of tasks.
+            context (dict, optional): A dictionary with additional context. Defaults to None.
+            kwargs: Additional parameters passed on to the predict function.
 
-    def fit(self, event, data, **additional_params):
+        Returns:
+            list[dict]: A list of dictionaries containing predictions.                
+        """
+
+        # if there is a registered predict function, use it
+        if _generate_fn:
+            return _generate_fn()
+
+
+    def train(self, tasks, data, **additional_params):
         """
         Fit/update the model based on the specified event and data.
 
         Args:
-          event: The event for which the model is fitted.
           data: The data on which the model is fitted.
           additional_params: Additional parameters (params after ** are optional named parameters)
         """
         # if there is a registered update function, use it
         if _update_fn:
-            return _update_fn(event, data, helper=self, **additional_params)
+            return _update_fn(tasks, data, helper=self, **additional_params)
 
     def get_local_path(self, url, project_dir=None, ls_host=None, ls_access_token=None, task_id=None, *args, **kwargs):
         """

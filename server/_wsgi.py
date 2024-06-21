@@ -62,13 +62,6 @@ if __name__ == "__main__":
         help='Logging level')
     
     parser.add_argument(
-        '--groundingdino_model', dest='groundingdino_model', default="../../model_pool/groundingdino_swint_ogc.pth",
-        help='Directory where models are stored (relative to the project directory)')
-    parser.add_argument(
-        '--pose_model', dest='pose_model', default="../../model_pool/unipose_swint.pth",
-        help='Directory where models are stored (relative to the project directory)')
-    
-    parser.add_argument(
         '--check', dest='check', action='store_true',
         help='Validate model instance before launching server')
     parser.add_argument('--basic-auth-user',
@@ -112,23 +105,20 @@ if __name__ == "__main__":
     if args.kwargs:
         kwargs.update(parse_kwargs())
 
-    os.environ['groundingdino_model'] = args.groundingdino_model
-    os.environ['pose_model'] = args.pose_model
+    os.environ['MODEL_POOL_DIR'] = "../../model_pool/"
 
-    os.environ['ram_model'] = "../../model_pool/ram_plus_swin_large_14m.pth"
-    os.environ['ram_img_size'] = 384
+    os.environ['groundingdino_model'] = os.environ.get("MODEL_POOL_DIR") + "groundingdino_swint_ogc.pth"
+    os.environ['pose_model'] = os.environ.get("MODEL_POOL_DIR") + "unipose_swint.pth"
 
-    os.environ['videollama2_model_dir'] = "../../model_pool/VideoLLaMA2-7B-Base"
+    os.environ['ram_model'] = os.environ.get("MODEL_POOL_DIR") + "ram_plus_swin_large_14m.pth"
 
-    os.environ['det_model_dir'] = "../../model_pool/ch_PP-OCRv4_det_server_infer"
-    os.environ['cls_model_dir'] = "../../model_pool/ch_ppocr_mobile_v2.0_cls_infer"
-    os.environ['rec_model_dir'] = "../../model_pool/ch_PP-OCRv4_rec_server_infer"
-    os.environ['table_model_dir'] = "../../model_pool/ch_ppstructure_mobile_v2.0_SLANet_infer"
-    os.environ['layout_model_dir'] = "../../model_pool/picodet_lcnet_x1_0_fgd_layout_infer"
+    os.environ['videollama2_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "VideoLLaMA2-7B-Base"
 
-    os.environ['layout_dict_path'] = "./auto_x_ml/modules/utils/dict/layout_dict/layout_publaynet_dict.txt"
-    os.environ['rec_char_dict_path'] = "./auto_x_ml/modules/utils/ppocr_keys_v1.txt"
-    os.environ['table_char_dict_path'] = "./auto_x_ml/modules/utils/dict/table_structure_dict_ch.txt"
+    os.environ['det_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_det_server_infer"
+    os.environ['cls_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppocr_mobile_v2.0_cls_infer"
+    os.environ['rec_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_rec_server_infer"
+    os.environ['table_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppstructure_mobile_v2.0_SLANet_infer"
+    os.environ['layout_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "picodet_lcnet_x1_0_fgd_layout_infer"
 
     from auto_x import AutoSolution
 

@@ -2,14 +2,12 @@
 from typing import Type, Dict, Optional, List, Tuple, Any, Union
 from pydantic import BaseModel, confloat
 
-from label_studio_sdk.objects import PredictionValue
-
 
 class ModelResponse(BaseModel):
     """
     """
     model_version: Optional[str] = None
-    predictions: List[PredictionValue]
+    predictions: List[Any]
 
     def has_model_version(self) -> bool:
         return bool(self.model_version)

@@ -1,0 +1,18 @@
+{
+  "train": [
+    {
+      "root": "E:/dataset/4train/det/coco/train/",
+      "anno": "E:/dataset/4train/det/coco/annotations/detection_train.jsonl",
+      "label_map": "E:/dataset/4train/det/coco/annotations/coco2017_label_map.json",
+      "dataset_mode": "odvg"
+    }
+  ],
+  "val": [
+    {
+      "root": "E:/dataset/4train/det/coco/val",
+      "anno": "E:/dataset/4train/det/coco/annotations/detection_val.json",
+      "label_map": null,
+      "dataset_mode": "coco"
+    }
+  ]
+}

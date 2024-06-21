@@ -26,17 +26,17 @@ Contributors and Sponsors are welcomed.
 ## Auto-X Engine
 
 - [ ] Big models (llama2, whisper, ...)
-- [ ] Tiny models (picodet, paddleocr, ...)
-- [ ] Convert pre-trained models to Auto-X Engine Codes
+- [ ] Tiny models (picodet, tinypose, ...)
+- [ ] Convert pre-trained models to Auto-X Model File
 - [ ] Demos (timer camera, drone, robot, ...)
 - [ ] Auto-X RTOS (based on NuttX)
 
 ## Auto-X Studio
 
-- [ ] full workflow to build models: pre-labeling, labeling manually, fine-tuning/pre-training and deployment
-- [ ] built-in solution templates
-- [ ] support three types of knowledge graph creation tasks: from docs, from websites, and from search engine
-- [ ] integrate with Auto-X Server
+- [ ] Full workflow to build models: pre-labeling, labeling manually, fine-tuning/pre-training and deployment
+- [ ] Built-in solution templates
+- [ ] Support three types of knowledge graph creation tasks: from docs, from websites, and from search engine
+- [ ] Integrate with Auto-X Server
 
 ## Service Release Plans
 
@@ -49,6 +49,8 @@ Contributors and Sponsors are welcomed.
 - [ ] Release [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP) (based on Odoo)
 
 - [ ] Release [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
+
+- [ ] Release [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)
 
 
 ## Other Plans
@@ -68,3 +70,4 @@ Contributors and Sponsors are welcomed.
 - [flutter-webrtc](https://github.com/flutter-webrtc/flutter-webrtc)
 - [OpenClinic GA](https://sourceforge.net/projects/open-clinic/)
 - [Open Hospital](https://github.com/informatici/openhospital)
+- [SWIRL AI Connect](https://github.com/swirlai/swirl-search)

@@ -1,4 +1,4 @@
-# Auto-X AI Server
+# Auto-X Server
 
 
 This projects is originally based on label-studio-ml-backend, so it is compatible with label-studio interfaces.
@@ -21,10 +21,10 @@ The prediction tasks, training tasks, and LLM-based web scraping tasks can be us
 pip install -r requirements.txt
 ```
 
-6. Set the model paths and start server for test purposes
+6. Set the 'model_pool' paths in '_wsgi.py' and start server for test purposes
 
 ```bash
-python _wsgi.py --log-level DEBUG --groundingdino_model xxx --pose_model xxx
+python _wsgi.py --log-level DEBUG
 ```
 
 ## References
@@ -52,7 +52,6 @@ python _wsgi.py --log-level DEBUG --groundingdino_model xxx --pose_model xxx
 
 - [V-Express](https://github.com/tencent-ailab/V-Express)
 
-- [Perplexica](https://github.com/ItzCrazyKns/Perplexica)
 - [ScrapeGraphAI](https://github.com/VinciGit00/Scrapegraph-ai)
 - [crawl4ai](https://github.com/unclecode/crawl4ai)
 
