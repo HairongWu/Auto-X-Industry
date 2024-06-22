@@ -87,10 +87,6 @@ export const ErrorWrapper = ({
 
       <Elem name="actions">
         <Space spread>
-          <Elem tag={Button} name="action-slack" target="_blank" icon={<LsSlack />} href={SLACK_INVITE_URL}>
-            Ask on Slack
-          </Elem>
-
           <Space size="small">
             {preparedStackTrace && (
               <Button disabled={copied} onClick={copyStacktrace} style={{ width: 180 }}>

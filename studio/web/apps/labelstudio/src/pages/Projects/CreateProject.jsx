@@ -77,7 +77,7 @@ export const CreateProject = ({ onClose }) => {
 
   const onCreate = React.useCallback(async () => {
     setWaitingStatus(true);
-    const response = await api.callApi("updateProject", {
+    const response = await api.callApi("projectGenBackend", {
       params: {
         pk: project.id,
       },
