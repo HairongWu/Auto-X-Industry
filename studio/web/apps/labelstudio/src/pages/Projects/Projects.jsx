@@ -9,7 +9,7 @@ import { useContextProps } from "../../providers/RoutesProvider";
 import { useAbortController } from "../../hooks/useAbortController";
 import { Block, Elem } from "../../utils/bem";
 import { FF_DEV_2575, isFF } from "../../utils/feature-flags";
-import { CreateProject } from "./CreateProject";
+import { CreateProject } from "../CreateProject/CreateProject";
 import { DataManagerPage } from "../DataManager/DataManager";
 import { SettingsPage } from "../Settings";
 import "./Projects.styl";

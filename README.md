@@ -35,7 +35,7 @@ Contributors and Sponsors are welcomed.
 
 - [ ] Full workflow to build solution oriented models: pre-labeling, labeling manually, fine-tuning/pre-training and deployment
 - [ ] Built-in solution templates
-- [ ] Support two types of knowledge graph creation tasks: from docs, and from websites
+- [ ] Support two types of knowledge graph creation tasks: from documents, and from websites
 - [ ] Integrate with Auto-X Server
 
 ## Service Release Plans
@@ -46,14 +46,12 @@ Contributors and Sponsors are welcomed.
 
 - [ ] Release [Auto-X IDE](https://github.com/HairongWu/auto-intellij-community) (based on IntelliJ IDEA Community)
 
-- [ ] Release [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP) (based on Odoo)
-
-- [ ] Release [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
-
 - [ ] Release [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)
 
+- [ ] Release [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP) (based on Odoo)
 
 ## Other Plans
+- [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
 - Auto Finance (based on FinGPT)
 - Auto Insurance (based on openIMIS)
 - Auto EDA (based on KiCad)
@@ -67,7 +65,6 @@ Contributors and Sponsors are welcomed.
 - [openremote](https://github.com/openremote/openremote)
 - [IntelliJ IDEA Community Edition](https://github.com/JetBrains/intellij-community)
 - [Odoo](https://github.com/odoo/odoo)
-- [flutter-webrtc](https://github.com/flutter-webrtc/flutter-webrtc)
 - [OpenClinic GA](https://sourceforge.net/projects/open-clinic/)
 - [Open Hospital](https://github.com/informatici/openhospital)
 - [SWIRL AI Connect](https://github.com/swirlai/swirl-search)

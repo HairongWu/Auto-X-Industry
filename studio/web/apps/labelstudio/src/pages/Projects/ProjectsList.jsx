@@ -36,10 +36,10 @@ export const EmptyProjectsList = ({ openModal }) => {
     <Block name="empty-projects-page">
       <Elem name="heidi" tag="img" src={absoluteURL("/static/images/logo.png")} />
       <Elem name="header" tag="h1">
-        Connect to Auto-X Server to get the solution projects
+        You can also connect to Auto-X Server to get the available solution projects
       </Elem>
       <Elem name="action" tag={Button} onClick={openModal} look="primary">
-        Connect
+        Create
       </Elem>
     </Block>
   );
