@@ -1,19 +1,4 @@
-"""
-This script has functions and utilties for model export.
-Basically, we have a bunch of versions of the model, and we
-want to export them to .bin files to be read from and inferenced in C.
 
-Among the "input" versions of PyTorch files/models:
-- Official Llama 2 weights released by Meta
-- Huggingface weights available on the hub
-- llama2.c (this repo) trained models
-
-Among the "output" versions of .bin files:
-- v0: Legacy files of the original llama2.c repo (will eventually be DEPRECATED)
-- v1-vN: Improved .bin files with a proper header, cache alignment, etc.
-
-This script aspires to provide all of these conversions.
-"""
 import os
 import gzip
 import shutil
@@ -69,62 +54,6 @@ def quantize_q80(w, group_size):
     maxerr = err.max().item()
     return int8val, scale, maxerr
 
-# -----------------------------------------------------------------------------
-# legacy
-
-def legacy_export(model, filepath):
-    """ Original export of llama2.c bin files, i.e. version v0 """
-    out_file = open(filepath, 'wb')
-
-    # first write out the header
-    hidden_dim = model.layers[0].feed_forward.w1.weight.shape[0]
-    p = model.params
-    shared_classifier = torch.equal(model.tok_embeddings.weight, model.output.weight)
-    # legacy format uses negative/positive vocab size as a shared classifier flag
-    if not shared_classifier:
-        p.vocab_size = -p.vocab_size
-    n_kv_heads = p.n_heads if p.n_kv_heads is None else p.n_kv_heads
-    header = struct.pack('iiiiiii', p.dim, hidden_dim, p.n_layers, p.n_heads,
-                                    n_kv_heads, p.vocab_size, p.max_seq_len)
-    out_file.write(header)
-
-    # next write out the embedding weights
-    serialize_fp32(out_file, model.tok_embeddings.weight)
-
-    # now all the layers
-    # attention weights
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.attention_norm.weight)
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.attention.wq.weight)
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.attention.wk.weight)
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.attention.wv.weight)
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.attention.wo.weight)
-    # ffn weights
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.ffn_norm.weight)
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.feed_forward.w1.weight)
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.feed_forward.w2.weight)
-    for layer in model.layers:
-        serialize_fp32(out_file, layer.feed_forward.w3.weight)
-    # final rmsnorm
-    serialize_fp32(out_file, model.norm.weight)
-    # freqs_cis
-    serialize_fp32(out_file, model.freqs_cos[:p.max_seq_len])
-    serialize_fp32(out_file, model.freqs_sin[:p.max_seq_len])
-
-    # final classifier weights
-    if not shared_classifier:
-        serialize_fp32(out_file, model.output.weight)
-
-    # write to binary file
-    out_file.close()
-    print(f"wrote {filepath}")
 
 # -----------------------------------------------------------------------------
 # new version
@@ -493,14 +422,11 @@ def model_export(model, filepath, version, dtype=torch.float32):
     """
     Versions docs:
     v-1:huggingface export, i.e. intended for use outside of this repo, in HF
-    v0: legacy llama2.c float format, DEPRECATED
     v1: float32 export
     v2: int8 quantized Q8_0 export, similar to llama.cpp, in groups
     # TODO: add dtype export support for other versions (?)
     """
-    if version == 0:
-        legacy_export(model, filepath)
-    elif version == 1:
+    if version == 1:
         version1_export(model, filepath)
     elif version == 2:
         version2_export(model, filepath)
@@ -508,34 +434,6 @@ def model_export(model, filepath, version, dtype=torch.float32):
         hf_export(model, filepath, dtype)
     else:
         raise ValueError(f"unknown version {version}")
-
-def torchscript_export(model, filepath, zero_params=False, gzip_output=False):
-    """
-    (This was submitted via a PR earlier. Leaving it here, but "orphaned" for now)
-    Saves the model as a TorchScript.
-    The resulting file can be loaded in C++ code and then used for training or
-    inference with:
-        #include <torch/script.h>
-        torch::jit::Module module = torch::jit::load("model.pt")
-    Note that the serialized model includes the initial parameters and with the default
-    ModelArgs the file is 59M and gzips down to 55M. If you want to serialize/distribute
-    the model parameters separately you can zero out the parameters before saving it and
-    it will gzip down to 780K.
-    """
-
-    # If requested zero params before saving the model. This is useful in
-    # conjunction with gzip_output.
-    if zero_params:
-        for p in model.parameters():
-            p.detach().zero_()
-
-    torch.jit.save(torch.jit.script(model), filepath)
-
-    if gzip_output:
-        with open(filepath, "rb") as f_in:
-            with gzip.open(f"{filepath}.gz", "wb") as f_out:
-                shutil.copyfileobj(f_in, f_out)
-        os.unlink(filepath)
 
 # -----------------------------------------------------------------------------
 # CLI entrypoint

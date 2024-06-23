@@ -195,3 +195,30 @@ autox_err_t run_llama2(char* checkpoint_path, char* tokenizer_path, char* prompt
 
 	return err;
 }
+
+autox_err_t run_llama3(char* checkpoint_path, char* tokenizer_path, char* prompt)
+{
+	autox_err_t err = AUTOX_OK;
+	int max_new_tokens = 50; 
+
+	// build the Transformer via the model .bin file
+    Transformer transformer;
+    build_transformer(&transformer, checkpoint_path);
+    if (max_new_tokens > transformer.config.seq_len)
+        max_new_tokens = transformer.config.seq_len; // override to ~max length
+
+	// build the Tokenizer via the tokenizer .bin file
+	Tokenizer tokenizer;
+	err = build_tokenizer(&tokenizer, tokenizer_path, transformer.config.vocab_size);
+
+	char *pieces = (char*)malloc(25600);
+	err = llama3_generate(&pieces, &transformer, &tokenizer, prompt, max_new_tokens);
+	printf("%s", pieces);
+	// memory and file handles cleanup
+	free_tokenizer(&tokenizer);
+	free_transformer(&transformer);
+
+	free(pieces);
+
+	return err;
+}

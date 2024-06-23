@@ -8,3 +8,6 @@
 #define autox_softmax autox_softmax_ansi
 #define autox_argmax autox_argmax_ansi
 #define autox_swiglu autox_swiglu_ansi
+
+#define autox_accum autox_accum_ansi
+#define autox_rope_rotation autox_rope_rotation_ansi

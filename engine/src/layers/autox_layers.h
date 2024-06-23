@@ -96,3 +96,7 @@ int autox_sample(Sampler* sampler, float* logits);
 char* autox_tok_decode(Tokenizer* t, int prev_token, int token);
 int autox_tok_encode(Tokenizer* t, char *text, int8_t bos, int8_t eos, int *tokens, int *n_tokens);
 float* autox_transformer(Transformer* transformer, int token, int pos);
+
+float* autox_transformer3(Transformer* transformer, int token, int pos);
+void autox_multi_head_attention(int pos, int seq_len, float *sq, float *satt, float *sxb, float *key_cache,
+                                            float *value_cache, int kv_dim, int kv_mul, int head_size, int loff);

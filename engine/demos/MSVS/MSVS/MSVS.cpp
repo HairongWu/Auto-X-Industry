@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 	char prompt[256] = "One day, Lily met a Shoggoth";        // prompt string
 
 	run_llama2(checkpoint_path, tokenizer_path, prompt);
+	run_llama3(checkpoint_path, tokenizer_path, prompt);
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

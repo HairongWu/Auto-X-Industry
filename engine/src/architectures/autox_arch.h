@@ -34,3 +34,4 @@ typedef int autox_err_t;
 #define AUTOX_ERR_MEMPROT_BASE        0xd000  /*!< Starting number of Memory Protection API error codes */
 
 autox_err_t llama2_generate(char** pieces, Transformer *transformer, Tokenizer *tokenizer, Sampler *sampler, char *prompt, uint32_t steps);
+autox_err_t llama3_generate(char** pieces, Transformer *transformer, Tokenizer *tokenizer, char *prompt, int max_new_tokens);

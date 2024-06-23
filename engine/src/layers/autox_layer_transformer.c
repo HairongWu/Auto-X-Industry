@@ -153,3 +153,72 @@ float* autox_transformer(Transformer* transformer, int token, int pos) {
 	autox_matmul(x, w->wcls, s->logits, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
     return s->logits;
 }
+
+float *autox_transformer3(Transformer *transformer, int token, int pos) {
+    // a few convenience variables
+    Config *p = &transformer->config;
+    TransformerWeights *w = &transformer->weights;
+    RunState *s = &transformer->state;
+    float *x = s->x;
+    int dim = p->dim;
+    int kv_dim = (p->dim * p->n_kv_heads) / p->n_heads;
+    int kv_mul = p->n_heads / p->n_kv_heads; // integer multiplier of the kv sharing in multiquery
+    int hidden_dim = p->hidden_dim;
+    int head_size = dim / p->n_heads;
+
+    // copy the token embedding into x
+    float *content_row = w->token_embedding_table + token * dim;
+    memcpy(x, content_row, dim * sizeof(*x));
+
+    // forward all the layers
+    for (unsigned long long l = 0; l < p->n_layers; l++) {
+        // attention rmsnorm
+        autox_rmsnorm(s->xb, x, w->rms_att_weight + l * dim, dim);
+
+        // key and value point to the kv cache
+        int loff = l * p->seq_len * kv_dim; // kv cache layer offset for convenience
+        s->k = s->key_cache + loff + pos * kv_dim;
+        s->v = s->value_cache + loff + pos * kv_dim;
+
+        // qkv matmuls for this position
+        autox_matmul(s->q, s->xb, w->wq + l * dim * dim, dim, dim);
+        autox_matmul(s->k, s->xb, w->wk + l * dim * kv_dim, dim, kv_dim);
+        autox_matmul(s->v, s->xb, w->wv + l * dim * kv_dim, dim, kv_dim);
+
+        // RoPE relative positional encoding: complex-valued rotate q and k in each head
+        autox_rope_rotation(pos, s, dim, kv_dim, head_size);
+
+        // multihead attention. iterate over all heads
+        autox_multi_head_attention(pos, p, s, kv_dim, kv_mul, head_size, loff);
+
+        // final matmul to get the output of the attention
+        autox_matmul(s->xb2, s->xb, w->wo + l * dim * dim, dim, dim);
+
+        // residual connection back into x
+        autox_accum(x, s->xb2, dim);
+
+        // ffn rmsnorm
+        autox_rmsnorm(s->xb, x, w->rms_ffn_weight + l * dim, dim);
+
+        // Now for FFN in PyTorch we have: self.w2(F.silu(self.w1(x)) * self.w3(x))
+        // first calculate self.w1(x) and self.w3(x)
+        autox_matmul(s->hb, s->xb, w->w1 + l * dim * hidden_dim, dim, hidden_dim);
+        autox_matmul(s->hb2, s->xb, w->w3 + l * dim * hidden_dim, dim, hidden_dim);
+
+        // SwiGLU non-linearity
+        autox_swiglu(s, hidden_dim);
+
+        // final matmul to get the output of the ffn
+        autox_matmul(s->xb, s->hb, w->w2 + l * dim * hidden_dim, hidden_dim, dim);
+
+        // residual connection
+        autox_accum(x, s->xb, dim);
+    }
+
+    // final rmsnorm
+    autox_rmsnorm(x, x, w->rms_final_weight, dim);
+
+    // classifier into logits
+    autox_matmul(s->logits, x, w->wcls, p->dim, p->vocab_size);
+    return s->logits;
+}
