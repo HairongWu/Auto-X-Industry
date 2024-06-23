@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\architectures\autox_llama.c" />
+    <ClCompile Include="..\..\..\src\architectures\autox_whisper.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_accum.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_argmax.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_matmul.c" />
@@ -165,6 +166,7 @@
     <ClCompile Include="..\..\..\src\layers\autox_layer_transformer.c" />
     <ClCompile Include="llama_demo.cpp" />
     <ClCompile Include="MSVS.cpp" />
+    <ClCompile Include="whisper_demo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\architectures\autox_arch.h" />
@@ -174,6 +176,7 @@
     <ClInclude Include="..\..\..\src\kernels\autox_nn.h" />
     <ClInclude Include="..\..\..\src\layers\autox_layers.h" />
     <ClInclude Include="llama_demo.h" />
+    <ClInclude Include="whisper_demo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
