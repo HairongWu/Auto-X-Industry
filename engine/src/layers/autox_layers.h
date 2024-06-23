@@ -98,5 +98,5 @@ int autox_tok_encode(Tokenizer* t, char *text, int8_t bos, int8_t eos, int *toke
 float* autox_transformer(Transformer* transformer, int token, int pos);
 
 float* autox_transformer3(Transformer* transformer, int token, int pos);
-void autox_multi_head_attention(int pos, int seq_len, float *sq, float *satt, float *sxb, float *key_cache,
-                                            float *value_cache, int kv_dim, int kv_mul, int head_size, int loff);
+void autox_multi_head_attention(int n_heads, int pos, int seq_len, float *sq, float *satt, float *sxb, float *key_cache,
+	float *value_cache, int kv_dim, int kv_mul, int head_size, int loff);

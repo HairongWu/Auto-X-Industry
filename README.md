@@ -25,7 +25,7 @@ Contributors and Sponsors are welcomed.
 
 ## Auto-X Engine
 
-- [ ] Big models (llama2, whisper, ...)
+- [ ] Big models (llama3, whisper, ...)
 - [ ] Tiny models (picodet, tinypose, ...)
 - [ ] Convert pre-trained models to Auto-X Model File
 - [ ] Demos (timer camera, drone, robot, ...)

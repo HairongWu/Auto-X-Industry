@@ -151,16 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\architectures\autox_llama2.c" />
+    <ClCompile Include="..\..\..\src\architectures\autox_llama.c" />
+    <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_accum.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_argmax.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_matmul.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_rmsnorm.c" />
+    <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_rope_rotation.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_softmax.c" />
     <ClCompile Include="..\..\..\src\kernels\ansi\autox_nn_swiglu.c" />
+    <ClCompile Include="..\..\..\src\layers\autox_layer_multi_head_attention.c" />
     <ClCompile Include="..\..\..\src\layers\autox_layer_sampler.c" />
     <ClCompile Include="..\..\..\src\layers\autox_layer_tokenizer.c" />
     <ClCompile Include="..\..\..\src\layers\autox_layer_transformer.c" />
-    <ClCompile Include="llama2_demo.cpp" />
+    <ClCompile Include="llama_demo.cpp" />
     <ClCompile Include="MSVS.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,7 +173,7 @@
     <ClInclude Include="..\..\..\src\kernels\ansi\autox_nn_ansi_headers.h" />
     <ClInclude Include="..\..\..\src\kernels\autox_nn.h" />
     <ClInclude Include="..\..\..\src\layers\autox_layers.h" />
-    <ClInclude Include="llama2_demo.h" />
+    <ClInclude Include="llama_demo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

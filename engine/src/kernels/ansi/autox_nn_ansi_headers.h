@@ -12,4 +12,4 @@ void autox_argmax_ansi(const float *X, uint32_t *Out, uint32_t size);
 void autox_swiglu_ansi(float* hb, float* hb2, uint32_t hidden_dim);
 
 void autox_accum_ansi(float *a, float *b, int size);
-void autox_rope_rotation_ansi(int pos, float *sq, float *sk, int kv_dim, int head_size);
+void autox_rope_rotation_ansi(int pos, float *sq, float *sk, int dim, int kv_dim, int head_size);
