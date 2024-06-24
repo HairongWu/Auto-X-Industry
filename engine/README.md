@@ -42,6 +42,9 @@ Please refer to [here](https://github.com/ggerganov/whisper.cpp) for details.
 
 ## Model Converter
 
+- pytorch2autox
+- huggingface2autox
+- onnx2autox
 
 ## Demos
 

@@ -91,36 +91,38 @@ def _predict():
 @_server.route('/train', methods=['POST'])
 @exception_handler
 def _train():
+    """
+    Predict tasks
+
+    Example request:
+    request = {
+            'tasks': tasks,
+            'model_version': model_version,
+            'project': '{project.id}.{int(project.created_at.timestamp())}',
+            'label_config': project.label_config,
+            'params': {
+                'login': project.task_data_login,
+                'password': project.task_data_password,
+                'context': context,
+            },
+        }
+
+    @return:
+    Predictions in LS format
+    """
     data = request.json
-    tasks = data.get('tasks')
+    annotations = data.get('annotations')
     label_config = data.get('label_config')
     project = data.get('project')
     project_id = project.split('.', 1)[0] if project else None
     params = data.get('params', {})
-    context = params.pop('context', {})
 
     model = MODEL_CLASS(project_id=project_id,
                         label_config=label_config)
+    model.train(annotations)
 
-    response = model.train(tasks, data)
-
-    # if there is no model version we will take the default
-    if isinstance(response, ModelResponse):
-        if not response.has_model_version():
-            mv = model.model_version
-            if mv:
-                response.set_version(str(mv))
-        else:
-            response.update_predictions_version()
-
-        response = response.serialize()
-
-    res = response
-    if res is None:
-        res = []
-
-    return jsonify({'results': res})
-
+    return jsonify({'results': []})
+    
 @_server.route('/agent', methods=['POST'])
 @exception_handler
 def _agent():
@@ -184,12 +186,8 @@ TRAIN_EVENTS = (
 def webhook():
     data = request.json
     event = data.pop('action')
-    if event not in TRAIN_EVENTS:
-        return jsonify({'status': 'Unknown event'}), 200
-    project_id = str(data['project']['id'])
-    label_config = data['project']['label_config']
-    model = MODEL_CLASS(project_id, label_config=label_config)
-    model.fit(event, data)
+    print(event)
+    
     return jsonify({}), 201
 
 

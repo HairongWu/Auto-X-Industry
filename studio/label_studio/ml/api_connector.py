@@ -185,29 +185,19 @@ class MLApi(BaseHTTPAPI):
         time_id = int(project.created_at.timestamp())
         return f'{project.id}.{time_id}'
 
-    def train(self, project, use_ground_truth=False):
-        # TODO Replace AnonymousUser with real user from request
-        user = AnonymousUser()
-        # Identify if feature flag is turned on
-        if flag_set('ff_back_dev_1417_start_training_mlbackend_webhooks_250122_long', user):
-            request = {
-                'action': 'START_TRAINING',
-                'project': load_func(settings.WEBHOOK_SERIALIZERS['project'])(instance=project).data,
-            }
-            return self._request('webhook', request, verbose=False, timeout=TIMEOUT_PREDICT)
-        else:
-            # get only tasks with annotations
-            tasks = project.tasks.annotate(num_annotations=Count('annotations')).filter(num_annotations__gt=0)
-            # create serialized tasks with annotations: {"data": {...}, "annotations": [{...}], "predictions": [{...}]}
-            tasks_ser = ExportDataSerializer(tasks, many=True).data
-            logger.debug(f'{len(tasks_ser)} tasks with annotations are sent to ML backend for training.')
-            request = {
-                'annotations': tasks_ser,
-                'project': self._create_project_uid(project),
-                'label_config': project.label_config,
-                'params': {'login': project.task_data_login, 'password': project.task_data_password},
-            }
-            return self._request('train', request, verbose=False, timeout=TIMEOUT_PREDICT)
+    def train(self, project, use_ground_truth=False):  
+        # get only tasks with annotations
+        tasks = project.tasks.annotate(num_annotations=Count('annotations')).filter(num_annotations__gt=0)
+        # create serialized tasks with annotations: {"data": {...}, "annotations": [{...}], "predictions": [{...}]}
+        tasks_ser = ExportDataSerializer(tasks, many=True).data
+        logger.debug(f'{len(tasks_ser)} tasks with annotations are sent to ML backend for training.')
+        request = {
+            'annotations': tasks_ser,
+            'project': self._create_project_uid(project),
+            'label_config': project.label_config,
+            'params': {'login': project.task_data_login, 'password': project.task_data_password},
+        }
+        return self._request('train', request, verbose=False, timeout=TIMEOUT_PREDICT)
 
     def _prep_prediction_req(self, tasks, project, context=None):
         request = {

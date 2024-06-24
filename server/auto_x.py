@@ -6,13 +6,17 @@ from uuid import uuid4
 from typing import List, Dict, Optional
 from auto_x_ml.model import AutoXMLBase
 
-from auto_x_ml.pipelines.visual_pipeline import *
-from auto_x_ml.pipelines.ocr_pipeline import *
+from auto_x_ml.pipelines.ram_pipeline import *
+from auto_x_ml.pipelines.detection_pipeline import *
+from auto_x_ml.pipelines.keypoint_pipeline import *
+from auto_x_ml.pipelines.document_pipeline import *
 
 logger = logging.getLogger(__name__)
 
 
-vis_pipeline = VisualPipeline()
+ram_pipeline = RamPipeline()
+dec_pipeline = DetectionPipeline()
+kp_pipeline = KeypointPipeline()
 ocr_pipeline = OCRPipeline()
 
 class AutoSolution(AutoXMLBase):
@@ -46,7 +50,7 @@ class AutoSolution(AutoXMLBase):
         from_name_rect, to_name_rect = self.get_config_item('Rectangle')
         from_name_l, to_name_l = self.get_config_item('Labels')
         from_name_ta, to_name_ta = self.get_config_item('TextArea')
-
+        
         for task in tasks:
             try:
                 if 'ocr' in task['data']:
@@ -56,33 +60,34 @@ class AutoSolution(AutoXMLBase):
                 if 'kp' in task['data']:
                     raw_img_path = task['data']['kp']
 
-                img_path = self.get_local_path(
-                    raw_img_path,
-                    # ls_access_token=LABEL_STUDIO_ACCESS_TOKEN,
-                    #ls_host=LABEL_STUDIO_HOST,
-                    task_id=task.get('id')
-                )
-                # printing the mime type of the file 
-                mime = magic.from_file(img_path, mime = True)
-                print(mime)
+                if raw_img_path is not None:
+                    img_path = self.get_local_path(
+                        raw_img_path,
+                        # ls_access_token=LABEL_STUDIO_ACCESS_TOKEN,
+                        #ls_host=LABEL_STUDIO_HOST,
+                        task_id=task.get('id')
+                    )
+                    # printing the mime type of the file 
+                    mime = magic.from_file(img_path, mime = True)
+                    print(mime)
 
-                if 'image/' in mime:
-                    if 'dec' in task['data']:
-                        image_dec_tasks.append(img_path)
-                    elif 'kp' in task['data']:
-                        image_kp_tasks.append(img_path)
-                    elif 'ocr' in task['data']:
+                    if 'image/' in mime:
+                        if 'dec' in task['data']:
+                            image_dec_tasks.append(img_path)
+                        elif 'kp' in task['data']:
+                            image_kp_tasks.append(img_path)
+                        elif 'ocr' in task['data']:
+                            image_ocr_tasks.append(img_path)
+
+                    elif 'video/' in mime:
+                        video_tasks.append(img_path)
+                    elif 'audio/' in mime:
+                        pass
+                    elif mime == 'application/pdf':
                         image_ocr_tasks.append(img_path)
-
-                elif 'video/' in mime:
-                    video_tasks.append(img_path)
-                elif 'audio/' in mime:
-                    pass
-                elif mime == 'application/pdf':
-                    image_ocr_tasks.append(img_path)
             except Exception as e:
                 logger.error(f"Error getting local path: {e}")
-                img_path = raw_img_path
+
         if len(image_dec_tasks) > 0:
             final_predictions.append(self.multiple_dec_tasks(image_dec_tasks, from_name_r, to_name_r))
         if len(image_kp_tasks) > 0:
@@ -95,7 +100,7 @@ class AutoSolution(AutoXMLBase):
         
         predictions = []
 
-        all_boxes, all_labels, all_logits, all_lengths = vis_pipeline.run_detection(image_paths)
+        all_boxes, all_labels, all_logits, all_lengths = dec_pipeline.run_detection(image_paths, ram_pipeline.run_ram(image_paths))
 
         for boxes_xyxy, label, logits, (H, W) in zip(all_boxes, all_labels, all_logits, all_lengths):                 
             predictions.extend(self.get_detection_results(boxes_xyxy, label, logits, (H, W), from_name_r, to_name_r))
@@ -109,7 +114,7 @@ class AutoSolution(AutoXMLBase):
         
         predictions = []
 
-        all_keypoints, all_boxes, all_labels, all_logits, all_lengths = vis_pipeline.run_keypoints(image_paths)
+        all_keypoints, all_boxes, all_labels, all_logits, all_lengths = kp_pipeline.run_keypoints(image_paths)
         
         for points, (H, W) in zip(all_keypoints, all_lengths):            
             predictions.extend(self.get_keypoint_results(points, (H, W), from_name_k, to_name_k))
@@ -250,20 +255,19 @@ class AutoSolution(AutoXMLBase):
 
         return results
     
-    def train(self, tasks: List[Dict], data, **kwargs) -> List[Dict]:
-        image_dec_train_tasks = []
-        image_kp_train_tasks = []
-        image_ocr_train_tasks = []
-        video_train_tasks = []
+    def train(self, annotations, **kwargs):
+        dec_annos = []
+        for annos in annotations:
+            if 'dec' in annos['data']:
+                raw_img_path = annos['data']['dec']
+                img_path = self.get_local_path(
+                        raw_img_path,
+                        # ls_access_token=LABEL_STUDIO_ACCESS_TOKEN,
+                        #ls_host=LABEL_STUDIO_HOST,
+                        task_id=annos['id']
+                )
 
-        for task in tasks:
-            try:
-                if 'ocr' in task['data']:
-                    image_ocr_train_tasks.append(task)
-                if 'dec' in task['data']:
-                    image_dec_train_tasks.append(task)
-                if 'kp' in task['data']:
-                    image_kp_train_tasks.append(task)
+                for anno in annos['annotations']:
+                    dec_annos.append((img_path, anno['result'][0]))
 
-            except Exception as e:
-                logger.error(f"Error getting local path: {e}")
+        dec_pipeline.train_detection(dec_annos)

@@ -239,7 +239,7 @@ class AutoXMLBase(ABC):
             return _generate_fn()
 
 
-    def train(self, tasks, data, **additional_params):
+    def train(self, data, **additional_params):
         """
         Fit/update the model based on the specified event and data.
 
@@ -249,7 +249,7 @@ class AutoXMLBase(ABC):
         """
         # if there is a registered update function, use it
         if _update_fn:
-            return _update_fn(tasks, data, helper=self, **additional_params)
+            return _update_fn(data, helper=self, **additional_params)
 
     def get_local_path(self, url, project_dir=None, ls_host=None, ls_access_token=None, task_id=None, *args, **kwargs):
         """

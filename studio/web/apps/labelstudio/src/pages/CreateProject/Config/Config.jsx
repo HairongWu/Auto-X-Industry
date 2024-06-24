@@ -472,7 +472,7 @@ const Configurator = ({
                 autoCloseTags={true}
                 smartIndent={true}
                 detach
-                extensions={["hint", "xml-hint"]}
+                extensions={[javascript({ jsx: true })]}
                 options={{
                   mode: "xml",
                   theme: "default",
@@ -490,7 +490,9 @@ const Configurator = ({
                 onKeyDown={(editor, e) => {
                   if (e.code === "Escape") e.stopPropagation();
                 }}
-                onChange={(editor, data, value) => onChange(value)}
+                onChange={(value, viewUpdate) => {
+                  console.log('value:', value);
+                }}
               />
             </div>
           )}

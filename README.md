@@ -29,7 +29,7 @@ Contributors and Sponsors are welcomed.
 - [ ] Tiny models (picodet, tinypose, ...)
 - [ ] Convert pre-trained models to Auto-X Model File
 - [ ] Demos (timer camera, drone, robot, ...)
-- [ ] Auto-X RTOS (based on NuttX)
+- [ ] [Auto-X RTOS](https://github.com/HairongWu/NuttX-for-AutoX) (based on NuttX)
 
 ## Auto-X Studio
 

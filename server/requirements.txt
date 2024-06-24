@@ -13,6 +13,7 @@ lanms-nova
 scikit-image
 imgaug
 pymilvus
+ruamel.yaml
 
 paddleclas
 
