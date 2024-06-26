@@ -460,43 +460,10 @@ const Configurator = ({
       <div className={configClass.elem("container")}>
         <header>
           <button onClick={onBrowse}>Browse Templates</button>
-          <ToggleItems items={{ code: "Code", visual: "Visual" }} active={configure} onSelect={onSelect} />
+
         </header>
         <div className={configClass.elem("editor")}>
-          {configure === "code" && (
-            <div className={configClass.elem("code")} style={{ display: configure === "code" ? undefined : "none" }}>
-              <CodeMirror
-                name="code"
-                id="edit_code"
-                value={config}
-                autoCloseTags={true}
-                smartIndent={true}
-                detach
-                extensions={[javascript({ jsx: true })]}
-                options={{
-                  mode: "xml",
-                  theme: "default",
-                  lineNumbers: true,
-                  extraKeys: {
-                    "'<'": completeAfter,
-                    // "'/'": completeIfAfterLt,
-                    "' '": completeIfInTag,
-                    "'='": completeIfInTag,
-                    "Ctrl-Space": "autocomplete",
-                  },
-                  hintOptions: { schemaInfo: tags },
-                }}
-                // don't close modal with Escape while editing config
-                onKeyDown={(editor, e) => {
-                  if (e.code === "Escape") e.stopPropagation();
-                }}
-                onChange={(value, viewUpdate) => {
-                  console.log('value:', value);
-                }}
-              />
-            </div>
-          )}
-          {visualLoaded && (
+          {(
             <div
               className={configClass.elem("visual")}
               style={{ display: configure === "visual" ? undefined : "none" }}

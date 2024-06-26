@@ -1,7 +1,7 @@
 import struct
 import torch
 
-from model import ModelArgs, Transformer
+from llama2 import ModelArgs, Transformer
 
 # -----------------------------------------------------------------------------
 # common utilities
