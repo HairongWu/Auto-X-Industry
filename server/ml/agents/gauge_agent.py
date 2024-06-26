@@ -1,6 +1,6 @@
 from ..pipelines import visual_pipeline
 
-class MeasurementAgent(): 
+class GaugeAgent(): 
     def __init__(self):
         super().__init__()
 

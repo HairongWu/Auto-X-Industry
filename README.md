@@ -5,6 +5,8 @@
   <h1>Auto-X for Industries</h1>
 </div>
 
+Not stable for now. Please wait for the first release.
+
 Auto-X for Industries is an autonomous solution that aims to solve the following challenges:
 
 - High running cost and low efficiency for practical industrial uses with current AI services. Customers sometimes defer to use GPUs for some reasons.
@@ -16,41 +18,21 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
   <img src="assets/framework.png" width="800"/>
 </div>
 
-Not stable for now. Please wait for the first release.
-Contributors and Sponsors are welcomed.
+## Release Plans
 
-## Auto-X Server
+- [ ] version 0.0.1
+      1. Auto-X Engine: Big models (llama3, whisper), Tiny models (picodet, tinypose), convert pre-trained models to Auto-X Model File, integrate with Auto-X IoT (MQTT)
+      2. Auto-X Studio: Built-in solution templates, dataset generation, pre-labeling, fine-tuning/pre-training, knowledge creation from images/ documents/websites, integrate with Auto-X Server
+      3. Auto-X Server: integrate with Auto-X Studio and Auto-X IoT
+      4. Recognize anything Demo: recognize objects of images taken by esp32 camera, create image vector database, and update related models
 
-- [ ] Provides all the AI pipelines and antonomous agents needed by Auto-X Studio and Auto-X Services
+## Other Plans (Automate Existing Business Systems with Auto-X)
 
-## Auto-X Engine
+- [Auto-X IDE](https://github.com/HairongWu/auto-intellij-community) (based on IntelliJ IDEA Community)
 
-- [ ] Big models (llama3, whisper, ...)
-- [ ] Tiny models (picodet, tinypose, ...)
-- [ ] Convert pre-trained models to Auto-X Model File
-- [ ] Demos (timer camera, drone, robot, ...)
-- [ ] [Auto-X RTOS](https://github.com/HairongWu/NuttX-for-AutoX) (based on NuttX)
-
-## Auto-X Studio
-
-- [ ] Full workflow to build solution oriented models: pre-labeling, labeling manually, fine-tuning/pre-training and deployment
-- [ ] Built-in solution templates
-- [ ] Support two types of knowledge graph creation tasks: from documents, and from websites
-- [ ] Integrate with Auto-X Server
-
-## Service Release Plans
-
-- [X] Initialize codebase
-
-- [ ] Release [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT)， eg. Energy, Real Estate,... (based on OpenRemote)
-
-- [ ] Release [Auto-X IDE](https://github.com/HairongWu/auto-intellij-community) (based on IntelliJ IDEA Community)
-
-- [ ] Release [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)
-
-- [ ] Release [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP) (based on Odoo)
-
-## Other Plans
+- [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)
+- [Auto-X RTOS](https://github.com/HairongWu/NuttX-for-AutoX) (based on NuttX)
+- [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP) (based on Odoo)
 - [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
 - Auto Finance (based on FinGPT)
 - Auto Insurance (based on openIMIS)

@@ -2,7 +2,7 @@
 import json
 import os
 
-import util.misc as utils
+from ..utils.misc import *
 
 try:
     from panopticapi.evaluation import pq_compute
@@ -14,7 +14,7 @@ class PanopticEvaluator(object):
     def __init__(self, ann_file, ann_folder, output_dir="panoptic_eval"):
         self.gt_json = ann_file
         self.gt_folder = ann_folder
-        if utils.is_main_process():
+        if is_main_process():
             if not os.path.exists(output_dir):
                 os.mkdir(output_dir)
         self.output_dir = output_dir
@@ -28,14 +28,14 @@ class PanopticEvaluator(object):
         self.predictions += predictions
 
     def synchronize_between_processes(self):
-        all_predictions = utils.all_gather(self.predictions)
+        all_predictions = all_gather(self.predictions)
         merged_predictions = []
         for p in all_predictions:
             merged_predictions += p
         self.predictions = merged_predictions
 
     def summarize(self):
-        if utils.is_main_process():
+        if is_main_process():
             json_data = {"annotations": self.predictions}
             predictions_json = os.path.join(self.output_dir, "predictions.json")
             with open(predictions_json, "w") as f:

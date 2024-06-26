@@ -23,9 +23,9 @@ class OCRPipeline():
         args['table_model_dir'] = os.environ.get('table_model_dir')
         args['layout_model_dir'] = os.environ.get('layout_model_dir')
 
-        args['layout_dict_path'] = "./auto_x_ml/pipelines/utils/dict/layout_dict/layout_publaynet_dict.txt"
-        args['rec_char_dict_path'] = "./auto_x_ml/pipelines/utils/ppocr_keys_v1.txt"
-        args['table_char_dict_path'] = "./auto_x_ml/pipelines/utils/dict/table_structure_dict_ch.txt"
+        args['layout_dict_path'] = "./ml/pipelines/utils/dict/layout_dict/layout_publaynet_dict.txt"
+        args['rec_char_dict_path'] = "./ml/pipelines/utils/ppocr_keys_v1.txt"
+        args['table_char_dict_path'] = "./ml/pipelines/utils/dict/table_structure_dict_ch.txt"
 
         args['layout_score_threshold'] = 0.5
         args['layout_nms_threshold'] = 0.5

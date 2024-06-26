@@ -4,15 +4,14 @@ import yaml
 import glob
 from uuid import uuid4
 from typing import List, Dict, Optional
-from auto_x_ml.model import AutoXMLBase
+from api.model import AutoXMLBase
 
-from auto_x_ml.pipelines.ram_pipeline import *
-from auto_x_ml.pipelines.detection_pipeline import *
-from auto_x_ml.pipelines.keypoint_pipeline import *
-from auto_x_ml.pipelines.document_pipeline import *
+from ml.pipelines.ram_pipeline import *
+from ml.pipelines.detection_pipeline import *
+from ml.pipelines.keypoint_pipeline import *
+from ml.pipelines.document_pipeline import *
 
 logger = logging.getLogger(__name__)
-
 
 ram_pipeline = RamPipeline()
 dec_pipeline = DetectionPipeline()
@@ -20,8 +19,6 @@ kp_pipeline = KeypointPipeline()
 ocr_pipeline = OCRPipeline()
 
 class AutoSolution(AutoXMLBase):
-    """
-    """
 
     def setup(self):
         self.set("model_version", f'{self.__class__.__name__}-v0.0.1')
@@ -63,8 +60,6 @@ class AutoSolution(AutoXMLBase):
                 if raw_img_path is not None:
                     img_path = self.get_local_path(
                         raw_img_path,
-                        # ls_access_token=LABEL_STUDIO_ACCESS_TOKEN,
-                        #ls_host=LABEL_STUDIO_HOST,
                         task_id=task.get('id')
                     )
                     # printing the mime type of the file 
@@ -232,31 +227,11 @@ class AutoSolution(AutoXMLBase):
                     'readonly': False
                 })
 
-                results.append({
-                    'id': label_id,
-                    'from_name': from_name_l,
-                    'to_name': to_name_l,
-                    'type': 'labels',
-                    'value': {
-                        'labels': ['Handwriting']
-                    },
-                    'score': 1.0
-                })
-                results.append({
-                    'id': label_id,
-                    'from_name': from_name_l,
-                    'to_name': to_name_l,
-                    'type': 'labels',
-                    'value': {
-                        'labels': ['Handwriting']
-                    },
-                    'score': 1.0
-                })
-
         return results
     
     def train(self, annotations, **kwargs):
-        dec_annos = []
+        odvg_annos = []
+        ram_annos = []
         for annos in annotations:
             if 'dec' in annos['data']:
                 raw_img_path = annos['data']['dec']
@@ -266,8 +241,17 @@ class AutoSolution(AutoXMLBase):
                         #ls_host=LABEL_STUDIO_HOST,
                         task_id=annos['id']
                 )
-
+                ret = {"filename": img_path,
+                        "height": annos['originalHeight'],
+                        "width": annos['originalWidth'],
+                        'detection':{}}
+                
+                instances = []
                 for anno in annos['annotations']:
-                    dec_annos.append((img_path, anno['result'][0]))
+                    instances.append({'bbox':[anno['result'][0]['value']['x'], anno['result'][0]['value']['y'], 
+                                        anno['result'][0]['value']['width'], anno['result'][0]['value']['height']], 
+                                'category':anno['result'][0]['value']['rectanglelabels'][0], 'label':0})
+                ret['detection']['instances'] = instances
+                odvg_annos.append(ret)
 
-        dec_pipeline.train_detection(dec_annos)
+        dec_pipeline.train_detection(odvg_annos)

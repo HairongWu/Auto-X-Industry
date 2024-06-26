@@ -40,13 +40,6 @@ CACHE = create_cache(
     os.getenv('CACHE_TYPE', 'sqlite'),
     path=os.getenv('MODEL_DIR', '.'))
 
-API_KEY = (
-        ''
-)
-LABEL_STUDIO_URL = (
-        'http://127.0.0.1:8080/'
-)
-
 # Decorator to register predict function
 _predict_fn: Callable = None
 _update_fn: Callable = None
@@ -93,8 +86,11 @@ class AutoXMLBase(ABC):
             project_id (str, optional): The project ID. Defaults to None.
         """
         self.project_id = project_id or ''
+        self.LABEL_STUDIO_URL = (os.getenv('LABEL_STUDIO_URL', ''))
+        self.LABEL_STUDIO_ACCESS_TOKEN = (os.getenv('LABEL_STUDIO_ACCESS_TOKEN', ''))
+
         # Connect to the Label Studio API and check the connection
-        self.label_studio = LabelStudio(base_url=LABEL_STUDIO_URL, api_key=API_KEY)
+        self.label_studio = LabelStudio(base_url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
         
         self.use_label_config(label_config)
         # set initial model version
@@ -251,7 +247,7 @@ class AutoXMLBase(ABC):
         if _update_fn:
             return _update_fn(data, helper=self, **additional_params)
 
-    def get_local_path(self, url, project_dir=None, ls_host=None, ls_access_token=None, task_id=None, *args, **kwargs):
+    def get_local_path(self, url, project_dir=None, task_id=None, *args, **kwargs):
         """
         Return the local path for a given URL.
 
@@ -270,9 +266,10 @@ class AutoXMLBase(ABC):
         return get_local_path(
             url,
             project_dir=project_dir,
-            hostname=ls_host,
-            access_token=ls_access_token,
+            hostname=self.LABEL_STUDIO_URL,
+            access_token=self.LABEL_STUDIO_ACCESS_TOKEN,
             task_id=task_id,
+            download_resources=False,
             *args,
             **kwargs
         )

@@ -24,7 +24,7 @@ pip install -r requirements.txt
 6. Set the 'model_pool' paths in '_wsgi.py' and start server for test purposes
 
 ```bash
-python _wsgi.py --log-level DEBUG
+python _wsgi.py --log-level DEBUG  --ls-access-token xxxxxxx --ls-url http://127.0.0.1:8080/
 ```
 
 ## References

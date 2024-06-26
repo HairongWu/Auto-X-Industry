@@ -123,7 +123,7 @@ class KeypointPipeline():
         self.TEXT_THRESHOLD = os.environ.get("TEXT_THRESHOLD", 0.25)
 
         from .UniPose.models import build_model
-        args = SLConfig.fromfile('./auto_x_ml/pipelines/UniPose/UniPose_SwinT.py')
+        args = SLConfig.fromfile('./ml/pipelines/UniPose/UniPose_SwinT.py')
         #args.text_encoder_type = os.environ.get('bert-base-uncased')
         args.device = self.device
         self.pose_model = build_model(args)

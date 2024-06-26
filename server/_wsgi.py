@@ -28,7 +28,7 @@ logging.config.dictConfig({
   }
 })
 
-from auto_x_ml.api import init_app
+from api.api import init_app
 
 
 _DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
@@ -70,6 +70,13 @@ if __name__ == "__main__":
     
     parser.add_argument('--basic-auth-pass',
                         default=os.environ.get('ML_SERVER_BASIC_AUTH_PASS', None),
+                        help='Basic auth pass')    
+    
+    parser.add_argument('--ls-access-token',
+                        default=os.environ.get('LABEL_STUDIO_ACCESS_TOKEN', ''),
+                        help='Basic auth pass')    
+    parser.add_argument('--ls-url',
+                        default=os.environ.get('LABEL_STUDIO_URL', ''),
                         help='Basic auth pass')    
     
     args = parser.parse_args()
@@ -119,6 +126,9 @@ if __name__ == "__main__":
     os.environ['rec_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_rec_server_infer"
     os.environ['table_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppstructure_mobile_v2.0_SLANet_infer"
     os.environ['layout_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "picodet_lcnet_x1_0_fgd_layout_infer"
+
+    os.environ['LABEL_STUDIO_ACCESS_TOKEN'] = args.ls_access_token
+    os.environ['LABEL_STUDIO_URL'] = args.ls_url
 
     from auto_x import AutoSolution
 

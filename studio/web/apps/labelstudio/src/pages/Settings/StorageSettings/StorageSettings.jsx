@@ -14,14 +14,14 @@ export const StorageSettings = () => {
   return isAllowCloudStorage ? (
     <Block name="storage-settings">
       <Description style={{ marginTop: 0 }}>
-        Use cloud or database storage as the source for your labeling tasks or the target of your completed annotations.
+        Use cloud or database storage as the source for your labeling tasks, the target of your completed annotations or the models used in your project.
       </Description>
 
       <Columns count={2} gap="40px" size="320px" className={rootClass}>
-        <StorageSet title="Source Cloud Storage" buttonLabel="Add Source Storage" rootClass={rootClass} />
+        <StorageSet title="Source Storage" buttonLabel="Add Source Storage" rootClass={rootClass} />
 
         <StorageSet
-          title="Target Cloud Storage"
+          title="Target Storage"
           target="export"
           buttonLabel="Add Target Storage"
           rootClass={rootClass}
@@ -31,5 +31,5 @@ export const StorageSettings = () => {
   ) : null;
 };
 
-StorageSettings.title = "Cloud Storage";
+StorageSettings.title = "Storage";
 StorageSettings.path = "/storage";
