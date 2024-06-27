@@ -72,8 +72,8 @@ Metric:
 Train:
   dataset:
     name: PubTabDataSet
-    data_dir: E:\dataset\raw\documents\doc_images\table\train_data\table\train/
-    label_file_list: [E:\dataset\raw\documents\doc_images\table\train_data\table\train/train.txt]
+    data_dir: 
+    label_file_list: [train.txt]
     transforms:
       - DecodeImage:
           img_mode: BGR
@@ -109,8 +109,8 @@ Train:
 Eval:
   dataset:
     name: PubTabDataSet
-    data_dir: E:\dataset\raw\documents\doc_images\table\train_data\table\val/
-    label_file_list: [E:\dataset\raw\documents\doc_images\table\train_data\table\val/val.txt]
+    data_dir: 
+    label_file_list: [val.txt]
     transforms:
       - DecodeImage:
           img_mode: BGR

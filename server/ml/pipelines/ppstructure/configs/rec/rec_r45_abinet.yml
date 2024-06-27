@@ -60,8 +60,8 @@ Metric:
 Train:
   dataset:
     name: SimpleDataSet
-    data_dir: E:\dataset\raw\documents\doc_images\ocr\kishimoto/
-    label_file_list: ["E:/dataset/raw/documents/doc_images/ocr/kishimoto/rec_gt.txt"]
+    data_dir: 
+    label_file_list: ["rec_gt.txt"]
     transforms:
       - DecodeImage: # load image
           img_mode: RGB
@@ -82,8 +82,8 @@ Train:
 Eval:
   dataset:
     name: SimpleDataSet
-    data_dir: E:\dataset\raw\documents\doc_images\ocr\kishimoto/
-    label_file_list: ["E:/dataset/raw/documents/doc_images/ocr/kishimoto/rec_gt.txt"]
+    data_dir: 
+    label_file_list: ["rec_gt.txt"]
     transforms:
       - DecodeImage: # load image
           img_mode: RGB

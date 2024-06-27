@@ -24,7 +24,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 1. Auto-X Engine: Big models (llama3, whisper), Tiny models (picodet, tinypose), convert pre-trained models to Auto-X Model File, integrate with Auto-X IoT (MQTT)
 
-2. Auto-X Studio: Built-in solution templates, dataset generation, pre-labeling, fine-tuning/pre-training, knowledge creation from images/ documents/websites, integrate with Auto-X Server
+2. Auto-X Studio: Built-in solution templates, dataset generation, pre-labeling, fine-tuning/pre-training, knowledge creation from images/documents/websites, integrate with Auto-X Server
    
 3. Auto-X Server: integrate with Auto-X Studio and Auto-X IoT
    

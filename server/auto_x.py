@@ -237,8 +237,8 @@ class AutoSolution(AutoXMLBase):
                 raw_img_path = annos['data']['dec']
                 img_path = self.get_local_path(
                         raw_img_path,
-                        # ls_access_token=LABEL_STUDIO_ACCESS_TOKEN,
-                        #ls_host=LABEL_STUDIO_HOST,
+                        ls_access_token=self.LABEL_STUDIO_ACCESS_TOKEN,
+                        ls_host=self.LABEL_STUDIO_URL,
                         task_id=annos['id']
                 )
                 ret = {"filename": img_path,
