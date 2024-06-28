@@ -155,12 +155,13 @@ class DetectionPipeline():
     def train_detection(self, annotations):
         args = AttrDict()
         args['output_dir'] = os.environ.get("MODEL_POOL_DIR") + "detection/"
-        args['config_file'] = "./ml/pipelines/groundingdino/config/cfg_coco.py"
+        args['config_file'] = "./ml/pipelines/groundingdino/config/cfg_odvg.py"
         args['device'] = self.device
         args['num_workers'] = 1
         args['start_epoch'] = 0
         args['pretrain_model_path'] = None
         args['amp'] = False
+        args['fix_size'] = None
         args['resume'] = None
         pathlib.Path(args.output_dir).mkdir(parents=True, exist_ok=True)
         cfg = SLConfig.fromfile(args.config_file)
@@ -181,10 +182,25 @@ class DetectionPipeline():
                                   weight_decay=args.weight_decay)
 
     
-        print(annotations)
         train, val = train_test_split(annotations, test_size=0.25)
-        dataset_train = build_dataset(datasetinfo=train)
-        dataset_val = build_dataset(datasetinfo=val)
+        datasetinfo = {}
+        label_map = {}
+        fo = open("./ml/pipelines/taglist.txt", "r")
+        for i, line in enumerate(fo.readlines()):
+            line = line.strip()
+            label_map[str(i)] = line
+            args['label_list'].append(line)
+
+        fo.close()
+        datasetinfo['label_map'] = label_map
+        datasetinfo["root"] = ''
+
+        datasetinfo["dataset_mode"] = 'odvg'
+        datasetinfo['anno'] = train    
+        dataset_train = build_dataset(image_set='train', args=args, datasetinfo=datasetinfo)
+        datasetinfo["dataset_mode"] = 'odvg'
+        datasetinfo['anno'] = val
+        dataset_val = build_dataset(image_set='val', args=args, datasetinfo=datasetinfo)
         
         sampler_val = torch.utils.data.SequentialSampler(dataset_val)
         sampler_train = torch.utils.data.RandomSampler(dataset_train)
@@ -225,15 +241,15 @@ class DetectionPipeline():
                 model, criterion, data_loader_train, optimizer, self.device, epoch,
                 args.clip_max_norm, wo_class_error=wo_class_error, lr_scheduler=lr_scheduler, args=args, logger=None)
             if args.output_dir:
-                checkpoint_paths = [args.output_dir / 'checkpoint.pth']
+                checkpoint_paths = [args.output_dir + 'checkpoint.pth']
 
             if not args.onecyclelr:
                 lr_scheduler.step()
             if args.output_dir:
-                checkpoint_paths = [args.output_dir / 'checkpoint.pth']
+                checkpoint_paths = [args.output_dir + 'checkpoint.pth']
                 # extra checkpoint before LR drop and every 100 epochs
                 if (epoch + 1) % args.lr_drop == 0 or (epoch + 1) % args.save_checkpoint_interval == 0:
-                    checkpoint_paths.append(args.output_dir / f'checkpoint{epoch:04}.pth')
+                    checkpoint_paths.append(args.output_dir + f'checkpoint{epoch:04}.pth')
                 for checkpoint_path in checkpoint_paths:
                     weights = {
                         'model': model.state_dict(),
@@ -253,7 +269,7 @@ class DetectionPipeline():
             map_regular = test_stats['coco_eval_bbox'][0]
             _isbest = best_map_holder.update(map_regular, epoch, is_ema=False)
             if _isbest:
-                checkpoint_path = args.output_dir / 'checkpoint_best_regular.pth'
+                checkpoint_path = args.output_dir + 'checkpoint_best_regular.pth'
                 save_on_master({
                     'model': model.state_dict(),
                     'optimizer': optimizer.state_dict(),
@@ -267,16 +283,16 @@ class DetectionPipeline():
             }
 
             if args.output_dir and is_main_process():
-                with (args.output_dir / "log.txt").open("a") as f:
+                with (args.output_dir + "log.txt").open("a") as f:
                     f.write(json.dumps(log_stats) + "\n")
 
                 # for evaluation logs
                 if coco_evaluator is not None:
-                    (args.output_dir / 'eval').mkdir(exist_ok=True)
+                    (args.output_dir + 'eval').mkdir(exist_ok=True)
                     if "bbox" in coco_evaluator.coco_eval:
                         filenames = ['latest.pth']
                         if epoch % 50 == 0:
                             filenames.append(f'{epoch:03}.pth')
                         for name in filenames:
                             torch.save(coco_evaluator.coco_eval["bbox"].eval,
-                                    args.output_dir / "eval" / name)
+                                    args.output_dir + "eval" + name)

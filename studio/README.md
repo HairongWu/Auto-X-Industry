@@ -17,14 +17,6 @@ python label_studio/manage.py collectstatic
 python label_studio/manage.py runserver
 ```
 
-## Setup storages
-
-1. For a specific project, open 'Settings > Storage'.
-2. Click 'Add Source Storage' or 'Add Target Storage'. And fill the information needed.
-3. (Optional) Toggle 'Treat every bucket object as a source file'. Enable this option if you want to create Label Studio tasks from media files automatically, such as JPG, MP3, or similar file types. Use this option for labeling configurations with one source tag. Disable this option if you want to import tasks in Label Studio JSON format directly from your storage. Use this option for complex labeling configurations with HyperText or multiple source tags.
-4. Click 'Add Storage'.
-5. After adding the storage, click 'Sync Storage'. If you configure target storage, annotations are sent to target storage after you click Sync for the configured target storage connection. The target storage receives a JSON-formatted export of each annotation. 
-
 ## Connect to Auto-X Server
 
 1. Open the project settings and select 'Model'. Click 'Connect Model'

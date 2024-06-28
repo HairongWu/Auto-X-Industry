@@ -112,8 +112,4 @@ use_detached_boxes_dec_out = False
 dn_scalar = 100
 
 use_coco_eval = False
-label_list=['0','1','2','3','4','5','6','7','8','9','0 and 1','1 and 2',
-                        '2 and 3','3 and 4','4 and 5','5 and 6','6 and 7',
-                    '7 and 8','8 and 9','9 and 0','one pointer gauge', 
-                    'indicator lamp','level gauge',
-                    'two pointer gauge','dial meter']
+label_list=[]

@@ -91,10 +91,6 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
 
         _cnt += 1
-        if args.debug:
-            if _cnt % 15 == 0:
-                print("BREAK!"*5)
-                break
 
     if getattr(criterion, 'loss_weight_decay', False):
         criterion.loss_weight_decay(epoch=epoch)
@@ -155,12 +151,21 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
     else:
         cat_list=args.label_list
     caption = " . ".join(cat_list) + ' .'
-    print("Input text prompt:", caption)
 
     for samples, targets in metric_logger.log_every(data_loader, 10, header, logger=logger):
         samples = samples.to(device)
 
+        targ = []
+        for t in targets:
+            d = {}
+            for k, v in t.items():
+                if k != 'cap_list' and k != 'caption':
+                    d[k] = v
+            targ.append(d)
+        targets =  targ
+        print(targets)
         targets = [{k: to_device(v, device) for k, v in t.items()} for t in targets]
+        print(targets)
 
         bs = samples.tensors.shape[0]
         input_captions = [caption] * bs
@@ -168,7 +173,7 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
 
             outputs = model(samples, captions=input_captions)
 
-        orig_target_sizes = torch.stack([t["orig_size"] for t in targets], dim=0)
+        orig_target_sizes = torch.stack([t["size"] for t in targets], dim=0)
 
         results = postprocessors['bbox'](outputs, orig_target_sizes)
         # [scores: [100], labels: [100], boxes: [100, 4]] x B
@@ -190,61 +195,6 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
                 res_pano[i]["file_name"] = file_name
 
             panoptic_evaluator.update(res_pano)
-        
-        if args.save_results:
-
-
-
-            for i, (tgt, res) in enumerate(zip(targets, results)):
-                """
-                pred vars:
-                    K: number of bbox pred
-                    score: Tensor(K),
-                    label: list(len: K),
-                    bbox: Tensor(K, 4)
-                    idx: list(len: K)
-                tgt: dict.
-
-                """
-                # compare gt and res (after postprocess)
-                gt_bbox = tgt['boxes']
-                gt_label = tgt['labels']
-                gt_info = torch.cat((gt_bbox, gt_label.unsqueeze(-1)), 1)
-
-                _res_bbox = res['boxes']
-                _res_prob = res['scores']
-                _res_label = res['labels']
-                res_info = torch.cat((_res_bbox, _res_prob.unsqueeze(-1), _res_label.unsqueeze(-1)), 1)
-       
-
-                if 'gt_info' not in output_state_dict:
-                    output_state_dict['gt_info'] = []
-                output_state_dict['gt_info'].append(gt_info.cpu())
-
-                if 'res_info' not in output_state_dict:
-                    output_state_dict['res_info'] = []
-                output_state_dict['res_info'].append(res_info.cpu())
-
-            # # for debug only
-            # import random
-            # if random.random() > 0.7:
-            #     print("Now let's break")
-            #     break
-
-        _cnt += 1
-        if args.debug:
-            if _cnt % 15 == 0:
-                print("BREAK!"*5)
-                break
-
-    if args.save_results:
-        import os.path as osp
-        
-        # output_state_dict['gt_info'] = torch.cat(output_state_dict['gt_info'])
-        # output_state_dict['res_info'] = torch.cat(output_state_dict['res_info'])
-        savepath = osp.join(args.output_dir, 'results-{}.pkl'.format(utils.get_rank()))
-        print("Saving res to {}".format(savepath))
-        torch.save(output_state_dict, savepath)
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()

@@ -1,7 +1,5 @@
 import logging
 import magic 
-import yaml
-import glob
 from uuid import uuid4
 from typing import List, Dict, Optional
 from api.model import AutoXMLBase
@@ -23,17 +21,6 @@ class AutoSolution(AutoXMLBase):
     def setup(self):
         self.set("model_version", f'{self.__class__.__name__}-v0.0.1')
         self.projects = []
-
-    def generate(self) -> List[Dict]:
-        for f in glob.glob('./ls_project_templates/**/*.yml', recursive=True):
-            with open(f, 'r') as file:
-                config = yaml.safe_load(file)
-
-            project = self.label_studio.projects.create(
-                title=config['title'],
-                label_config=config['config']
-            )
-            self.projects.append(project)
                         
     def predict(self, tasks: List[Dict], context: Optional[Dict] = None, **kwargs) -> List[Dict]:
         final_predictions = []
@@ -237,19 +224,23 @@ class AutoSolution(AutoXMLBase):
                 raw_img_path = annos['data']['dec']
                 img_path = self.get_local_path(
                         raw_img_path,
-                        ls_access_token=self.LABEL_STUDIO_ACCESS_TOKEN,
-                        ls_host=self.LABEL_STUDIO_URL,
                         task_id=annos['id']
                 )
+                image_source = Image.open(img_path)
+                width, height = image_source.size
                 ret = {"filename": img_path,
-                        "height": annos['originalHeight'],
-                        "width": annos['originalWidth'],
+                        "height": height,
+                        "width": width,
                         'detection':{}}
                 
                 instances = []
                 for anno in annos['annotations']:
-                    instances.append({'bbox':[anno['result'][0]['value']['x'], anno['result'][0]['value']['y'], 
-                                        anno['result'][0]['value']['width'], anno['result'][0]['value']['height']], 
+                    x1 = anno['result'][0]['value']['x']
+                    y1 = anno['result'][0]['value']['y']
+                    x2 = x1 + anno['result'][0]['value']['width']
+                    y2 = y1 + anno['result'][0]['value']['height']
+                    instances.append({'bbox':[x1*width/100, y1*height/100, 
+                                        x2*width/100, y2*height/100], 
                                 'category':anno['result'][0]['value']['rectanglelabels'][0], 'label':0})
                 ret['detection']['instances'] = instances
                 odvg_annos.append(ret)

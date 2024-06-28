@@ -1,7 +1,8 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 import torch.utils.data
 import torchvision
-from .autox_dataset import build
+from .coco import build as build_coco
+
 
 def get_coco_api_from_dataset(dataset):
     for _ in range(10):
@@ -12,6 +13,11 @@ def get_coco_api_from_dataset(dataset):
     if isinstance(dataset, torchvision.datasets.CocoDetection):
         return dataset.coco
 
-def build_dataset(datasetinfo):
-    return build(datasetinfo)
 
+def build_dataset(image_set, args, datasetinfo):
+    if datasetinfo["dataset_mode"] == 'coco':
+        return build_coco(image_set, args, datasetinfo)
+    if datasetinfo["dataset_mode"] == 'odvg':
+        from .odvg import build_odvg
+        return build_odvg(image_set, args, datasetinfo)
+    raise ValueError(f'dataset {args.dataset_file} not supported')
