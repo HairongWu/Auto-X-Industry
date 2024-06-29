@@ -80,13 +80,6 @@ export const StorageSet = ({ title, target, rootClass, buttonLabel }) => {
             }}
           />
         ),
-        footer: (
-          <>
-            Save completed annotations to Amazon S3, Google Cloud, Microsoft Azure, or Redis.
-            <br />
-            <a href="https://labelstud.io/guide/storage.html">See more in the documentation</a>.
-          </>
-        ),
       });
     },
     [project, fetchStorages, target, rootClass],
