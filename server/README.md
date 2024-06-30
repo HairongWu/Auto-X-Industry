@@ -11,11 +11,7 @@ The prediction tasks, training tasks, and LLM-based web scraping tasks can be us
 
 2. Install [PaddlePaddle](https://www.paddlepaddle.org.cn/documentation/docs/en/2.4/install/index_en.html) according to you hardwares
 
-3. Install [Grounding DINO](https://github.com/IDEA-Research/GroundingDINO) and download the [model](https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth)
-
-4. Install [UniPose](https://github.com/IDEA-Research/UniPose) and download the [model](https://drive.google.com/file/d/13gANvGWyWApMFTAtC3ntrMgx0fOocjIa/view)
-
-5. Install other dependencies
+3. Install other dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -38,11 +34,6 @@ python _wsgi.py --log-level DEBUG  --ls-access-token xxxxxxx --ls-url http://127
 - [VideoLLaMA 2](https://github.com/DAMO-NLP-SG/VideoLLaMA2)
 - [anomalib](https://github.com/openvinotoolkit/anomalib)
 - [EmoLLM](https://github.com/SmartFlowAI/EmoLLM)
-- [OMG-Seg](https://github.com/lxtGH/OMG-Seg)
-- [SegFormer](https://github.com/NVlabs/SegFormer)
-- [Recognize Anything Model](https://github.com/xinyu1205/recognize-anything)
-- [Grounding DINO](https://github.com/IDEA-Research/GroundingDINO)
-- [UniPose](https://github.com/IDEA-Research/UniPose)
 
 - [MegaParse](https://github.com/QuivrHQ/MegaParse)
 - [PP-Structure](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)

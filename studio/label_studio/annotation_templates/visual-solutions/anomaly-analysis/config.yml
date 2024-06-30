@@ -1,0 +1,28 @@
+title: Visual Anomaly Detection
+type: community
+group: Visual Solutions
+order: 10000
+image: /static/templates/blog_anomaly_detection.png
+details: <h1>Classify PDF documents</h1>
+config: |
+  <View>
+    <Image name="image" value="$ocr"/>
+    <Labels name="label" toName="image">
+      <Label value="Title" background="green"/>
+      <Label value="Figure" background="blue"/>
+      <Label value="Table" background="orange"/>
+      <Label value="Text" background="red"/>
+      <Label value="List" background="yellow"/>
+    </Labels>
+    <Rectangle name="bbox" toName="image" strokeWidth="3"/>
+    <Polygon name="poly" toName="image" strokeWidth="3"/>
+    <TextArea name="transcription" toName="image"
+              editable="true"
+              perRegion="true"
+              required="true"
+              maxSubmissions="1"
+              rows="5"
+              placeholder="Recognized Text"
+              displayMode="region-list"
+              />
+  </View>

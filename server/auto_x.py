@@ -1,49 +1,29 @@
-import logging
 import magic 
 from uuid import uuid4
 from typing import List, Dict, Optional
 from api.model import AutoXMLBase
+from PIL import Image
 
-from ml.pipelines.ram_pipeline import *
-from ml.pipelines.detection_pipeline import *
-from ml.pipelines.keypoint_pipeline import *
-from ml.pipelines.document_pipeline import *
+from ml.pipelines.lspr_pipeline import *
 
-logger = logging.getLogger(__name__)
-
-ram_pipeline = RamPipeline()
-dec_pipeline = DetectionPipeline()
-kp_pipeline = KeypointPipeline()
-ocr_pipeline = OCRPipeline()
-
+lspr_pipeline = LSPRPipeline()
 class AutoSolution(AutoXMLBase):
 
     def setup(self):
         self.set("model_version", f'{self.__class__.__name__}-v0.0.1')
-        self.projects = []
                         
     def predict(self, tasks: List[Dict], context: Optional[Dict] = None, **kwargs) -> List[Dict]:
         final_predictions = []
-        image_dec_tasks = []
-        image_kp_tasks = []
-        image_ocr_tasks = []
-        video_tasks = []
+        lspr_tasks = []
 
-        from_name_k, to_name_k = self.get_config_item('KeyPointLabels')
-        from_name_r, to_name_r = self.get_config_item('RectangleLabels')
-        from_name_rect, to_name_rect = self.get_config_item('Rectangle')
-        from_name_l, to_name_l = self.get_config_item('Labels')
-        from_name_ta, to_name_ta = self.get_config_item('TextArea')
+        from_name_r, to_name = self.get_config_item('RectangleLabels')
+        from_name_t, to_name = self.get_config_item('TextArea')
         
         for task in tasks:
             try:
-                if 'ocr' in task['data']:
-                    raw_img_path = task['data']['ocr']
-                if 'dec' in task['data']:
-                    raw_img_path = task['data']['dec']
-                if 'kp' in task['data']:
-                    raw_img_path = task['data']['kp']
-
+                if 'lspr' in task['data']:
+                    raw_img_path = task['data']['lspr']
+               
                 if raw_img_path is not None:
                     img_path = self.get_local_path(
                         raw_img_path,
@@ -54,195 +34,126 @@ class AutoSolution(AutoXMLBase):
                     print(mime)
 
                     if 'image/' in mime:
-                        if 'dec' in task['data']:
-                            image_dec_tasks.append(img_path)
-                        elif 'kp' in task['data']:
-                            image_kp_tasks.append(img_path)
-                        elif 'ocr' in task['data']:
-                            image_ocr_tasks.append(img_path)
-
+                        if 'lspr' in task['data']:
+                            lspr_tasks.append(img_path)
+                       
                     elif 'video/' in mime:
-                        video_tasks.append(img_path)
+                        pass
                     elif 'audio/' in mime:
                         pass
                     elif mime == 'application/pdf':
-                        image_ocr_tasks.append(img_path)
+                        pass
             except Exception as e:
                 logger.error(f"Error getting local path: {e}")
 
-        if len(image_dec_tasks) > 0:
-            final_predictions.append(self.multiple_dec_tasks(image_dec_tasks, from_name_r, to_name_r))
-        if len(image_kp_tasks) > 0:
-            final_predictions.append(self.multiple_kp_tasks(image_kp_tasks, from_name_r, to_name_r, from_name_k, to_name_k))
-        if len(image_ocr_tasks) > 0:
-            final_predictions.append(self.multiple_ocr_tasks(image_ocr_tasks, from_name_rect, to_name_rect, from_name_l, to_name_l, to_name_ta))
+        if len(lspr_tasks) > 0:
+            final_predictions.append(self.multiple_lspr_tasks(lspr_tasks, from_name_r, from_name_t, to_name))
+       
         return final_predictions
     
-    def multiple_dec_tasks(self, image_paths, from_name_r, to_name_r):
+    def multiple_lspr_tasks(self, image_paths, from_name_r, from_name_t, to_name):
         
         predictions = []
 
-        all_boxes, all_labels, all_logits, all_lengths = dec_pipeline.run_detection(image_paths, ram_pipeline.run_ram(image_paths))
+        all_boxes, all_labels, all_logits, all_lengths = lspr_pipeline.predict(image_paths)
 
         for boxes_xyxy, label, logits, (H, W) in zip(all_boxes, all_labels, all_logits, all_lengths):                 
-            predictions.extend(self.get_detection_results(boxes_xyxy, label, logits, (H, W), from_name_r, to_name_r))
+            predictions.extend(self.get_lspr_results(boxes_xyxy, label, logits, (H, W), from_name_r, from_name_t, to_name))
 
         return {
             'result': predictions,
             'score': 0,
             'model_version': self.get('model_version')
         }
-    def multiple_kp_tasks(self, image_paths, from_name_r, to_name_r, from_name_k, to_name_k):
-        
-        predictions = []
 
-        all_keypoints, all_boxes, all_labels, all_logits, all_lengths = kp_pipeline.run_keypoints(image_paths)
-        
-        for points, (H, W) in zip(all_keypoints, all_lengths):            
-            predictions.extend(self.get_keypoint_results(points, (H, W), from_name_k, to_name_k))
-
-        for boxes_xyxy, label, logits, (H, W) in zip(all_boxes, all_labels, all_logits, all_lengths):                 
-            predictions.extend(self.get_detection_results(boxes_xyxy, label, logits, (H, W), from_name_r, to_name_r))
-
-        return {
-            'result': predictions,
-            'score': 0,
-            'model_version': self.get('model_version')
-        }
-    
-    def multiple_ocr_tasks(self, image_paths, from_name_r, to_name_r, from_name_l, to_name_l, textarea_tag):
-        
-        predictions = []
-
-        res_list = ocr_pipeline.run_ocr(image_paths)
-        
-        for res in res_list:                 
-            predictions.extend(self.get_ocr_results(res, from_name_r, to_name_r, from_name_l, to_name_l,textarea_tag))
-
-        return {
-            'result': predictions,
-            'score': 0,
-            'model_version': self.get('model_version')
-        }
-    
-    def get_detection_results(self, all_points, all_labels, all_scores, all_lengths, from_name_r, to_name_r):
-        
-
-        results = []
-        height, width = all_lengths
-        for points, score, label in zip(all_points, all_scores, all_labels):
-            # random ID
-            label_id = str(uuid4())[:9]
-            results.append({
-                'id': label_id,
-                'from_name': from_name_r,
-                'to_name': to_name_r,
-                'original_width': width,
-                'original_height': height,
-                'image_rotation': 0,
-                'value': {
-                    "rectanglelabels": [label],
-                    'rotation': 0,
-                    'width': (points[2] - points[0]) / width * 100,
-                    'height': (points[3] - points[1]) / height * 100,
-                    'x': points[0] / width * 100,
-                    'y': points[1] / height * 100
-                },
-                'score': float(score),
-                'type': 'rectanglelabels',
-                'readonly': False
-            })
-
-        return results
-    
-    def get_keypoint_results(self, points, lengths, from_name_k, to_name_k):
-        
+    def get_lspr_results(self, boxes_xyxy, labels, logits, lengths, from_name_r, from_name_t, to_name):
         results = []
         height, width = lengths
-
-        for point in points:
-            
-            # creates a random ID for your label everytime so no chance for errors
+        for box, label, score in zip(boxes_xyxy, labels, logits):
+            # random ID
             label_id = str(uuid4())[:9]
-
+            # results.append({
+            #     'id': label_id,
+            #     'from_name': from_name_r,
+            #     'to_name': to_name,
+            #     'original_width': width,
+            #     'original_height': height,
+            #     'image_rotation': 0,
+            #     'value': {
+            #         "rectanglelabels": [label],
+            #         'rotation': 0,
+            #         'width': (box[2] - box[0]) / width * 100,
+            #         'height': (box[3] - box[1]) / height * 100,
+            #         'x': box[0] / width * 100,
+            #         'y': box[1] / height * 100
+            #     },
+            #     'score': float(score),
+            #     'type': 'rectanglelabels',
+            #     'readonly': False
+            # })
             results.append({
-                'id': label_id,
-                'from_name': from_name_k,
-                'to_name': to_name_k,
-                'original_width': width,
-                'original_height': height,
-                'image_rotation': 0,
-                'value': {
-                    'x': point[0] / width * 100,
-                    'y': point[1]/ height * 100,
-                    'width': 0.1,
-                    'labels': [point[2]],
-                    'keypointlabels': [point[2]]
+                "original_width": width,
+                "original_height": height,
+                "image_rotation": 0,
+                "value": {
+                    "rotation": 0,
+                    'width': (box[2] - box[0]) / width * 100,
+                    'height': (box[3] - box[1]) / height * 100,
+                    'x': box[0] / width * 100,
+                    'y': box[1] / height * 100,
+                    "text": [
+                        label
+                    ]
                 },
-                'score': 1.0,
-                'readonly': False,
-                'type': 'keypointlabels'
+                "id": label_id,
+                "from_name": from_name_t,
+                "to_name": to_name,
+                "type": "textarea",
+                "origin": "manual"
             })
-        
+
         return results
     
-    def get_ocr_results(self, res, from_name_r, to_name_r, from_name_l, to_name_l,textarea_tag):
-        results = []
-        height, width = res[1]
-        angle = int(res[2])
-        for rs in res[0]:
-            for r in rs['res']:
-                # random ID
-                label_id = str(uuid4())[:9]
-                points = [r['text_region'][0][0],r['text_region'][0][1],r['text_region'][2][0],r['text_region'][2][1]]
-                results.append({
-                    'id': label_id,
-                    'from_name': from_name_r,
-                    'to_name': to_name_r,
-                    'original_width': width,
-                    'original_height': height,
-                    'image_rotation': angle,
-                    'value': {
-                        'rotation': 0,
-                        'width': (points[2] - points[0]) / width * 100,
-                        'height': (points[3] - points[1]) / height * 100,
-                        'x': points[0] / width * 100,
-                        'y': points[1] / height * 100
-                    },
-                    'score': float(r['confidence']),
-                    'type': 'rectangle',
-                    'readonly': False
-                })
-
-        return results
+    def get_names(self):
+        import xml.etree.ElementTree as ET
+        current_label_config = self.get('label_config')    
+        root = ET.fromstring(current_label_config)
+        names = []
+        for node in root.findall("Label"):
+            value = node.get('value')
+            names.append(value)
+            
+        return names
     
     def train(self, annotations, **kwargs):
         odvg_annos = []
-        ram_annos = []
+        names = self.get_names()
         for annos in annotations:
-            if 'dec' in annos['data']:
-                raw_img_path = annos['data']['dec']
+            if 'lspr' in annos['data']:
+                raw_img_path = annos['data']['lspr']
                 img_path = self.get_local_path(
                         raw_img_path,
                         task_id=annos['id']
                 )
                 image_source = Image.open(img_path)
-                width, height = image_source.size
-                ret = {"filename": img_path,
-                        "height": height,
-                        "width": width,
-                        'detection':{}}
+                width, height = image_source.size 
                 
-                instances = []
                 for anno in annos['annotations']:
-                    x1 = anno['result'][0]['value']['x']
-                    y1 = anno['result'][0]['value']['y']
-                    x2 = x1 + anno['result'][0]['value']['width']
-                    y2 = y1 + anno['result'][0]['value']['height']
-                    instances.append({'bbox':[x1*width/100, y1*height/100, 
-                                        x2*width/100, y2*height/100], 
-                                'category':anno['result'][0]['value']['rectanglelabels'][0], 'label':0})
-                ret['detection']['instances'] = instances
-                odvg_annos.append(ret)
+                    if len(anno['result']) > 0:
+                        ret = {"im_file": img_path,
+                            "shape": (height,width),
+                            "bboxes":[],
+                            "cls":[],
+                            "bbox_format":"xyxy",
+                            "normalized":True}
+                        x1 = anno['result'][0]['value']['x']
+                        y1 = anno['result'][0]['value']['y']
+                        x2 = x1 + anno['result'][0]['value']['width']
+                        y2 = y1 + anno['result'][0]['value']['height']
+                        ret["bboxes"].append([x1*width/100, y1*height/100, 
+                                            x2*width/100, y2*height/100])
+                        label = anno['result'][0]['value']['rectanglelabels'][0]
+                        ret["cls"].append([0])
+                        odvg_annos.append(ret)
 
-        dec_pipeline.train_detection(odvg_annos)
+        lspr_pipeline.train(odvg_annos, names)

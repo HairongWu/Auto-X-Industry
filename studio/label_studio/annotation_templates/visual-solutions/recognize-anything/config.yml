@@ -1,0 +1,16 @@
+title: Large-scale Product Recognition
+type: community
+group: Visual Solutions
+image: /static/templates/inventory-tracking.png
+details: <h1>Recognize large numbers of products using vector database</h1>
+config: |
+  <View>    
+    <Image name="image" value="$lspr" zoom="true" zoomControl="false"
+          rotateControl="true" width="100%" height="100%"
+          maxHeight="auto" maxWidth="auto"/>
+
+    <TextArea name="transcription" toName="image" 
+    editable="true" perRegion="true" required="false" 
+    maxSubmissions="1" rows="5" placeholder="Descriptions" 
+    displayMode="region-list"/>
+  </View>

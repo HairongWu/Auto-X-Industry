@@ -115,7 +115,6 @@ def _train():
     label_config = data.get('label_config')
     project = data.get('project')
     project_id = project.split('.', 1)[0] if project else None
-    params = data.get('params', {})
 
     model = MODEL_CLASS(project_id=project_id,
                         label_config=label_config)

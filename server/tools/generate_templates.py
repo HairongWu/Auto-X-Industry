@@ -91,7 +91,7 @@ def generate_detection_labels(fileName):
  
     for i, pred in enumerate(predefined_detection):
         b1 = gfg.SubElement(m1, "Label") 
-        b1.set('value',pred)
+        b1.set('value',pred.strip())
         b1.set('background',getDistinctColors(i))
 
     root.append (m1)

@@ -14,12 +14,13 @@ scikit-image
 imgaug
 pymilvus
 ruamel.yaml
+safetensors==0.4.3
 
 paddleclas
 
 git+https://github.com/HumanSignal/label-studio-tools.git
-git+https://github.com/xinyu1205/recognize-anything.git
 git+https://github.com/amazon-science/chronos-forecasting.git
+git+https://github.com/THU-MIG/yolov10.git
 
 
 
