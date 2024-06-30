@@ -10,7 +10,7 @@ config: |
           maxHeight="auto" maxWidth="auto"/>
 
     <TextArea name="transcription" toName="image" 
-    editable="true" perRegion="true" required="false" 
-    maxSubmissions="1" rows="5" placeholder="Descriptions" 
+    editable="true" perRegion="true" required="true" 
+    maxSubmissions="1" rows="5" placeholder="Class Name" 
     displayMode="region-list"/>
   </View>

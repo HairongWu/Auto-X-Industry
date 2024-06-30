@@ -1,0 +1,24 @@
+title: Document Analysis
+type: community
+group: Visual Solutions
+order: 10000
+image: /static/templates/doc.jpg
+details: <h1>Extract document information from images</h1>
+config: |
+  <View>    
+    <Image name="image" value="$ocr" zoom="true" zoomControl="false"
+          rotateControl="true" width="100%" height="100%"
+          maxHeight="auto" maxWidth="auto"/>
+    
+    <RectangleLabels name="bbox" toName="image" strokeWidth="1" smart="true">
+        <Label value="text" background="green"/>
+        <Label value="table" background="blue"/>
+        <Label value="title" background="red"/>
+        <Label value="figure" background="red"/>
+    </RectangleLabels>
+
+    <TextArea name="transcription" toName="image" 
+    editable="true" perRegion="true" required="true" 
+    maxSubmissions="1" rows="5" placeholder="Recognized Text" 
+    displayMode="region-list"/>
+  </View>
