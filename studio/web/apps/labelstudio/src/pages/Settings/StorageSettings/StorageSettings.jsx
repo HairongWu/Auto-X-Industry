@@ -19,8 +19,8 @@ export const StorageSettings = () => {
 
       <Columns count={2} gap="40px" size="320px" className={rootClass}>
         <StorageSet title="Source Storage" buttonLabel="Add Source Storage" rootClass={rootClass} />
-        <StorageSet title="Generate Dataset" buttonLabel="Generate" rootClass={rootClass} />
-        <StorageSet title="Scrape Dataset" buttonLabel="Scrape" rootClass={rootClass} />
+        <StorageSet title="Dataset Generation" buttonLabel="Generate from Models" rootClass={rootClass} />
+        <StorageSet title="Dataset Scraping" buttonLabel="Scrape for Websites" rootClass={rootClass} />
       </Columns>
     </Block>
   ) : null;

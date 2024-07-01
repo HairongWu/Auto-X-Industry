@@ -1,0 +1,18 @@
+title: Graph Creation
+type: community
+group: LLM Solutions
+image: /static/templates/kg.jpeg
+details: <h1>Recognize large numbers of products using vector database</h1>
+config: |
+  <View>
+    <Relations>
+      <Relation value="org:founded_by"/>
+      <Relation value="org:founded"/>
+    </Relations>
+    <Labels name="label" toName="text">
+      <Label value="Organization" background="orange"/>
+      <Label value="Person" background="green"/>
+      <Label value="Datetime" background="blue"/>
+    </Labels>
+    <Text name="text" value="$text"/>
+  </View>
