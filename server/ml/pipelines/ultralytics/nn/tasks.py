@@ -718,7 +718,7 @@ def torch_safe_load(weight):
     Returns:
         (dict): The loaded PyTorch model.
     """
-    from ultralytics.utils.downloads import attempt_download_asset
+    from ..utils.downloads import attempt_download_asset
 
     check_suffix(file=weight, suffix=".pt")
     file = attempt_download_asset(weight)  # search online if missing locally
@@ -749,7 +749,7 @@ def torch_safe_load(weight):
             f"\nRecommend fixes are to train a new model using the latest 'ultralytics' package or to "
             f"run a command with an official YOLOv8 model, i.e. 'yolo predict model=yolov8n.pt'"
         )
-        check_requirements(e.name)  # install missing module
+        # check_requirements(e.name)  # install missing module
         ckpt = torch.load(file, map_location="cpu")
 
     if not isinstance(ckpt, dict):

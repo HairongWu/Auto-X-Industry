@@ -114,12 +114,7 @@ if __name__ == "__main__":
 
     os.environ['MODEL_POOL_DIR'] = "../../model_pool/"
 
-    os.environ['groundingdino_model'] = os.environ.get("MODEL_POOL_DIR") + "groundingdino_swint_ogc.pth"
-    os.environ['pose_model'] = os.environ.get("MODEL_POOL_DIR") + "unipose_swint.pth"
-
-    os.environ['ram_model'] = os.environ.get("MODEL_POOL_DIR") + "ram_plus_swin_large_14m.pth"
-
-    os.environ['videollama2_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "VideoLLaMA2-7B-Base"
+    os.environ['videollama2_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "VideoLLaMA2-7B"
 
     os.environ['det_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_det_server_infer"
     os.environ['cls_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppocr_mobile_v2.0_cls_infer"

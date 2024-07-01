@@ -2,13 +2,21 @@ title: Video Understanding
 type: community
 group: Visual Solutions
 image: /static/templates/video-timeline-segmentation.png
-details: <h1>Select and classify video segments</h1>
+details: <h1>Video captioning</h1>
 config: |
   <View>
+    <Style>
+        .lsf-main-content.lsf-requesting .prompt::before { content: ' loading...'; color: #808080; }
+    </Style>
+
     <Video name="video" value="$video_url" sync="audio"/>
     <Audio name="audio" value="$video_url" sync="video" speed="false"/>
-    <TextArea name="v_caption" toName="video" placeholder="Enter description here..." rows="2" maxSubmissions="1"/>
-    <TextArea name="a_caption" toName="audio" placeholder="Enter description here..." rows="2" maxSubmissions="1"/>
+
+    <Header value="User prompt:"/>
+    <TextArea name="prompt" toName="video" rows="4" editable="true" maxSubmissions="1" showSubmitButton="false"/>
+    <Header value="Bot answer:"/>
+    <TextArea name="response" toName="video" rows="4" editable="true" maxSubmissions="1" showSubmitButton="false"/>
+
   </View>
 
   <!--

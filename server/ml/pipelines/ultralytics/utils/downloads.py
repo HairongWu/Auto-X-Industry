@@ -421,7 +421,7 @@ def attempt_download_asset(file, repo="ultralytics/assets", release="v8.1.0", **
         file_path = attempt_download_asset('yolov5s.pt', repo='ultralytics/assets', release='latest')
         ```
     """
-    from ultralytics.utils import SETTINGS  # scoped for circular import
+    from . import SETTINGS  # scoped for circular import
 
     # YOLOv3/5u updates
     file = str(file)

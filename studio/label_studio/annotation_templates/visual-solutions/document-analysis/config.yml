@@ -6,7 +6,7 @@ image: /static/templates/doc.jpg
 details: <h1>Extract document information from images</h1>
 config: |
   <View>    
-    <Image name="image" value="$ocr" zoom="true" zoomControl="false"
+    <Image name="image" value="$doc" zoom="true" zoomControl="false"
           rotateControl="true" width="100%" height="100%"
           maxHeight="auto" maxWidth="auto"/>
     
@@ -14,7 +14,7 @@ config: |
         <Label value="text" background="green"/>
         <Label value="table" background="blue"/>
         <Label value="title" background="red"/>
-        <Label value="figure" background="red"/>
+        <Label value="figure" background="yellow"/>
     </RectangleLabels>
 
     <TextArea name="transcription" toName="image" 

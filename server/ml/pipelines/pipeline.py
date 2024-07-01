@@ -23,3 +23,9 @@ class Pipeline(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def finetune(self):
         pass
+
+    def generate_dataset(self):
+        pass
+
+    def scraping_dataset(self):
+        pass

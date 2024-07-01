@@ -108,13 +108,16 @@ class AutoXMLBase(ABC):
         
         # self.set("model_version", "0.0.2")
 
-    def get_config_item(self, node_str):
+    def get_config_item(self, node_str, attr = None):
         current_label_config = self.get('label_config')    
         root = ET.fromstring(current_label_config)
         for node in root.findall(node_str):
             name = node.get('name')
             toname = node.get('toName')
-            if name != None and toname != None:
+            if attr is not None:
+                if attr == name:
+                    return name, toname
+            elif name != None and toname != None:
                 return name, toname
         return None, None
             

@@ -1,4 +1,3 @@
-from ..pipelines import visual_pipeline
 
 class GaugeAgent(): 
     def __init__(self):
