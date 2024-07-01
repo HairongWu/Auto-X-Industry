@@ -19,17 +19,12 @@ export const StorageSettings = () => {
 
       <Columns count={2} gap="40px" size="320px" className={rootClass}>
         <StorageSet title="Source Storage" buttonLabel="Add Source Storage" rootClass={rootClass} />
-
-        <StorageSet
-          title="Target Storage"
-          target="export"
-          buttonLabel="Add Target Storage"
-          rootClass={rootClass}
-        />
+        <StorageSet title="Generate Dataset" buttonLabel="Generate" rootClass={rootClass} />
+        <StorageSet title="Scrape Dataset" buttonLabel="Scrape" rootClass={rootClass} />
       </Columns>
     </Block>
   ) : null;
 };
 
-StorageSettings.title = "Storage";
+StorageSettings.title = "Data Source";
 StorageSettings.path = "/storage";

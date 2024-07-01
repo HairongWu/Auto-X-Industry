@@ -5,9 +5,7 @@ import { Modal } from "../../components/Modal/Modal";
 import { Space } from "../../components/Space/Space";
 import { useAPI } from "../../providers/ApiProvider";
 import { cn } from "../../utils/bem";
-import { ConfigPage } from "./Config/Config";
 import "./CreateProject.styl";
-import { ImportPage } from "./Import/Import";
 import { useImportPage } from "./Import/useImportPage";
 import { useDraftProject } from "./utils/useDraftProject";
 
@@ -141,8 +139,6 @@ export const CreateProject = ({ onClose }) => {
       <div className={rootClass}>
         <Modal.Header>
           <h1>Create Project</h1>
-          <ToggleItems items={steps} active={step} onSelect={setStep} />
-
           <Space>
             <Button look="danger" size="compact" onClick={onDelete} waiting={waiting}>
               Delete
@@ -167,14 +163,6 @@ export const CreateProject = ({ onClose }) => {
           description={description}
           setDescription={setDescription}
           show={step === "name"}
-        />
-        <ImportPage project={project} show={step === "import"} {...pageProps} />
-        <ConfigPage
-          project={project}
-          onUpdate={setConfig}
-          show={step === "config"}
-          columns={columns}
-          disableSaveButton={true}
         />
       </div>
     </Modal>
