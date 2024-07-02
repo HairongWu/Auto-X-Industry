@@ -16,7 +16,9 @@ The prediction tasks, training tasks, and LLM-based web scraping tasks can be us
 pip install "deeplake[all]"
 ```
 4. Install [ArangoDB](https://github.com/arangodb/arangodb) according to you hardwares
-
+```bash
+pip install pyarango --user
+```
 5. Install other dependencies
 
 ```bash
@@ -41,9 +43,7 @@ python _wsgi.py --log-level DEBUG  --ls-access-token xxxxxxx --ls-url http://127
 - [anomalib](https://github.com/openvinotoolkit/anomalib)
 - [EmoLLM](https://github.com/SmartFlowAI/EmoLLM)
 
-- [MegaParse](https://github.com/QuivrHQ/MegaParse)
 - [PP-Structure](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)
-- [Surya](https://github.com/VikParuchuri/surya)
 
 - [Chronos](https://github.com/amazon-science/chronos-forecasting)
 
@@ -60,3 +60,4 @@ python _wsgi.py --log-level DEBUG  --ls-access-token xxxxxxx --ls-url http://127
 - [aiXcoder](https://github.com/aixcoder-plugin/aiXcoder-7B)
 
 - [Deep Lake](https://github.com/activeloopai/deeplake)
+- [OpenRLHF](https://github.com/OpenLLMAI/OpenRLHF)

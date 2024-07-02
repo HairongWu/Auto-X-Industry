@@ -24,6 +24,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 ## Other Plans (Automate Existing Business Systems with Auto-X)
 
+- [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on MNN)
 - [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
 - [Auto-X IDE](https://github.com/HairongWu/auto-intellij-community) (based on IntelliJ IDEA Community)
 - [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)

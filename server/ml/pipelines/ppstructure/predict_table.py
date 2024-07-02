@@ -55,10 +55,11 @@ class TableSystem(object):
     def __call__(self, img, return_ocr_result_in_table=False):
         result = dict()
 
-        structure_res, elapse = self._structure(copy.deepcopy(img))
+        structure_res = self._structure(copy.deepcopy(img))
+        print(structure_res)
         result["cell_bbox"] = structure_res[1].tolist()
 
-        dt_boxes, rec_res, det_elapse, rec_elapse = self._ocr(copy.deepcopy(img))
+        dt_boxes, rec_res = self._ocr(copy.deepcopy(img))
 
         if return_ocr_result_in_table:
             result["boxes"] = [x.tolist() for x in dt_boxes]
@@ -71,12 +72,12 @@ class TableSystem(object):
         return result
 
     def _structure(self, img):
-        structure_res, elapse = self.table_structurer(copy.deepcopy(img))
-        return structure_res, elapse
+        structure_res = self.table_structurer(copy.deepcopy(img))
+        return structure_res
 
     def _ocr(self, img):
         h, w = img.shape[:2]
-        dt_boxes, det_elapse = self.text_detector(copy.deepcopy(img))
+        dt_boxes = self.text_detector(copy.deepcopy(img))
         dt_boxes = sorted_boxes(dt_boxes)
 
         r_boxes = []
@@ -88,7 +89,7 @@ class TableSystem(object):
             box = [x_min, y_min, x_max, y_max]
             r_boxes.append(box)
         dt_boxes = np.array(r_boxes)
-        print("dt_boxes num : {}, elapse : {}".format(len(dt_boxes), det_elapse))
+
         if dt_boxes is None:
             return None, None
 
@@ -98,7 +99,6 @@ class TableSystem(object):
             x0, y0, x1, y1 = expand(2, det_box, img.shape)
             text_rect = img[int(y0) : int(y1), int(x0) : int(x1), :]
             img_crop_list.append(text_rect)
-        rec_res, rec_elapse = self.text_recognizer(img_crop_list)
-        print("rec_res num  : {}, elapse : {}".format(len(rec_res), rec_elapse))
-        return dt_boxes, rec_res, det_elapse, rec_elapse
+        rec_res = self.text_recognizer(img_crop_list)
+        return dt_boxes, rec_res
 

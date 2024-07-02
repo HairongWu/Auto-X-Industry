@@ -40,7 +40,7 @@ def build_pre_process_list(args):
 class TableStructurer(object):
     def __init__(self, args):
         self.args = args
-        self.use_onnx = args.use_onnx
+
         pre_process_list = build_pre_process_list(args)
         if args.table_algorithm not in ["TableMaster"]:
             postprocess_params = {
@@ -67,7 +67,6 @@ class TableStructurer(object):
 
     def __call__(self, img):
 
-        ori_im = img.copy()
         data = {"image": img}
         data = transform(data, self.preprocess_op)
         img = data[0]
@@ -75,22 +74,14 @@ class TableStructurer(object):
             return None, 0
         img = np.expand_dims(img, axis=0)
         img = img.copy()
-        if self.args.benchmark:
-            self.autolog.times.stamp()
-        if self.use_onnx:
-            input_dict = {}
-            input_dict[self.input_tensor.name] = img
-            outputs = self.predictor.run(self.output_tensors, input_dict)
-        else:
-            self.input_tensor.copy_from_cpu(img)
-            self.predictor.run()
-            outputs = []
-            for output_tensor in self.output_tensors:
-                output = output_tensor.copy_to_cpu()
-                outputs.append(output)
-            if self.args.benchmark:
-                self.autolog.times.stamp()
 
+        self.input_tensor.copy_from_cpu(img)
+        self.predictor.run()
+        outputs = []
+        for output_tensor in self.output_tensors:
+            output = output_tensor.copy_to_cpu()
+            outputs.append(output)
+        
         preds = {}
         preds["structure_probs"] = outputs[1]
         preds["loc_preds"] = outputs[0]

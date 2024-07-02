@@ -61,11 +61,14 @@ class AutoSolution(AutoXMLBase):
             final_predictions.append(self.multiple_lspr_tasks(lspr_tasks, from_name_t, to_name))
         if len(doc_tasks) > 0:
             from_name_r, to_name = self.get_config_item('RectangleLabels')
-            from_name_t, to_name = self.get_config_item('TextArea')
-            final_predictions.append(self.multiple_doc_tasks(doc_tasks, from_name_r, from_name_t, to_name))
+            from_name_t, _ = self.get_config_item('TextArea')
+            from_name_lang, _ = self.get_config_item('Choices','lang')
+            from_name_type, _ = self.get_config_item('Choices','type')
+            from_name_rot, _ = self.get_config_item('Choices','rotation')
+            final_predictions.append(self.multiple_doc_tasks(doc_tasks, from_name_r, from_name_t, from_name_lang, from_name_type, to_name))
         if len(video_tasks) > 0:
             from_name_p, to_name = self.get_config_item('TextArea','prompt')
-            from_name_r, to_name = self.get_config_item('TextArea','response')
+            from_name_r, _ = self.get_config_item('TextArea','response')
             final_predictions.append(self.multiple_video_tasks(video_tasks, from_name_p, from_name_r,to_name))
        
         return final_predictions
@@ -114,14 +117,14 @@ class AutoSolution(AutoXMLBase):
 
         return results
     
-    def multiple_doc_tasks(self, image_paths, from_name_r, from_name_t, to_name):
+    def multiple_doc_tasks(self, image_paths, from_name_r, from_name_t, from_name_lang, from_name_type, to_name):
         
         predictions = []
 
         res_list = doc_pipeline.predict(image_paths)
         
         for res in res_list:                 
-            predictions.extend(self.get_ocr_results(res, from_name_r, from_name_t, to_name))
+            predictions.extend(self.get_ocr_results(res, from_name_r, from_name_t, from_name_lang, from_name_type, to_name))
 
         return {
             'result': predictions,
@@ -129,57 +132,100 @@ class AutoSolution(AutoXMLBase):
             'model_version': self.get('model_version')
         }    
 
-    def get_ocr_results(self, res, from_name_r, from_name_t, to_name):
+    def get_ocr_results(self, res, from_name_r, from_name_t, from_name_lang, from_name_type, to_name):
         results = []
-        height, width = res[1]
-        angle = int(res[2])
+        height, width = res[2]
+        lang = res[4]
+        print(lang)
+
+        label_id = str(uuid4())[:9]
+        results.append({
+          "from_name": "lang",
+          "to_name": to_name,
+          "type": "choices",
+          "value": { "choices": lang }
+        })
+        label_id = str(uuid4())[:9]
+        results.append({
+          "from_name": "type",
+          "to_name": to_name,
+          "type": "choices",
+          "value": { "choices": ["Others"] }
+        })
+        label_id = str(uuid4())[:9]
+        results.append({
+          "from_name": "rotation",
+          "to_name": to_name,
+          "type": "choices",
+          "value": { "choices": [res[3]] }
+        })
         for rs in res[0]:
-            for r in rs['res']:
-                # random ID
+            if len(rs['text'].strip()) > 0:
                 label_id = str(uuid4())[:9]
-                points = [r['text_region'][0][0],r['text_region'][0][1],r['text_region'][2][0],r['text_region'][2][1]]
-                results.append({
-                    'id': label_id,
-                    'from_name': from_name_r,
-                    'to_name': to_name,
-                    'original_width': width,
-                    'original_height': height,
-                    'image_rotation': angle,
-                    'value': {
-                        "rectanglelabels": ['text'],
-                        'rotation': 0,
-                        'width': (points[2] - points[0]) / width * 100,
-                        'height': (points[3] - points[1]) / height * 100,
-                        'x': points[0] / width * 100,
-                        'y': points[1] / height * 100
-                    },
-                    'score': float(r['confidence']),
-                    'type': 'rectanglelabels',
-                    'readonly': False
-                })
+                points = rs['text_region']
                 results.append({
                     "original_width": width,
                     "original_height": height,
-                    "image_rotation": 0,
                     "value": {
                         "rotation": 0,
+                        'width': (points[2] - points[0]) / width * 100,
+                        'height': (points[3] - points[1]) / height * 100,
+                        'x': points[0] / width * 100,
+                        'y': points[1] / height * 100,
                         "text": [
-                            r['text']
+                        rs['text'].strip()
                         ]
                     },
                     "id": label_id,
                     "from_name": from_name_t,
                     "to_name": to_name,
                     "type": "textarea",
-                    "origin": "manual"
+                    'score': float(rs['confidence']),
+                    "origin": "manual",
+                })
+                results.append({
+                    'id': label_id,
+                    'from_name': from_name_r,
+                    'to_name': to_name,
+                    'original_width': width,
+                    'original_height': height,
+                    'value': {
+                        "rectanglelabels": ['Text'],
+                        'width': (points[2] - points[0]) / width * 100,
+                        'height': (points[3] - points[1]) / height * 100,
+                        'x': points[0] / width * 100,
+                        'y': points[1] / height * 100
+                    },
+                    'type': 'rectanglelabels',
                 })
 
+        for rs in res[1]:
+            # random ID
+            label_id = str(uuid4())[:9]
+            points = [rs['box'][0][0], rs['box'][0][1], rs['box'][2][0], rs['box'][2][1]]
+            results.append({
+                'id': label_id,
+                'from_name': from_name_r,
+                'to_name': to_name,
+                'original_width': width,
+                'original_height': height,
+                'value': {
+                    "rectanglelabels": [rs['type']],
+                    'width': (points[2] - points[0]) / width * 100,
+                    'height': (points[3] - points[1]) / height * 100,
+                    'x': points[0] / width * 100,
+                    'y': points[1] / height * 100
+                },
+                'type': 'rectanglelabels',
+            })
+           
         return results
 
     def multiple_video_tasks(self, image_paths, from_name_p, from_name_r,to_name):
         
         predictions = []
-        questions =['What animals are in the video, what are they doing, and how does the video feel?','What is the woman wearing, what is she doing, and how does the image feel?']
+        fo = open("./ml/tools/questions.txt", "r")
+        questions =fo.readlines()
         res_list = video_pipeline.predict(image_paths, questions)
         print(res_list)
         

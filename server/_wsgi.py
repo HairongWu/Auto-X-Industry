@@ -120,7 +120,6 @@ if __name__ == "__main__":
     os.environ['cls_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppocr_mobile_v2.0_cls_infer"
     os.environ['rec_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_rec_server_infer"
     os.environ['table_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppstructure_mobile_v2.0_SLANet_infer"
-    os.environ['layout_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "picodet_lcnet_x1_0_fgd_layout_infer"
 
     os.environ['LABEL_STUDIO_ACCESS_TOKEN'] = args.ls_access_token
     os.environ['LABEL_STUDIO_URL'] = args.ls_url

@@ -18,13 +18,13 @@ try:
 except ImportError:
     import multiprocessing as mp
 
-from semver import Version
+#from semver import Version
 
 from typing import Tuple, Callable, Union, List, Dict, Optional
 from abc import ABC
 from colorama import Fore
 
-from label_studio_sdk.client import LabelStudio
+from label_studio_sdk.label_interface import LabelInterface
 from label_studio_sdk._extensions.label_studio_tools.core.utils.io import (
     get_local_path,
     _DIR_APP_NAME,
@@ -89,8 +89,9 @@ class AutoXMLBase(ABC):
         self.LABEL_STUDIO_URL = (os.getenv('LABEL_STUDIO_URL', ''))
         self.LABEL_STUDIO_ACCESS_TOKEN = (os.getenv('LABEL_STUDIO_ACCESS_TOKEN', ''))
 
+        self.label_interface = LabelInterface(config=label_config)
         # Connect to the Label Studio API and check the connection
-        self.label_studio = LabelStudio(base_url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
+        #self.label_studio = LabelStudio(base_url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
         
         self.use_label_config(label_config)
         # set initial model version

@@ -1,18 +1,24 @@
+paddleclas
+
+git+https://github.com/HumanSignal/label-studio-tools.git
+
 #python-magic
 # Windows
 python-magic-bin
-Flask~=2.3
-colorama~=0.4
-requests~=2.31
-semver~=3.0.2
-pillow~=10.3
 label-studio-sdk
+semver~=3.0.2
+huggingface_hub
+protobuf==3.20
 shapely
 pyclipper
-lanms-nova
 scikit-image
+# Flask~=2.3
+# colorama~=0.4
+# requests~=2.31
+# pillow~=10.3
+# lanms-nova
 imgaug
-ruamel.yaml
+# ruamel.yaml
 safetensors==0.4.3
 timm==1.0.3
 transformers==4.37.2
@@ -23,12 +29,9 @@ moviepy==1.0.3
 scenedetect==0.6.3
 sentencepiece==0.1.99
 accelerate==0.21.0
-
-paddleclas
-
-git+https://github.com/HumanSignal/label-studio-tools.git
-git+https://github.com/amazon-science/chronos-forecasting.git
-git+https://github.com/THU-MIG/yolov10.git
+ultralytics
+cnstd
+#surya-ocr
 
 
 
