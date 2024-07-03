@@ -1,11 +1,25 @@
 # Auto-X Engine
 
 Most of the codes are adapted from [ggml](https://github.com/ggerganov/ggml), [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite),
-[OpenCV](https://github.com/opencv/opencv), [MNN](https://github.com/alibaba/MNN) and [llama2.c](https://github.com/karpathy/llama2.c).
+[OpenCV](https://github.com/opencv/opencv), and [MNN](https://github.com/alibaba/MNN).
 
 This engine only supports the model structures described in this repo at this time. And these models are needed in the built-in solutions.
 
 This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/Android based Robots to Auto-X Studio via MQTT using Auto-X Engine.
+
+## Compile
+
+### Linux/MacOS
+```bash
+mkdir build && cd build && cmake .. && make -j8
+```
+
+### Windows (Using Visual Studio Command Tool)
+```bash
+mkdir build && cd build
+cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DMNN_BUILD_SHARED_LIBS=OFF -DMNN_WIN_RUNTIME_MT=OFF
+ninja
+```
 
 ## Model Pool
 
@@ -17,10 +31,8 @@ This repo also demonstrates how to connect ESP32 based cameras/PX4 based drones/
 
 ### Models for CPU (such as Arm Cortex-A and X86)
 
-### Models for GPU
+### Models for Auto-X Agents
 
-
-## Model Converter
 
 
 ## Demos
