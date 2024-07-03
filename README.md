@@ -20,21 +20,21 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 ## Release Plans
 
-- [ ] version 0.0.1
+- [ ] Release Auto-X Studio, Engine, and Agents (this repo)
 
+- [ ] Release [Auto-X Training Server](https://github.com/HairongWu/Auto-X-Training-Server) (based on OpenRLHF)
+- [ ] Release [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
+  
 ## Other Plans (Automate Existing Business Systems with Auto-X)
 
-- [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on MNN)
-- [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
 - [Auto-X IDE](https://github.com/HairongWu/auto-intellij-community) (based on IntelliJ IDEA Community)
 - [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)
-- [Auto-X RTOS](https://github.com/HairongWu/NuttX-for-AutoX) (based on NuttX)
-- [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP) (based on Odoo)
 - [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
-- Auto Finance (based on FinGPT)
-- Auto Insurance (based on openIMIS)
-- Auto EDA (based on KiCad)
-- Auto CAD (based on FreeCAD)
+- Auto-X ERP (based on Odoo)
+- Auto-X Finance (based on FinGPT)
+- Auto-X Insurance (based on openIMIS)
+- Auto-X EDA (based on KiCad)
+- Auto-X CAD (based on FreeCAD)
 
 - Auto-X Consultant (All-In-One)
 

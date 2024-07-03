@@ -1,6 +1,8 @@
 # Auto-X Studio
 
 Auto-X Studio is based on Label Studio and provides full workflows to build or finetune your own AI solution models.
+Auto-X Studio contains three types of interfaces to build solution models: document table building tool, 
+knowledge graph building tool, and general purpose building tool.
 
 ## Install for local development
 
@@ -17,7 +19,7 @@ python label_studio/manage.py collectstatic
 python label_studio/manage.py runserver
 ```
 
-## Connect to Auto-X Server
+## Connect to Auto-X Agents
 
 1. Open the project settings and select 'Model'. Click 'Connect Model'
 2. Set your Auto-X Server configurations
@@ -34,5 +36,4 @@ python label_studio/manage.py runserver
 2. Select 'Start Training' option of top right dropdown menu in the connnected Auto-X Server Card.
 3. The pre-labeling model will be updated automatiocally when finished. And you check the training status in Auto-X Server side.
 
-## Examples
 
