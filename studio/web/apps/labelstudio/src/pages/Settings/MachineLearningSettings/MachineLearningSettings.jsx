@@ -102,11 +102,11 @@ export const MachineLearningSettings = () => {
         {loaded && backends.length === 0 && (
           <EmptyState
             icon={<IconEmptyPredictions />}
-            title="Let’s connect your first model"
-            description="Connect a machine learning model to generate predictions. These predictions can be compared side by side, used for efficient pre‒labeling and, to aid in active learning, directing users to the most impactful labeling tasks."
+            title="Let’s connect the Auto-X Agents"
+            description="Connect Auto-X Agents to generate predictions. These predictions can be compared side by side, used for efficient pre‒labeling and, to aid in active learning, directing users to the most impactful labeling tasks."
             action={
               <Button primary onClick={() => showMLFormModal()}>
-                Connect Model
+                Connect to Auto-X Agents
               </Button>
             }
           />
@@ -174,5 +174,5 @@ export const MachineLearningSettings = () => {
   );
 };
 
-MachineLearningSettings.title = "Model";
+MachineLearningSettings.title = "Auto-X Agents";
 MachineLearningSettings.path = "/ml";

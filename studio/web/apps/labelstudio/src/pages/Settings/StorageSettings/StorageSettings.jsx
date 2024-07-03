@@ -3,6 +3,8 @@ import { Columns } from "../../../components/Columns/Columns";
 import { Description } from "../../../components/Description/Description";
 import { Block, cn } from "../../../utils/bem";
 import { StorageSet } from "./StorageSet";
+import { GenerationSet } from "./GenerationSet";
+import { ScrapingSet } from "./ScrapingSet";
 import "./StorageSettings.styl";
 import { isInLicense, LF_CLOUD_STORAGE_FOR_MANAGERS } from "../../../utils/license-flags";
 
@@ -19,8 +21,8 @@ export const StorageSettings = () => {
 
       <Columns count={2} gap="40px" size="320px" className={rootClass}>
         <StorageSet title="Source Storage" buttonLabel="Add Source Storage" rootClass={rootClass} />
-        <StorageSet title="Dataset Generation" buttonLabel="Generate from Models" rootClass={rootClass} />
-        <StorageSet title="Dataset Scraping" buttonLabel="Scrape for Websites" rootClass={rootClass} />
+        <GenerationSet title="Dataset Generation" buttonLabel="Generate from Models" rootClass={rootClass} />
+        <ScrapingSet title="Dataset Scraping" buttonLabel="Scrape for Websites" rootClass={rootClass} />
       </Columns>
     </Block>
   ) : null;

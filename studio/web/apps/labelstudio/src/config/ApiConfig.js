@@ -45,6 +45,9 @@ export const API_CONFIG = {
     syncStorage: "POST:/storages/:target?/:type/:pk/sync",
     validateStorage: "POST:/storages/:target?/:type/validate",
 
+    generationTypes: "/storages/:target?/types",
+    scrapingTypes: "/storages/:target?/types",
+
     // ML
     mlBackends: "GET:/ml",
     mlBackend: "GET:/ml/:pk",

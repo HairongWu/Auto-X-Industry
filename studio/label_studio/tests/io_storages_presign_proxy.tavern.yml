@@ -529,7 +529,60 @@ stages:
         title: Redis
       - name: localfiles
         title: Local files
-
+---
+test_name: get_generation_types
+strict: true
+marks:
+- usefixtures:
+  - django_live_url
+  - fflag_fix_all_lsdv_4711_cors_errors_accessing_task_data_short_on
+stages:
+- id: signup
+  type: ref
+- name: stage
+  request:
+    method: GET
+    url: '{django_live_url}/api/generation/types'
+  response:
+    status_code: 200
+    json:
+      - name: s3
+        title: AWS S3
+      - name: gcs
+        title: Google Cloud Storage
+      - name: azure
+        title: Microsoft Azure
+      - name: redis
+        title: Redis
+      - name: localfiles
+        title: Local files
+---
+test_name: get_scraping_types
+strict: true
+marks:
+- usefixtures:
+  - django_live_url
+  - fflag_fix_all_lsdv_4711_cors_errors_accessing_task_data_short_on
+stages:
+- id: signup
+  type: ref
+- name: stage
+  request:
+    method: GET
+    url: '{django_live_url}/api/scraping/types'
+  response:
+    status_code: 200
+    json:
+      - name: s3
+        title: AWS S3
+      - name: gcs
+        title: Google Cloud Storage
+      - name: azure
+        title: Microsoft Azure
+      - name: redis
+        title: Redis
+      - name: localfiles
+        title: Local files
 ---
 test_name: test_export_s3_storage
 strict: false
