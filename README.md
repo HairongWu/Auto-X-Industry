@@ -27,7 +27,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
   
 ## Other Plans (Automate Existing Business Systems with Auto-X)
 
-- [Auto-X IDE](https://github.com/HairongWu/auto-intellij-community) (based on IntelliJ IDEA Community)
+- [Auto-X IDE](https://github.com/HairongWu/Auto-X-IDE) (based on theia)
 - [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)
 - [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
 - Auto-X ERP (based on Odoo)
@@ -42,7 +42,6 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
 - [openremote](https://github.com/openremote/openremote)
-- [IntelliJ IDEA Community Edition](https://github.com/JetBrains/intellij-community)
 - [Odoo](https://github.com/odoo/odoo)
 - [OpenClinic GA](https://sourceforge.net/projects/open-clinic/)
 - [Open Hospital](https://github.com/informatici/openhospital)

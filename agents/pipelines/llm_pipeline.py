@@ -10,11 +10,12 @@ class LLMPipeline(Pipeline):
         model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True, device=self.device)
         self.model = model.eval()
 
-        self.history = []
-
-    def predict(self, messages):
-        
-        response, self.history = self.model.chat(self.tokenizer, messages, self.history)
+    def predict(self, messages, history):
+        response = []
+        for message in messages:
+            res, history = self.model.chat(self.tokenizer, message, history=[])
+            response.append(res)
+            print('history', history)
         
         return response
         

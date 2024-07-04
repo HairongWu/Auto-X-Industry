@@ -127,35 +127,6 @@ def _train():
 def _agent():
     pass
 
-
-@_server.route('/generate', methods=['POST'])
-@exception_handler
-def _generate():
-    model = MODEL_CLASS(project_id=None,
-                        label_config=None)
-
-    response = model.generate()
-
-    # if there is no model version we will take the default
-    if isinstance(response, ModelResponse):
-        if not response.has_model_version():
-            mv = model.model_version
-            if mv:
-                response.set_version(str(mv))
-        else:
-            response.update_predictions_version()
-
-        response = response.serialize()
-
-    res = response
-    if res is None:
-        res = []
-
-    if isinstance(res, dict):
-        res = response.get("projects", response)
-
-    return jsonify({'results': res})
-
 @_server.route('/setup', methods=['POST'])
 @exception_handler
 def _setup():

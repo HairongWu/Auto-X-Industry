@@ -7,26 +7,6 @@ details: <h1>Extract document information from images</h1>
 config: |
   <View>  
     <View style="display: flex; flex-wrap: wrap;">
-      <View className="label-column"> 
-        <Header value="Languages"/>
-        <Choices name="lang" toName="image" choice="multiple">
-          <Choice value="english"/>
-          <Choice value="chinese_cht" />
-          <Choice value="japan" />
-          <Choice value="korean" />
-          <Choice value="others" />
-        </Choices>
-      </View>
-
-      <View className="label-column">
-        <Header value="Types"/>
-        <Choices name="type" toName="image" choice="single">
-          <Choice value="Invoice"/>
-          <Choice value="Receipt" />
-          <Choice value="Questionnaire" />
-          <Choice value="Others" />
-        </Choices> 
-      </View>
       <View className="label-column">
         <Header value="Rotation"/>
         <Choices name="rotation" toName="image" choice="single">
@@ -41,19 +21,9 @@ config: |
           rotateControl="true" width="100%" height="100%"
           maxHeight="auto" maxWidth="auto"/>
 
-    <RectangleLabels name="bbox" toName="image" strokeWidth="1" smart="true">
-      <Label value="Title" background="green"/>
-      <Label value="Figure" background="blue"/>
-      <Label value="Figure caption" background="red"/>
-      <Label value="Table" background="pink"/>
-      <Label value="Table caption" background="yellow"/>
-      <Label value="Header" background="black"/>
-      <Label value="Footer" background="purple"/>
-      <Label value="Reference" background="orange"/>
-      <Label value="Equation" background="gray"/>
-    </RectangleLabels>
+    <RectangleLabels name="bbox" toName="image" strokeWidth="1" smart="true"/>
 
-    <TextArea name="transcription" toName="image" 
+    <TextArea name="zh" toName="image" 
       editable="true" perRegion="true" required="true" 
       maxSubmissions="1" rows="5" placeholder="Recognized Text" 
       displayMode="region-list"/>

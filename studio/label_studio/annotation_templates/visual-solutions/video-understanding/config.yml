@@ -18,12 +18,3 @@ config: |
     <TextArea name="response" toName="video" rows="4" editable="true" maxSubmissions="1" showSubmitButton="false"/>
 
   </View>
-
-  <!--
-    Audio tag uses the same $video file to be in sync, video is muted
-  -->
-
-  <!--{
-   "video_url": "/static/samples/opossum_snow.mp4"
-  }-->
-

@@ -2,9 +2,6 @@ import os
 import cv2
 
 from .ppstructure.predict_system import TextSystem
-from .ppstructure.predict_layout import LayoutPredictor
-from .ppstructure.predict_table import TableSystem
-from .ppstructure.utility import cal_ocr_word_box
 import paddleclas
 
 from cnstd import LayoutAnalyzer
@@ -17,17 +14,16 @@ class AttrDict(dict):
            self.__dict__ = self
 
 class DocumentPipeline(Pipeline): 
-    def __init__(self):
+    def __init__(self, lang):
         super().__init__()
         args = AttrDict()
         
         args['det_model_dir'] = os.environ.get('det_model_dir')
         args['cls_model_dir'] = os.environ.get('cls_model_dir')
-        args['rec_model_dir'] = os.environ.get('rec_model_dir')
-        args['table_model_dir'] = os.environ.get('table_model_dir')
+        args['rec_model_dir'] = os.environ.get(lang+'_rec_model_dir')
 
-        args['rec_char_dict_path'] = "./pipelines/utils/ppocr_keys_v1.txt"
-        args['table_char_dict_path'] = "./pipelines/utils/dict/table_structure_dict_ch.txt"
+        lang_dict = {"zh":"./pipelines/utils/ppocr_keys_v1.txt","jp":"./pipelines/utils/dict/japan_dict.txt"}
+        args['rec_char_dict_path'] = lang_dict[lang]
 
         args['use_onnx'] = False
         args['drop_score'] = 0.5
@@ -76,29 +72,16 @@ class DocumentPipeline(Pipeline):
         args['cls_thresh'] = 0.9
         args['label_list'] = ["0", "180"]
 
-        args['table_algorithm'] = "TableAttn"
-        args['merge_no_span_structure'] = True
-        args['table_max_len'] = 488
-
         self.image_orientation_predictor = paddleclas.PaddleClas(
                 model_name="text_image_orientation"
             )
-        self.language_predictor = paddleclas.PaddleClas(model_name="language_classification")
-        # self.layout_predictor = LayoutPredictor(args)
-        self.text_system = TextSystem(args)
 
-        self.table_system = TableSystem(
-                        args,
-                        self.text_system.text_detector,
-                        self.text_system.text_recognizer,
-                    )
-        self.return_word_box = args.return_word_box
+        self.text_system = TextSystem(args)
 
         self.analyzer = LayoutAnalyzer('layout')
 
     def predict(self, image_paths):
         results = []
-        langs = [] 
 
         for image_file in image_paths:
             img = cv2.imread(image_file)
@@ -114,7 +97,6 @@ class DocumentPipeline(Pipeline):
             if angle in cv_rotate_code:
                 img = cv2.rotate(img, cv_rotate_code[angle])
 
-            langs = self.language_predictor.predict(input_data=img)
             h, w = img.shape[:2]
             filter_boxes, filter_rec_res = self.text_system(img)
             res = []
@@ -131,9 +113,5 @@ class DocumentPipeline(Pipeline):
             # Predict on image
             layout_res = self.analyzer.analyze(image_file, resized_shape=704)
 
-            # ta = self.table_system(
-            #                 img, False
-            #             )
-            # print(ta)
-            results.append([res, layout_res, (h,w), angle, next(langs)[0]['label_names']])
+            results.append([res, layout_res, (h,w), angle])
         return results

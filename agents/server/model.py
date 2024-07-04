@@ -7,7 +7,7 @@ import importlib
 import importlib.util
 import inspect
 import xml.etree.ElementTree as ET
-
+from xml.dom.minidom import parse, parseString
 try:
     import torch.multiprocessing as mp
     try:
@@ -29,6 +29,7 @@ from label_studio_sdk._extensions.label_studio_tools.core.utils.io import (
     get_local_path,
     _DIR_APP_NAME,
 )
+from label_studio_sdk import Client
 
 from .response import ModelResponse
 from .utils import is_preload_needed
@@ -90,6 +91,7 @@ class AutoXMLBase(ABC):
         self.LABEL_STUDIO_ACCESS_TOKEN = (os.getenv('LABEL_STUDIO_ACCESS_TOKEN', ''))
 
         self.label_interface = LabelInterface(config=label_config)
+        self.ls = Client(url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
         # Connect to the Label Studio API and check the connection
         #self.label_studio = LabelStudio(base_url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
         
@@ -183,7 +185,7 @@ class AutoXMLBase(ABC):
         mv = self.model_version
 
         # TODO: check if this is correct - seems like it doesn't work, check RND-7 and make sure it's test covered
-        mv.bump_minor()
+        # mv.bump_minor()
         logger.debug(f'Bumping model version from {self.model_version} to {mv}')
         self.set('model_version', str(mv))
         
@@ -294,6 +296,42 @@ class AutoXMLBase(ABC):
 
         # keep value as is
         return value
+
+    def add_nodes_recursive(self, parent, payload, tag_type='Choice'):
+        """Helper function to walk recursively over taxonomy tree given current 'parent' node"""
+        for key, value in payload.items():
+            # Check if the payload value is a dictionary - meaning nested tags
+            if isinstance(value, dict):
+                # Find the parent tag for nested tags
+                nested_parent = parent.findall(f".//{tag_type}[@value='{key}']")
+                # If parent tag is not found, create it
+                if len(nested_parent) < 1:
+                    nested_parent = ET.SubElement(parent, tag_type, {'value': key})
+                # Add nested tags recursively
+                self.add_nodes_recursive(nested_parent[0], value, tag_type)
+            else:
+                nested_parent = parent.findall(f".//{tag_type}[@value='{key}']")
+                if len(nested_parent) < 1:
+                    # Add top-level tags directly under the parent tag
+                    ET.SubElement(parent, tag_type, {'value': key})
+
+    def add_new_labels(self, tag_name, payload, tag_type='Taxonomy'):
+        project = self.ls.get_project(self.project_id)
+        print(f'Updating project "{project.title}" (ID={project.id})')
+        label_config = project.label_config
+        root = ET.fromstring(label_config)
+
+        # Locate the desired tag in XML
+        tag_to_update = root.findall(f'.//{tag_type}[@name="{tag_name}"]')
+
+        if len(tag_to_update) < 1:
+            print(f'No <{tag_type} name="{tag_name}".../> tag found.')
+            return
+        # Add nodes recursively
+        child_tag_type = 'Choice' if tag_type in ('Taxonomy', 'Choices') else 'Label'
+        self.add_nodes_recursive(tag_to_update[0], payload, child_tag_type)
+        new_label_config = ET.tostring(root, encoding='unicode')
+        project.set_params(label_config=new_label_config)
 
 def get_all_classes_inherited_LabelStudioMLBase(script_file):
     """

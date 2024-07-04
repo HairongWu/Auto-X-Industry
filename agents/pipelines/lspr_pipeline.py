@@ -97,7 +97,7 @@ class LSPRPipeline(Pipeline):
     def __init__(self):
         super().__init__()
 
-        self.BOX_THRESHOLD = os.environ.get("BOX_THRESHOLD", 0.3)
+        self.BOX_THRESHOLD = os.environ.get("BOX_THRESHOLD", 0.40)
         self.TEXT_THRESHOLD = os.environ.get("TEXT_THRESHOLD", 0.25)
 
         from groundingdino.models import build_model
@@ -136,7 +136,7 @@ class LSPRPipeline(Pipeline):
                                 {'name': 'description', 'htype': 'tag'}],
             )
 
-    def predict(self, image_paths):
+    def predict(self, image_paths, prompts=None):
         # Fix me: Change to batch inferences
         all_boxes = []
         all_labels = []
@@ -144,10 +144,13 @@ class LSPRPipeline(Pipeline):
         all_lengths = []
 
         for img in image_paths:
-            image = self.transform(Image.open(img)).unsqueeze(0).to(self.device)
-            res = inference(image, self.ram_model)
-            res = res[0].split('|')
-            res = [r.strip() for r in res]
+            if prompts is None or len(prompts) < 1:
+                image = self.transform(Image.open(img)).unsqueeze(0).to(self.device)
+                res = inference(image, self.ram_model)
+                res = res[0].split('|')
+            else:
+                res = prompts
+            res = [r.strip().lower() for r in prompts]
             prompts = ','.join(res)
 
             if len(prompts) > 0:

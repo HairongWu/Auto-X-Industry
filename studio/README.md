@@ -4,9 +4,11 @@ Auto-X Studio is based on Label Studio and provides full workflows to build or f
 Auto-X Studio contains three types of interfaces to build solution models: document table building tool, 
 knowledge graph building tool, and general purpose building tool.
 
-## Install for local development
+
+## Run studio
 
 You can run the latest Auto-X Studio locally without installing the package. 
+User docker for production purposes.
 
 ```bash
 # Install all package dependencies
@@ -19,21 +21,36 @@ python label_studio/manage.py collectstatic
 python label_studio/manage.py runserver
 ```
 
-## Connect to Auto-X Agents
+## Create Detect Anything Dataset
 
-1. Open the project settings and select 'Model'. Click 'Connect Model'
-2. Set your Auto-X Server configurations
+1. Create a project and select the 'Detect Anything' labeling template. Click 'Save'.
+2. Start [Auto-X Agents Server](../agents) and Connect to Auto-X Agents
+3. Go to the Data Manager, and import the image data
+4. Select 'Actions > Retrieve predictions'.
+5. Select 'Actions > Create Annotations from Predictions'.
+6. Confirm the pre-annotated data manually
 
-## Pre-labeling
+> **Note** You can also using existing Vector Database for pre-labeling.
 
-1. Select a template from the available templates.
-2. Click 'Save'.
-3. Go to the Data Manager, select the tasks you want to get predictions for, and then select 'Actions > Retrieve predictions'.
+## Create Document Recognition Dataset
 
-## Training
+## Create LLM Dataset
 
-1. For a specific project, open 'Settings > Model'.
-2. Select 'Start Training' option of top right dropdown menu in the connnected Auto-X Server Card.
-3. The pre-labeling model will be updated automatiocally when finished. And you check the training status in Auto-X Server side.
+## Create Video Captioning Dataset
 
+
+## Create Document Table Recognition Dataset
+
+
+## Create Vector Database for Image Recognition
+
+
+## Create Knowledge Graph Database
+
+
+
+## Training (Not available for now)
+
+1. Start the [Auto-X Training server](https://github.com/HairongWu/Auto-X-Training-Server)
+2. Click 'Start Training' of dropdown menu of project settings.
 

@@ -122,8 +122,8 @@ if __name__ == "__main__":
 
     os.environ['det_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_det_server_infer"
     os.environ['cls_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppocr_mobile_v2.0_cls_infer"
-    os.environ['rec_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_rec_server_infer"
-    os.environ['table_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_ppstructure_mobile_v2.0_SLANet_infer"
+    os.environ['zh_rec_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "ch_PP-OCRv4_rec_server_infer"
+    os.environ['jp_rec_model_dir'] = os.environ.get("MODEL_POOL_DIR") + "japan_PP-OCRv3_rec_infer"
 
     os.environ['LABEL_STUDIO_ACCESS_TOKEN'] = args.ls_access_token
     os.environ['LABEL_STUDIO_URL'] = args.ls_url
