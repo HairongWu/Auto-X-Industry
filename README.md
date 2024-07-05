@@ -22,13 +22,14 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 - [ ] Release Auto-X Studio, Engine, and Agents (this repo)
 
-- [ ] Release [Auto-X Training Server](https://github.com/HairongWu/Auto-X-Training-Server) (based on OpenRLHF)
-- [ ] Release [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
-  
+- [ ] [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
+
+- [ ] [Auto-X IDE](https://github.com/HairongWu/Auto-X-IDE) (based on theia)
+- [ ] [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect and Perplexica)
+- [ ] [Auto-X Training Server](https://github.com/HairongWu/Auto-X-Training-Server) (based on OpenRLHF)
+ 
 ## Other Plans (Automate Existing Business Systems with Auto-X)
 
-- [Auto-X IDE](https://github.com/HairongWu/Auto-X-IDE) (based on theia)
-- [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect)
 - [Auto-X Clinic](https://github.com/HairongWu/AutoX-Clinic) (based on OpenClinic GA and Open Hospital)
 - Auto-X ERP (based on Odoo)
 - Auto-X Finance (based on FinGPT)
