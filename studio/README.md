@@ -1,8 +1,6 @@
 # Auto-X Studio
 
-Auto-X Studio is based on Label Studio and provides full workflows to build or finetune your own AI solution models.
-Auto-X Studio contains three types of interfaces to build solution models: document table building tool, 
-knowledge graph building tool, and general purpose building tool.
+Auto-X Studio provides full workflows to build or finetune your own AI solution models.
 
 
 ## Run studio
@@ -21,36 +19,45 @@ python label_studio/manage.py collectstatic
 python label_studio/manage.py runserver
 ```
 
-## Create Detect Anything Dataset
+## Workflow
 
-1. Create a project and select the 'Detect Anything' labeling template. Click 'Save'.
-2. Start [Auto-X Agents Server](../agents) and Connect to Auto-X Agents
-3. Go to the Data Manager, and import the image data
+1. Create a project and select the appropriate labeling template. Click 'Save'.
+<div  align="center">
+  <img src="../assets/lspr/select_template.png" width="500"/>
+</div>
+
+2. Start [Auto-X Agents](../agents) and Connect to Auto-X Agents
+<div  align="center">
+  <img src="../assets/lspr/autox_agents.png" width="500"/>
+</div>
+
+3. Go to the Data Manager, and import the data
 4. Select 'Actions > Retrieve predictions'.
 5. Select 'Actions > Create Annotations from Predictions'.
-6. Confirm the pre-annotated data manually
-
-> **Note** You can also using existing Vector Database for pre-labeling.
-
-## Create Document Recognition Dataset
-
-## Create LLM Dataset
-
-## Create Video Captioning Dataset
+6. Confirm the pre-annotated data manually and modify if necessary
+7. Start the [Auto-X Engine Training Server](https://github.com/HairongWu/Auto-X-Engine)(Not available for now)
+8. Click 'Start Training' of dropdown menu of project settings.(Not available for now)
 
 
-## Create Document Table Recognition Dataset
+## Demos
+
+### Create Detect Anything Dataset
 
 
-## Create Vector Database for Image Recognition
+### Create Document Recognition Dataset (Layout Analysis and OCR)
+
+### Create LLM Dataset
+
+### Create Video Captioning Dataset
 
 
-## Create Knowledge Graph Database
+### Create Document Table Recognition Dataset
 
 
+### Create Vector Database
 
-## Training (Not available for now)
 
-1. Start the [Auto-X Training server](https://github.com/HairongWu/Auto-X-Training-Server)
-2. Click 'Start Training' of dropdown menu of project settings.
+### Create Knowledge Graph Database
+
+
 

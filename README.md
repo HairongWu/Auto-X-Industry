@@ -20,13 +20,13 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 ## Release Plans
 
-- [ ] Release Auto-X Studio, Engine, and Agents (this repo)
-
+- [ ] Auto-X Studio and Agents (this repo)
+- [ ] [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on OpenRLHF/MNN/vLLM)
 - [ ] [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
 
 - [ ] [Auto-X IDE](https://github.com/HairongWu/Auto-X-IDE) (based on theia)
 - [ ] [Auto-X Search](https://github.com/HairongWu/Auto-X-Search) (based on SWIRL AI Connect and Perplexica)
-- [ ] [Auto-X Training Server](https://github.com/HairongWu/Auto-X-Training-Server) (based on OpenRLHF)
+
  
 ## Other Plans (Automate Existing Business Systems with Auto-X)
 
@@ -39,7 +39,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 - Auto-X Consultant (All-In-One)
 
-## Acknowledgments
+## References and Acknowledgments
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
 - [openremote](https://github.com/openremote/openremote)
@@ -47,3 +47,31 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 - [OpenClinic GA](https://sourceforge.net/projects/open-clinic/)
 - [Open Hospital](https://github.com/informatici/openhospital)
 - [SWIRL AI Connect](https://github.com/swirlai/swirl-search)
+
+- [label-studio-ml-backend](https://github.com/HumanSignal/label-studio-ml-backend)
+
+- [RAGFlow](https://github.com/infiniflow/ragflow)
+- [XAgent](https://github.com/OpenBMB/XAgent)
+- [crewAI](https://github.com/joaomdmoura/crewAI)
+
+- [VideoLLaMA 2](https://github.com/DAMO-NLP-SG/VideoLLaMA2)
+- [anomalib](https://github.com/openvinotoolkit/anomalib)
+- [EmoLLM](https://github.com/SmartFlowAI/EmoLLM)
+
+- [PP-Structure](https://github.com/PaddlePaddle/PaddleOCR/tree/main/ppstructure)
+
+- [Chronos](https://github.com/amazon-science/chronos-forecasting)
+
+- [V-Express](https://github.com/tencent-ailab/V-Express)
+
+- [ScrapeGraphAI](https://github.com/VinciGit00/Scrapegraph-ai)
+- [crawl4ai](https://github.com/unclecode/crawl4ai)
+
+- [Docs2KG](https://github.com/AI4WA/Docs2KG)
+- [Extract, Define, Canonicalize](https://github.com/clear-nus/edc)
+
+
+- [MetaGPT](https://github.com/geekan/MetaGPT)
+- [aiXcoder](https://github.com/aixcoder-plugin/aiXcoder-7B)
+
+- [Deep Lake](https://github.com/activeloopai/deeplake)
