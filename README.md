@@ -75,3 +75,4 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 - [aiXcoder](https://github.com/aixcoder-plugin/aiXcoder-7B)
 
 - [Deep Lake](https://github.com/activeloopai/deeplake)
+- [PPOCRLabelv2](https://github.com/PFCCLab/PPOCRLabel)
