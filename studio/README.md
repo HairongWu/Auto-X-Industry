@@ -6,9 +6,9 @@ Auto-X Studio provides full workflows to build or finetune your own AI solution 
 
 |               regular text annotation               |                table annotation                |
 | :-------------------------------------------------: | :--------------------------------------------: |
-|  <img src="./studio/PPOCRLabel/data/gif/steps_en.gif" width="80%"/>   | <img src="./studio/PPOCRLabel/data/gif/table.gif" width="100%"/> |
+|  <img src="./PPOCRLabel/data/gif/steps_en.gif" width="80%"/>   | <img src="./PPOCRLabel/data/gif/table.gif" width="100%"/> |
 |            **irregular text annotation**            |         **key information annotation**         |
-| <img src="./studio/PPOCRLabel/data/gif/multi-point.gif" width="80%"/> |  <img src="./studio/PPOCRLabel/data/gif/kie.gif" width="100%"/>  |
+| <img src="./PPOCRLabel/data/gif/multi-point.gif" width="80%"/> |  <img src="./PPOCRLabel/data/gif/kie.gif" width="100%"/>  |
 
 Build and Install the Whl Package Locally
 ```bash
@@ -16,7 +16,7 @@ cd ./PPOCRLabel
 pip install -e .
 ```
 
-### 2.1 Steps
+### Steps
 
 1. Build and launch using the instructions above.
 
@@ -42,7 +42,7 @@ pip install -e .
 
 10. Labeling result: the user can export the label result manually through the menu "File - Export Label", while the program will also export automatically if "File - Auto export Label Mode" is selected. The manually checked label will be stored in *Label.txt* under the opened picture folder. Click "File"-"Export Recognition Results" in the menu bar, the recognition training data of such pictures will be saved in the *crop_img* folder, and the recognition label will be saved in *rec_gt.txt*<sup>[4]</sup>.
 
-### 2.2 Table Annotation
+### Table Annotation
 The table annotation is aimed at extracting the structure of the table in a picture and converting it to Excel format,
 so the annotation needs to be done simultaneously with external software to edit Excel.
 In PPOCRLabel, complete the text information labeling (text and position), complete the table structure information
@@ -62,7 +62,7 @@ labeling in the Excel file, the recommended steps are:
 
 5. Export JSON format annotation: close all Excel files corresponding to table images, click `File`-`Export Table Label` to obtain `gt.txt` annotation results.
 
-### 2.3 Note
+### Note
 
 [1] PPOCRLabel uses the opened folder as the project. After opening the image folder, the picture will not be displayed in the dialog. Instead, the pictures under the folder will be directly imported into the program after clicking "Open Dir".
 
@@ -139,3 +139,9 @@ python label_studio/manage.py runserver
 ### Create LLM Dataset
 
 ### Create Video Captioning Dataset
+
+
+### Create Dataset from Generative Models
+
+
+### Create Dataset from Web Crawlers
