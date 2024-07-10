@@ -22,7 +22,7 @@ import platform
 import subprocess
 import sys
 import traceback
-
+import requests
 import xlrd
 from functools import partial
 
@@ -60,10 +60,10 @@ from PyQt5.QtWidgets import (
     QDialog,
     QAbstractItemView,
     QSizePolicy,
+    QLineEdit
 )
 
 
-from paddleocr import PaddleOCR, PPStructure
 from libs.resources import *
 from libs.constants import *
 from libs.utils import *
@@ -82,7 +82,7 @@ from libs.editinlist import EditInList
 from libs.unique_label_qlist_widget import UniqueLabelQListWidget
 from libs.keyDialog import KeyDialog
 
-__appname__ = "PPOCRLabel"
+__appname__ = "Auto-X Label"
 
 LABEL_COLORMAP = label_colormap()
 
@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
 
     def __init__(
         self,
-        lang="ch",
+        lang="en",
         gpu=False,
         kie_mode=False,
         default_filename=None,
@@ -125,24 +125,6 @@ class MainWindow(QMainWindow):
         self.key_dialog_tip = getStr("keyDialogTip")
 
         self.defaultSaveDir = default_save_dir
-        self.ocr = PaddleOCR(
-            use_pdserving=False,
-            use_angle_cls=True,
-            det=True,
-            cls=True,
-            use_gpu=gpu,
-            lang=lang,
-            show_log=False,
-        )
-        self.table_ocr = PPStructure(
-            use_pdserving=False, use_gpu=gpu, lang=lang, layout=False, show_log=False
-        )
-
-        if os.path.exists("./data/paddle.png"):
-            result = self.ocr.ocr("./data/paddle.png", cls=True, det=True)
-            result = self.table_ocr(
-                "./data/paddle.png", return_ocr_result_in_table=True
-            )
 
         # For loading all image under a directory
         self.mImgList = []
@@ -162,8 +144,8 @@ class MainWindow(QMainWindow):
 
         self._noSelectionSlot = False
         self._beginner = True
-        self.screencastViewer = self.getAvailableScreencastViewer()
-        self.screencast = "https://github.com/PaddlePaddle/PaddleOCR"
+        # self.screencastViewer = self.getAvailableScreencastViewer()
+        # self.screencast = "https://github.com/HairongWu/Auto-X-Industry"
 
         # Load predefined classes to the list
         self.loadPredefinedClasses(default_predefined_class_file)
@@ -178,7 +160,7 @@ class MainWindow(QMainWindow):
         self.shapesToItemsbox = {}
         self.prevLabelText = getStr("tempLabel")
         self.noLabelText = getStr("nullLabel")
-        self.model = "paddle"
+        self.model = "Auto-X Agents"
         self.PPreader = None
         self.autoSaveNum = 5
 
@@ -565,13 +547,6 @@ class MainWindow(QMainWindow):
             enabled=False,
         )
 
-        help = action(
-            getStr("tutorial"),
-            self.showTutorialDialog,
-            None,
-            "help",
-            getStr("tutorialDetail"),
-        )
         showInfo = action(
             getStr("info"), self.showInfoDialog, None, "help", getStr("info")
         )
@@ -957,7 +932,7 @@ class MainWindow(QMainWindow):
             file=self.menu("&" + getStr("mfile")),
             edit=self.menu("&" + getStr("medit")),
             view=self.menu("&" + getStr("mview")),
-            autolabel=self.menu("&PaddleOCR"),
+            autolabel=self.menu("&Auto-X Agents"),
             help=self.menu("&" + getStr("mhelp")),
             recentFiles=QMenu("Open &Recent"),
             labelList=labelMenu,
@@ -1027,7 +1002,7 @@ class MainWindow(QMainWindow):
             ),
         )
 
-        addActions(self.menus.autolabel, (AutoRec, reRec, cellreRec, alcm, None, help))
+        addActions(self.menus.autolabel, (AutoRec, reRec, cellreRec, alcm))
 
         self.menus.file.aboutToShow.connect(self.updateFileMenu)
 
@@ -1212,8 +1187,8 @@ class MainWindow(QMainWindow):
             return ["open"]
 
     ## Callbacks ##
-    def showTutorialDialog(self):
-        subprocess.Popen(self.screencastViewer + [self.screencast])
+    # def showTutorialDialog(self):
+    #     subprocess.Popen(self.screencastViewer + [self.screencast])
 
     def showInfoDialog(self):
         from libs.__init__ import __version__
@@ -3082,15 +3057,22 @@ class MainWindow(QMainWindow):
     def autolcm(self):
         vbox = QVBoxLayout()
         hbox = QHBoxLayout()
+        
+        self.urltext = QLabel()
+        self.urltext.setText(self.stringBundle.getString("urltext"))
+        self.urltext.setAlignment(Qt.AlignLeft)
+        self.urlbox = QLineEdit(self)
+
         self.panel = QLabel()
         self.panel.setText(self.stringBundle.getString("choseModelLg"))
-        self.panel.setAlignment(Qt.AlignLeft)
+        self.panel.setAlignment(Qt.AlignLeft)  
         self.comboBox = QComboBox()
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItems(
             ["Chinese & English", "English", "French", "German", "Korean", "Japanese"]
         )
-        vbox.addWidget(self.panel)
+        vbox.addWidget(self.urlbox)
+        vbox.addWidget(self.comboBox)
         vbox.addWidget(self.comboBox)
         self.dialog = QDialog()
         self.dialog.resize(300, 100)
@@ -3104,6 +3086,7 @@ class MainWindow(QMainWindow):
         hbox.addWidget(self.okBtn)
         hbox.addWidget(self.cancelBtn)
 
+        vbox.addWidget(self.urltext)
         vbox.addWidget(self.panel)
         vbox.addLayout(hbox)
         self.dialog.setLayout(vbox)
@@ -3123,23 +3106,14 @@ class MainWindow(QMainWindow):
             "Korean": "korean",
             "Japanese": "japan",
         }
-        del self.ocr
-        self.ocr = PaddleOCR(
-            use_pdserving=False,
-            use_angle_cls=True,
-            det=True,
-            cls=True,
-            use_gpu=False,
-            lang=lg_idx[self.comboBox.currentText()],
-        )
-        del self.table_ocr
-        self.table_ocr = PPStructure(
-            use_pdserving=False,
-            use_gpu=False,
-            lang=lg_idx[self.comboBox.currentText()],
-            layout=False,
-            show_log=False,
-        )
+        lang=lg_idx[self.comboBox.currentText()]
+
+        url = self.urlbox.text()
+        myobj = {'lang': lang}
+
+        x = requests.post(url, json = myobj)
+
+        print(x.text)
         self.dialog.close()
 
     def cancel(self):
@@ -3416,7 +3390,7 @@ def get_main_app(argv=[]):
     app.setWindowIcon(newIcon("app"))
     # Tzutalin 201705+: Accept extra arguments to change predefined class file
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("--lang", type=str, default="ch", nargs="?")
+    arg_parser.add_argument("--lang", type=str, default="en", nargs="?")
     arg_parser.add_argument("--gpu", type=str2bool, default=True, nargs="?")
     arg_parser.add_argument("--kie", type=str2bool, default=False, nargs="?")
     arg_parser.add_argument(

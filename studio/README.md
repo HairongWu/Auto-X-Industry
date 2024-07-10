@@ -2,18 +2,19 @@
 
 Auto-X Studio provides full workflows to build or finetune your own AI solution models.
 
-## Create Document Dataset
+## Create Document Dataset (Based on PPOCELabel)
 
 |               regular text annotation               |                table annotation                |
 | :-------------------------------------------------: | :--------------------------------------------: |
-|  <img src="./PPOCRLabel/data/gif/steps_en.gif" width="80%"/>   | <img src="./PPOCRLabel/data/gif/table.gif" width="100%"/> |
+|  <img src="./AutoXLabel/data/gif/steps_en.gif" width="80%"/>   | <img src="./AutoXLabel/data/gif/table.gif" width="100%"/> |
 |            **irregular text annotation**            |         **key information annotation**         |
-| <img src="./PPOCRLabel/data/gif/multi-point.gif" width="80%"/> |  <img src="./PPOCRLabel/data/gif/kie.gif" width="100%"/>  |
+| <img src="./AutoXLabel/data/gif/multi-point.gif" width="80%"/> |  <img src="./AutoXLabel/data/gif/kie.gif" width="100%"/>  |
 
 Build and Install the Whl Package Locally
 ```bash
-cd ./PPOCRLabel
-pip install -e .
+cd ./AutoXLabel
+pip install -r requirements.txt
+python AutoXLabel.py
 ```
 
 ### Steps
@@ -80,7 +81,7 @@ labeling in the Excel file, the recommended steps are:
 |  rec_gt.txt   | The recognition label file, which can be directly used for PP-OCR identification model training, is generated after the user clicks on the menu bar "File"-"Export recognition result". |
 |   crop_img    | The recognition data, generated at the same time with *rec_gt.txt* |
 
-## Create Knowledge Graph Database
+## Create Knowledge Graph Database (Based on Protege)
 
 Open a terminal in the directory 'webprotege' and Use maven to package WebProtégé
 ```bash
@@ -98,7 +99,7 @@ mvn -Denv=dev tomcat7:run
 Browse to WebProtégé in a Web browser by navigating to http://localhost:8080
 
 
-## Other types of datasets
+## Other types of datasets (Based on Label Studio)
 
 You can run the latest Auto-X Studio locally without installing the package. 
 User docker for production purposes.

@@ -1,0 +1,9 @@
+paddleocr
+xlrd
+PyQt5
+
+
+
+
+
+

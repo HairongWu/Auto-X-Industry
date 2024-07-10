@@ -18,7 +18,6 @@ import sys
 from PyQt5.QtCore import QPointF
 from PyQt5.QtGui import QColor, QPen, QPainterPath, QFont
 from libs.utils import distance
-from ppocr.utils.logging import get_logger
 
 DEFAULT_LINE_COLOR = QColor(0, 255, 0, 128)
 DEFAULT_FILL_COLOR = QColor(255, 0, 0, 128)
