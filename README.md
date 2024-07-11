@@ -21,7 +21,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 ## Release Plans
 
 - [ ] Auto-X Studio and Agents (this repo)
-- [ ] [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on OpenRLHF/MNN/vLLM)
+- [ ] [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on Triton/MNN/NuttX)
 - [ ] [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
 
 - [ ] [Auto-X IDE](https://github.com/HairongWu/Auto-X-IDE) (based on theia)
