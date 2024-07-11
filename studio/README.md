@@ -100,7 +100,9 @@ In a different terminal window start the tomcat server
 mvn -Denv=dev tomcat7:run
 ```
 Browse to WebProtégé in a Web browser by navigating to http://localhost:8080
-
+<div  align="center">
+  <img src="../assets/600px-WP-classes.png" width="600"/>
+</div>
 ## Medical Studio (Based on MITK)
 
     cd ./medical_studio
@@ -112,6 +114,7 @@ Browse to WebProtégé in a Web browser by navigating to http://localhost:8080
 <div  align="center">
   <img src="../assets/MITKUserManual_GUICommented.png" width="600"/>
 </div>
+
 ## Vision Studio (Based on Xtreme1)
 
 Image Annotation (B-box, Segmentation) - [YOLOR](https://github.com/WongKinYiu/yolor) & [RITM](https://github.com/saic-vul/ritm_interactive_segmentation) |  Lidar-camera Fusion Annotation - [OpenPCDet](https://github.com/open-mmlab/OpenPCDet) & [AB3DMOT](https://github.com/xinshuoweng/AB3DMOT)
