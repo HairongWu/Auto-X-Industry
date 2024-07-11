@@ -1,0 +1,4 @@
+MITK_CREATE_MODULE_TESTS(
+  DEPENDS MitkCore MitkChart
+  PACKAGE_DEPENDS PUBLIC Qt6|WebEngineWidgets
+)

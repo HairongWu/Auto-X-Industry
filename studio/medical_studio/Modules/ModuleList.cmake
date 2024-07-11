@@ -1,0 +1,62 @@
+# The entries in the mitk_modules list must be
+# ordered according to their dependencies.
+
+set(MITK_MODULES
+  Log
+  Core
+  CommandLine
+  CoreCmdApps
+  AppUtil
+  LegacyIO
+  DataTypesExt
+  Annotation
+  LegacyGL
+  AlgorithmsExt
+  MapperExt
+  DICOM
+  DICOMQI
+  DICOMTesting
+  SceneSerializationBase
+  PlanarFigure
+  ImageDenoising
+  ImageExtraction
+  SceneSerialization
+  Gizmo
+  GraphAlgorithms
+  Multilabel
+  Chart
+  ImageStatistics
+  ContourModel
+  SurfaceInterpolation
+  BoundingShape
+  Segmentation
+  QtWidgets
+  QtWidgetsExt
+  ImageStatisticsUI
+  SegmentationUI
+  MatchPointRegistration
+  MatchPointRegistrationUI
+  Classification
+  QtOverlays
+  DICOMUI
+  Remeshing
+  Python
+  QtPython
+  Persistence
+  RT
+  RTUI
+  IOExt
+  XNAT
+  RenderWindowManagerUI
+  CEST
+  BasicImageProcessing
+  ModelFit
+  ModelFitUI
+  Pharmacokinetics
+  PharmacokineticsUI
+  DICOMPM
+  REST
+  RESTService
+  DICOMweb
+  ROI
+)

@@ -1,0 +1,5 @@
+set(Plugin-Name "Fit Generator Demo")
+set(Plugin-Version "1.0")
+set(Plugin-Vendor "German Cancer Research Center (DKFZ) Heidelberg, Division of Medical Image Computing, Germany")
+set(Plugin-ContactAddress "Contact via www.MITK.org")
+set(Require-Plugin org.mitk.gui.qt.common)

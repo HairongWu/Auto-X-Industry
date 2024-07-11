@@ -1,0 +1,16 @@
+set(MODULE_TESTS
+  mitkGIFCooc2Test.cpp
+  mitkGIFCurvatureStatisticTest.cpp
+  mitkGIFFirstOrderHistogramStatisticsTest.cpp
+  mitkGIFFirstOrderNumericStatisticsTest.cpp
+  mitkGIFFirstOrderStatisticsTest.cpp
+  mitkGIFGreyLevelDistanceZoneTest.cpp
+  mitkGIFGreyLevelSizeZoneTest.cpp
+  mitkGIFImageDescriptionFeaturesTest.cpp
+  mitkGIFIntensityVolumeHistogramTest.cpp
+  mitkGIFLocalIntensityTest.cpp
+  mitkGIFNeighbourhoodGreyToneDifferenceFeaturesTest.cpp
+  mitkGIFNeighbouringGreyLevelDependenceFeatureTest.cpp
+  mitkGIFVolumetricDensityStatisticsTest.cpp
+  mitkGIFVolumetricStatisticsTest.cpp
+)

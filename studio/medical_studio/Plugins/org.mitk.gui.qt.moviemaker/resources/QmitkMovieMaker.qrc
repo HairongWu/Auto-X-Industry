@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/QmitkMovieMakerView" >
+        <file>delay.svg</file>
+        <file>duration.svg</file>
+    </qresource>
+</RCC>
