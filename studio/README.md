@@ -115,6 +115,7 @@ Browse to WebProtégé in a Web browser by navigating to http://localhost:8080
   <img src="../assets/MITKUserManual_GUICommented.png" width="600"/>
 </div>
 
+
 ## Vision Studio (Based on Xtreme1)
 
 Image Annotation (B-box, Segmentation) - [YOLOR](https://github.com/WongKinYiu/yolor) & [RITM](https://github.com/saic-vul/ritm_interactive_segmentation) |  Lidar-camera Fusion Annotation - [OpenPCDet](https://github.com/open-mmlab/OpenPCDet) & [AB3DMOT](https://github.com/xinshuoweng/AB3DMOT)
@@ -125,7 +126,6 @@ Image Data Curation (Visualizing & Debug)  - [MobileNetV3](https://github.com/xi
 :-------------------------:|:-------------------------:
 ![](/studio/vision_studio/docs/images/2d_v.gif) |  <img src="/studio/vision_studio/docs/images/0.7rlhf.webp" width="640"> 
 
-## Install from Source
 
 If you want to build or extend the function, download the source code and run locally.
 
@@ -166,6 +166,7 @@ services:
 Then when you run `docker compose up`, it will first build the `backend` and `frontend` image and start these services. Be sure to run `docker compose build` when code changes, as the up command will only build images when it does not exist.
 
 > You should not commit your change to `docker-compose.yml`, to avoid this, you can copy docker-compose.yml to a new file `docker-compose.develop.yml`, and modify this file as your development needs, as this file is already added into `.gitignore`. And you need to specify this specific file when running Docker Compose commands, such as `docker compose -f docker-compose.develop.yml build`.
+
 
 ## Other types of data (Based on Label Studio)
 
