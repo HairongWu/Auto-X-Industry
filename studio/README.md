@@ -118,11 +118,11 @@ Browse to WebProtégé in a Web browser by navigating to http://localhost:8080
 
 ## Vision Studio (Based on Xtreme1)
 
-Image Annotation (B-box, Segmentation) - [YOLOR](https://github.com/WongKinYiu/yolor) & [RITM](https://github.com/saic-vul/ritm_interactive_segmentation) |  Lidar-camera Fusion Annotation - [OpenPCDet](https://github.com/open-mmlab/OpenPCDet) & [AB3DMOT](https://github.com/xinshuoweng/AB3DMOT)
+Image Annotation (B-box, Segmentation) |  Lidar-camera Fusion Annotation
 :-------------------------:|:-------------------------:
 ![](/studio/vision_studio/docs/images/image_ai.gif)  |  ![](/studio/vision_studio/docs/images/3d_ai.gif)
 
-Image Data Curation (Visualizing & Debug)  - [MobileNetV3](https://github.com/xiaolai-sqlai/mobilenetv3) & [openTSNE](https://github.com/pavlin-policar/openTSNE)  | RLHF Annotation Tool for LLM (beta version)
+Image Data Curation (Visualizing & Debug)  | RLHF Annotation Tool for LLM (beta version)
 :-------------------------:|:-------------------------:
 ![](/studio/vision_studio/docs/images/2d_v.gif) |  <img src="/studio/vision_studio/docs/images/0.7rlhf.webp" width="640"> 
 
