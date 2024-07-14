@@ -20,22 +20,11 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 ## Release Plans
 
-- [ ] Auto-X Studio and Agents (this repo)
-- [ ] [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on Triton/MNN/NuttX)
-- [ ] [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
-- [ ] [Auto-X Clinic](https://github.com/HairongWu/Auto-X-Services) (based on OpenClinic GA and Open Hospital)
- 
-## Other Service Plans (Automate Existing Business Services/Systems with Auto-X)
-- Auto-X IDE (based on theia)
-- Auto-X Search (based on SWIRL AI Connect and Perplexica)
-
-- Auto-X ERP (based on Odoo)
-- Auto-X Finance (based on FinGPT)
-- Auto-X Insurance (based on openIMIS)
-- Auto-X EDA (based on KiCad)
-- Auto-X CAD (based on FreeCAD)
-
-- Auto-X Consultant (All-In-One)
+- Auto-X Studio (this repo)
+- Auto-X Agents (this repo)
+- [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on Triton/MNN/NuttX)
+- [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
+- [Service Plans](https://github.com/HairongWu/Auto-X-Services)
 
 ## References and Acknowledgments
 
