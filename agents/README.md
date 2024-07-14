@@ -7,6 +7,7 @@ The agent task is intefrated with the Auto-X Engine Serving, and the training ta
 <div  align="center">
   <img src="../assets/agents.png" width="600"/>
 </div>
+
 ## Environment Setup
 
 1. Install [PyTorch](https://pytorch.org/) according to you hardwares
