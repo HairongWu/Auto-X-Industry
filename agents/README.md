@@ -4,7 +4,9 @@
 This projects is originally based on label-studio-ml-backend, so it is compatible with label-studio interfaces.
 Auto-X AI Agents supports two types of tasks: training task and agent task.
 The agent task is intefrated with the Auto-X Engine Serving, and the training task with the Auto-X Engine Training.
-
+<div  align="center">
+  <img src="../assets/agents.png" width="600"/>
+</div>
 ## Environment Setup
 
 1. Install [PyTorch](https://pytorch.org/) according to you hardwares

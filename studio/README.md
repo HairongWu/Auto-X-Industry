@@ -1,7 +1,9 @@
 # Auto-X Studio
 
 Auto-X Studio provides full workflows to build or finetune your own AI solution models.
-
+<div  align="center">
+  <img src="../assets//studio.png" width="600"/>
+</div>
 ## Document Studio (Based on PPOCELabel)
 
 |               regular text annotation               |                table annotation                |
