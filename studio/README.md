@@ -106,6 +106,7 @@ Browse to WebProtégé in a Web browser by navigating to http://localhost:8080
 <div  align="center">
   <img src="../assets/600px-WP-classes.png" width="600"/>
 </div>
+
 ## Medical Studio (Based on MITK)
 
     cd ./medical_studio
