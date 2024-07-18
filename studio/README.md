@@ -5,6 +5,8 @@ Auto-X Studio provides full workflows to build or finetune your own AI solution 
   <img src="../assets//studio.png" width="600"/>
 </div>
 
+You need to start the Auto-X Agents Server to pre-label datasets, train or finetune models.
+
 ## Document Studio (Based on PPOCELabel)
 
 |               regular text annotation               |                table annotation                |
@@ -86,26 +88,6 @@ labeling in the Excel file, the recommended steps are:
 |  rec_gt.txt   | The recognition label file, which can be directly used for PP-OCR identification model training, is generated after the user clicks on the menu bar "File"-"Export recognition result". |
 |   crop_img    | The recognition data, generated at the same time with *rec_gt.txt* |
 
-## Knowledge Studio (Based on Protege)
-
-Open a terminal in the directory 'webprotege' and Use maven to package WebProtégé
-```bash
-cd ./knowledge_studio
-mvn clean package
-```
-The WebProtege .war file will be built into the webprotege-server directory
-Start the GWT code server in one terminal window
-```bash
-mvn gwt:codeserver
-```
-In a different terminal window start the tomcat server
-```bash
-mvn -Denv=dev tomcat7:run
-```
-Browse to WebProtégé in a Web browser by navigating to http://localhost:8080
-<div  align="center">
-  <img src="../assets/600px-WP-classes.png" width="600"/>
-</div>
 
 ## Medical Studio (Based on MITK)
 

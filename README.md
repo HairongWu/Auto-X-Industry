@@ -22,6 +22,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 - Auto-X Studio (this repo)
 - Auto-X Agents (this repo)
+- [Beetle Datalake](https://github.com/HairongWu/Beetle) (powered by [PROON株式会社](www.proon.co.jp))
 - [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on Triton/MNN/NuttX)
 - [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
 - [Service Plans](https://github.com/HairongWu/Auto-X-Services)

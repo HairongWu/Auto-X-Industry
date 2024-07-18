@@ -4,7 +4,7 @@ import re
 from typing import Tuple, Dict
 import pathlib
 
-from deeplake.core.vectorstore.deeplake_vectorstore import VectorStore
+# from deeplake.core.vectorstore.deeplake_vectorstore import VectorStore
 from torchvision import transforms, models
 from torchvision.models.feature_extraction import create_feature_extractor
 
@@ -125,16 +125,16 @@ class LSPRPipeline(Pipeline):
         self.embedding.to(self.device)
 
         vector_store_path = os.path.join(os.environ.get('MODEL_POOL_DIR'),'autox_lspr')
-        if os.path.exists(vector_store_path):
-            self.vector_store = VectorStore(
-                path = vector_store_path
-            )
-        else:
-            self.vector_store = VectorStore(
-                path = vector_store_path,
-                tensor_params = [{'name': 'embedding', 'htype': 'embedding'}, 
-                                {'name': 'description', 'htype': 'tag'}],
-            )
+        # if os.path.exists(vector_store_path):
+        #     self.vector_store = VectorStore(
+        #         path = vector_store_path
+        #     )
+        # else:
+        #     self.vector_store = VectorStore(
+        #         path = vector_store_path,
+        #         tensor_params = [{'name': 'embedding', 'htype': 'embedding'}, 
+        #                         {'name': 'description', 'htype': 'tag'}],
+        #     )
 
     def predict(self, image_paths, prompts=None):
         # Fix me: Change to batch inferences

@@ -15,9 +15,9 @@ from pipelines.document_pipeline import *
 from pipelines.video_pipeline import *
 from pipelines.llm_pipeline import *
 
-#lspr_pipeline = LSPRPipeline()
+lspr_pipeline = LSPRPipeline()
 #video_pipeline = VideoPipeline()
-llm_pipeline = LLMPipeline()
+#llm_pipeline = LLMPipeline()
 
 class AutoSolution(AutoXMLBase):
 

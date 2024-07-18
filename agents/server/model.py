@@ -91,7 +91,7 @@ class AutoXMLBase(ABC):
         self.LABEL_STUDIO_ACCESS_TOKEN = (os.getenv('LABEL_STUDIO_ACCESS_TOKEN', ''))
 
         self.label_interface = LabelInterface(config=label_config)
-        self.ls = Client(url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
+        # self.ls = Client(url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
         # Connect to the Label Studio API and check the connection
         #self.label_studio = LabelStudio(base_url=self.LABEL_STUDIO_URL, api_key=self.LABEL_STUDIO_ACCESS_TOKEN)
         
