@@ -29,7 +29,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 - [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
   
 - [Beetle](https://github.com/HairongWu/Beetle) (powered by [PROON株式会社](https://www.proon.co.jp/))
-- [Other Service Plans](https://github.com/HairongWu/Auto-X-Services)
+- [Service Plans](https://github.com/HairongWu/Auto-X-Services)
 
 ## References and Acknowledgments
 
