@@ -21,6 +21,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 ## Release Plans
 
 - [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on NVIDIA Triton/ggml)
+- [Auto-X AIOS](https://github.com/HairongWu/Auto-X-AIOS) (based on NuttX)
 
 - [Auto-X Agent](https://github.com/HairongWu/Auto-X-Agent)
 - [Auto-X Studio](https://github.com/HairongWu/Auto-X-Studio)
