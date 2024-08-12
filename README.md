@@ -20,16 +20,17 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 ## Release Plans
 
-- [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine) (based on NVIDIA Triton/ggml)
+- [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine)
 - [Auto-X AIOS](https://github.com/HairongWu/Auto-X-AIOS) (based on NuttX)
 
-- [Auto-X Agent](https://github.com/HairongWu/Auto-X-Agent)
 - [Auto-X Studio](https://github.com/HairongWu/Auto-X-Studio)
 
 - [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
-  
-- [Beetle](https://github.com/HairongWu/Beetle) (powered by [PROON株式会社](https://www.proon.co.jp/))
-- [Service Plans](https://github.com/HairongWu/Auto-X-Services)
+- [Auto-X Search](https://github.com/HairongWu/Auto-X-Search)(based on Perplexica)
+- [Auto-X Clinic](https://github.com/HairongWu/Auto-X-Clinic)
+- [Auto-X Call Center](https://github.com/HairongWu/Auto-X-Call-Center)
+- [Auto-X Dev](https://github.com/HairongWu/Auto-X-Dev)
+- [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP)(based on odoo)
 
 ## References and Acknowledgments
 
