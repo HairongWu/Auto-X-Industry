@@ -25,7 +25,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
 
 - [Auto-X Studio](https://github.com/HairongWu/Auto-X-Studio)
 
-- [Auto-X IoT](https://github.com/HairongWu/Auto-X-IoT) (based on OpenRemote)
+- [Auto-X AIoT](https://github.com/HairongWu/Auto-X-AIoT) (based on Thingsboard)
 - [Auto-X Search](https://github.com/HairongWu/Auto-X-Search)(based on Perplexica)
 - [Auto-X Clinic](https://github.com/HairongWu/Auto-X-Clinic)
 - [Auto-X Call Center](https://github.com/HairongWu/Auto-X-Call-Center)
