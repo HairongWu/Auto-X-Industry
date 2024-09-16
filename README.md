@@ -18,19 +18,7 @@ Auto-X for Industries is an autonomous solution that aims to solve the following
   <img src="assets/framework.png" width="800"/>
 </div>
 
-## Release Plans
-
-- [Auto-X Engine](https://github.com/HairongWu/Auto-X-Engine)
-- [Auto-X AIOS](https://github.com/HairongWu/Auto-X-AIOS) (based on NuttX)
-
-- [Auto-X Studio](https://github.com/HairongWu/Auto-X-Studio)
-
-- [Auto-X AIoT](https://github.com/HairongWu/Auto-X-AIoT) (based on Thingsboard)
-- [Auto-X Search](https://github.com/HairongWu/Auto-X-Search)(based on Perplexica)
-- [Auto-X Clinic](https://github.com/HairongWu/Auto-X-Clinic)
-- [Auto-X Call Center](https://github.com/HairongWu/Auto-X-Call-Center)
-- [Auto-X Dev](https://github.com/HairongWu/Auto-X-Dev)
-- [Auto-X ERP](https://github.com/HairongWu/Auto-X-ERP)(based on odoo)
+[Online Demo](https://search.autox-iotai.com/)
 
 ## References and Acknowledgments
 
