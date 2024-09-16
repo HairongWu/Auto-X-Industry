@@ -5,8 +5,6 @@
   <h1>Auto-X for Industries</h1>
 </div>
 
-Not stable for now. Please wait for the first release.
-
 Auto-X for Industries is an autonomous solution that aims to solve the following challenges:
 
 - High running cost and low efficiency for practical industrial uses with current AI services. Customers sometimes defer to use GPUs for some reasons.
